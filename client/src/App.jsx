@@ -1,12 +1,14 @@
-import React from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import UserLayout from './components/Layout/UserLayout';
 
-function App() {
+const App = () => {
   return (
-    <div>
-      <h1 className="text-4xl font-bold text-center text-brand-blue">Welcome to Nestora</h1>
-      <p className="text-center mt-4 text-gray-600">Your all-in-one solution for managing your business.</p>
-    </div>
-  )
-}
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<UserLayout />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
-export default App
+export default App;

@@ -3,9 +3,11 @@
 @theme {
   /* Adding a custom color */
   --color-brand-blue: #007bff;
+  --color-brand: #ac6a06;
 
   /* Adding a custom font */
   --font-heading: "Poppins", sans-serif;
+
 }
 #root{
   font-family: "Inter", sans-serif;
