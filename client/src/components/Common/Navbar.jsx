@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { FiSearch, FiUser, FiList, FiBell, FiShoppingBag } from 'react-icons/fi';
 import { MdOutlineCardGiftcard } from 'react-icons/md';
+import CartDrawer from '../Layout/CartDrawer';
+
 
 const categories = [
   'Furniture', 'Rugs', 'Outdoor', 'Bedding', 'Bath',
@@ -11,6 +13,7 @@ export const Navbar = () => {
   const [cartCount] = useState(0);
 
   return (
+    <>
     <nav className="sticky top-0 z-50 w-full shadow-sm bg-white">
 
       {/* Top Bar */}
@@ -21,7 +24,7 @@ export const Navbar = () => {
           <p className="text-xs font-bold text-gray-800 tracking-tight">NestOra</p>
         </div>
 
-        {/* Search Bar */}
+                {/* Search Bar */}
         <div className="flex flex-1 items-center border border-gray-300 rounded overflow-hidden h-10">
           <input
             type="text"
@@ -48,19 +51,12 @@ export const Navbar = () => {
             <span className="text-[10px] text-gray-500 mt-0.5">Lists</span>
           </div>
 
+          <CartDrawer />
+
           {/* Notifications */}
           <div className="flex flex-col items-center cursor-pointer hover:text-red-600">
             <FiBell size={20} />
             <span className="text-[10px] text-gray-500 mt-0.5">Notifications</span>
-          </div>
-
-          {/* Cart */}
-          <div className="relative flex flex-col items-center cursor-pointer hover:text-red-600">
-            <FiShoppingBag size={20} />
-            <span className="absolute -top-1.5 -right-2 bg-red-600 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">
-              {cartCount}
-            </span>
-            <span className="text-[10px] text-gray-500 mt-0.5">Cart</span>
           </div>
 
         </div>
@@ -80,5 +76,11 @@ export const Navbar = () => {
       </div>
 
     </nav>
+    
+    </>
+
+    
   );
 };
+
+export default Navbar;
