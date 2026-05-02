@@ -25,13 +25,13 @@ export const Navbar = () => {
         </div>
 
                 {/* Search Bar */}
-        <div className="flex flex-1 items-center border border-gray-300 rounded overflow-hidden h-10">
+        <div className="flex flex-1 items-center border border-gray-300 rounded overflow-hidden h-10 focus-within:border-[#8C7A6B] focus-within:ring-1 focus-within:ring-[#8C7A6B] transition-all">
           <input
             type="text"
             placeholder="Find all things home & beyond"
-            className="flex-1 px-4 text-sm text-gray-500 outline-none"
+            className="flex-1 px-4 text-sm text-gray-700 outline-none placeholder-gray-400"
           />
-          <button className="bg-gray-900 text-white w-12 h-10 flex items-center justify-center hover:bg-gray-700">
+          <button className="bg-[#2C2C2C] text-white w-12 h-10 flex items-center justify-center hover:bg-[#3E362E] transition-colors">
             <FiSearch size={16} />
           </button>
         </div>
@@ -40,13 +40,13 @@ export const Navbar = () => {
         <div className="flex items-center gap-5">
  
           {/* Account */}
-          <div className="flex flex-col items-center cursor-pointer hover:text-red-600">
+          <div className="flex flex-col items-center cursor-pointer hover:text-[#8C7A6B] transition-colors">
             <FiUser size={20} />
             <span className="text-[10px] text-gray-500 mt-0.5">Account</span>
           </div>
 
           {/* Lists */}
-          <div className="flex flex-col items-center cursor-pointer hover:text-red-600">
+          <div className="flex flex-col items-center cursor-pointer hover:text-[#8C7A6B] transition-colors">
             <FiList size={20} />
             <span className="text-[10px] text-gray-500 mt-0.5">Lists</span>
           </div>
@@ -54,7 +54,7 @@ export const Navbar = () => {
           <CartDrawer />
 
           {/* Notifications */}
-          <div className="flex flex-col items-center cursor-pointer hover:text-red-600">
+          <div className="flex flex-col items-center cursor-pointer hover:text-[#8C7A6B] transition-colors">
             <FiBell size={20} />
             <span className="text-[10px] text-gray-500 mt-0.5">Notifications</span>
           </div>
@@ -68,7 +68,7 @@ export const Navbar = () => {
           <a
             key={cat}
             href="#"
-            className="text-xs text-gray-700 whitespace-nowrap px-3 py-2.5 border-b-2 border-transparent hover:border-red-600 hover:text-red-600 transition-colors"
+            className="text-xs text-gray-700 whitespace-nowrap px-3 py-2.5 border-b-2 border-transparent hover:border-[#8C7A6B] hover:text-[#8C7A6B] transition-colors"
           >
             {cat}
           </a>

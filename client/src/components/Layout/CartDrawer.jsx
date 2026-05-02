@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FiShoppingBag } from "react-icons/fi";
+import CartContents  from "../Cart/CartContents";
 
 const CartDrawer = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -8,7 +9,7 @@ const CartDrawer = () => {
     <>
       {/* Cart Icon Button */}
       <div
-        className="relative flex flex-col items-center cursor-pointer hover:text-red-600"
+        className="relative flex flex-col items-center cursor-pointer hover:text-[#8C7A6B] transition-colors"
         onClick={() => setDrawerOpen(true)}
       >
         <FiShoppingBag size={20} />
@@ -18,35 +19,38 @@ const CartDrawer = () => {
       {/* Overlay */}
       {drawerOpen && (
         <div
-          className="fixed inset-0 bg-black/30 z-40"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity"
           onClick={() => setDrawerOpen(false)}
         />
       )}
 
       {/* Drawer */}
-      <div className={`fixed top-0 right-0 h-full w-80 bg-white shadow-lg z-50 transform transition-transform duration-300 ${drawerOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-        <div className="p-4">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">Your Cart</h2>
-            <button
-              onClick={() => setDrawerOpen(false)}
-              className="text-gray-500 hover:text-red-600 text-xl font-bold"
-            >
-              ✕
-            </button>
-          </div>
-          <p className="text-sm text-gray-400">Your cart is empty.</p>
+      <div className={`fixed top-0 right-0 h-full w-full sm:w-[400px] bg-white shadow-2xl z-50 transform transition-transform duration-500 ease-in-out flex flex-col ${drawerOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        
+        {/* Header */}
+        <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+          <h2 className="text-2xl font-light text-[#2C2C2C] tracking-wide">Your Cart</h2>
+          <button
+            onClick={() => setDrawerOpen(false)}
+            className="text-gray-400 hover:text-[#8C7A6B] text-2xl transition-colors p-2"
+          >
+            ✕
+          </button>
+        </div>
+        
+        {/* Body */}
+        <div className="flex-1 overflow-y-auto p-6">
+          <p className="text-sm text-gray-500 font-light text-center mt-10">Your cart is currently empty.</p>
+          <CartContents />
         </div>
 
-              {/* Cart contents with scrollable area */} 
-
-              <div>
-                <h2 className="grow p-4 overflow-y-auto">Cart Contents</h2>
-              </div>
-      <div className="p-4 bg-white sticky bottom-0">
-        <button className="w-full bg-black text-white text-lg font-semibold">Checkout</button>
-        <p className="text-sm text-gray-400">Shipping, taxes, and discount codes calculated at checkout.  </p>
-      </div>
+        {/* Footer */}
+        <div className="p-6 bg-[#FAFAFA] border-t border-gray-100">
+          <button className="w-full bg-[#2C2C2C] text-white py-4 text-sm font-medium tracking-widest uppercase hover:bg-[#8C7A6B] transition-colors duration-300 shadow-sm">
+            Checkout
+          </button>
+          <p className="text-xs text-gray-400 mt-4 text-center font-light tracking-wide">Shipping, taxes, and discount codes calculated at checkout.</p>
+        </div>
 
       </div>
 
