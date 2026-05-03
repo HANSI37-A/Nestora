@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FiSearch, FiUser, FiList, FiBell } from 'react-icons/fi';
 import CartDrawer from '../Layout/CartDrawer';
+import { IoMdClose } from "react-icons/io";
 
 const categories = [
   'Furniture', 'Rugs', 'Outdoor', 'Bedding', 'Bath',
@@ -34,7 +35,7 @@ export const Navbar = () => {
               placeholder="Find all things home & beyond"
               className="flex-1 px-4 text-sm text-gray-700 outline-none placeholder-gray-400"
             />
-            <button className="bg-[#2C2C2C] text-white w-12 h-10 flex items-center justify-center hover:bg-[#3E362E] transition-colors">
+            <button onClick={toggleNavDrawer} className="bg-[#2C2C2C] text-white w-12 h-10 flex items-center justify-center hover:bg-[#3E362E] transition-colors">
               <FiSearch size={16} />
             </button>
           </div>
@@ -83,6 +84,12 @@ export const Navbar = () => {
 
       {/* Nav Drawer */}
       <div className={`fixed top-0 left-0 w-3/4 sm:w-1/2 md:w-1/3 h-full bg-white shadow-lg transform transition-transform duration-300 z-50 ${navDrawerOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+
+      <div className="flex items-center justify-end p-4">
+        <button onClick={toggleNavDrawer}>
+          <IoMdClose className="h-6 w-6 text-gray-600" />
+        </button>
+      </div>
       </div>
 
     </>

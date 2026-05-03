@@ -4,6 +4,7 @@ import CartContents  from "../Cart/CartContents";
 
 const CartDrawer = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
 
   return (
     <>
@@ -25,7 +26,7 @@ const CartDrawer = () => {
       )}
 
       {/* Drawer */}
-      <div className={`fixed top-0 right-0 h-full w-full sm:w-[400px] bg-white shadow-2xl z-50 transform transition-transform duration-500 ease-in-out flex flex-col ${drawerOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`fixed top-0 right-0 h-full w-full sm:w-100 bg-white shadow-2xl z-50 transform transition-transform duration-500 ease-in-out flex flex-col ${drawerOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         
         {/* Header */}
         <div className="p-6 border-b border-gray-100 flex justify-between items-center">
@@ -40,8 +41,13 @@ const CartDrawer = () => {
         
         {/* Body */}
         <div className="flex-1 overflow-y-auto p-6">
-          <p className="text-sm text-gray-500 font-light text-center mt-10">Your cart is currently empty.</p>
-          <CartContents />
+          {cartItems.length === 0 ? (
+             <p className="text-sm text-gray-500 font-light text-center mt-10">
+               Your cart is currently empty.
+              </p>
+            ) : (
+               <CartContents cartItems={cartItems} />
+         )}
         </div>
 
         {/* Footer */}
