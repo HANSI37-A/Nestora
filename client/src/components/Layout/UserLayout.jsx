@@ -1,5 +1,8 @@
 import React from 'react'
 import { Header } from '../Common/Header'
+import Footer from '../Common/Footer'
+import heroimg from '../../assets/heroimg.jpg'
+
 
 const products = [
   { id: 1, name: 'Modern Sofa', price: '$899', image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800' },
@@ -16,13 +19,14 @@ const rooms = [
 
 const UserLayout = () => {
   return (
+    <>
     <div className="min-h-screen bg-[#FAFAFA] font-sans">
       <Header/>
       
       {/* Hero Section */}
       <section className="relative h-[80vh] w-full bg-[#EAE8E3]">
         <img 
-          src="https://images.unsplash.com/photo-1618220179428-22790b46a0eb?auto=format&fit=crop&q=80&w=2000" 
+          src={heroimg}
           alt="Modern living room" 
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -102,6 +106,8 @@ const UserLayout = () => {
       </main>
 
     </div>
+    <Footer />
+    </>
   )
 }
 
