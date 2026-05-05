@@ -143,7 +143,6 @@ const ProductDetails = () => {
               Add to Cart
             </button>
           </div>
-
         </div>
       </div>
     </div>
