@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ProductGrid from "./ProductGrid";
 
 const selectedProduct = {
   name: "Stylish Jacket",
@@ -15,6 +16,21 @@ const selectedProduct = {
     { url: "https://picsum.photos/500/600?random=3", altText: "Stylish Jacket Back View" },
   ],
 };
+
+const similarProducts = [
+  {
+    _id: "1",
+    name: "Casual Hoodie",
+    price: "$49.99",
+    images: [{ url: "https://picsum.photos/300/400?random=4", altText: "Casual Hoodie" }],
+  },
+  {
+    _id: "2",
+    name: "Slim Fit Jeans",
+    price: "$69.99",
+    images: [{ url: "https://picsum.photos/300/400?random=5", altText: "Slim Fit Jeans" }],
+  }
+];
 
 const ProductDetails = () => {
   const [mainImage, setMainImage] = useState(selectedProduct.images[0]?.url || null); 
@@ -145,6 +161,10 @@ const ProductDetails = () => {
           </div>
         </div>
       </div>
+       <div className="mt-20">
+          <h2 className="text-2xl text-center font-medium mb-4">You May Also Like</h2>
+          <ProductGrid products={similarProducts} />
+        </div>
     </div>
   );
 };
