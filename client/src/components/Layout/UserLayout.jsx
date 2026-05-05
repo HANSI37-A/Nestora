@@ -2,6 +2,8 @@ import React from 'react'
 import { Header } from '../Common/Header'
 import Footer from '../Common/Footer'
 import heroimg from '../../assets/heroimg.jpg'
+import ProductDetails from '../Products/ProductDetails'
+
 
 
 const products = [
@@ -104,9 +106,12 @@ const UserLayout = () => {
           </div>
         </section>
       </main>
+          <ProductDetails/>
+          <Footer />
 
     </div>
-    <Footer />
+ 
+
     </>
   )
 }
