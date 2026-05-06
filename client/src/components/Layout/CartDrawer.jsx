@@ -6,26 +6,26 @@ const CartDrawer = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Product 1",
-      size: "M",
-      color: "Red",
-      price: 29.99,
-      quantity: 1, 
-      Image: "https://via.placeholder.com/80",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      size: "L",
-      color: "Blue",
-      price: 49.99,
-      quantity: 2, 
-      Image: "https://via.placeholder.com/80",
-    },
-  ]);
+const [cartItems, setCartItems] = useState([
+  {
+    id: 1,
+    name: "Product 1",
+    size: "M",
+    color: "Red",
+    price: 29.99,
+    quantity: 1,
+    Image: "https://placehold.co/80x96?text=Product+1", 
+  },
+  {
+    id: 2,
+    name: "Product 2",
+    size: "L",
+    color: "Blue",
+    price: 49.99,
+    quantity: 2,
+    Image: "https://placehold.co/80x96?text=Product+2", 
+  },
+]);
 
   return (
     <>
