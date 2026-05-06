@@ -33,7 +33,7 @@ const similarProducts = [
 ];
 
 const ProductDetails = () => {
-  const [mainImage, setMainImage] = useState(selectedProduct.images[0]?.url || null); 
+  const [mainImage, setMainImage] = useState(selectedProduct?.images?.[0]?.url || null); 
   
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
@@ -73,7 +73,7 @@ const ProductDetails = () => {
             {mainImage && ( 
               <img
                 src={mainImage}
-                alt={selectedProduct.images[0].altText || "Product Image"}
+                alt={selectedProduct?.images?.[0]?.altText || "Product Image"}
                 className="w-full h-125 object-cover rounded-lg"
                 onError={(e) => { e.target.src = "https://placehold.co/500x600?text=Image+Not+Found"; }} 
               />
