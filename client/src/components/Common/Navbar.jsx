@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FiSearch, FiUser, FiList, FiBell } from 'react-icons/fi';
 import CartDrawer from '../Layout/CartDrawer';
 import { IoMdClose } from "react-icons/io";
+import { Link } from 'react-router-dom';
 
 const categories = [
   'Furniture', 'Rugs', 'Outdoor', 'Bedding', 'Bath',
@@ -45,8 +46,11 @@ export const Navbar = () => {
 
             {/* Account */}
             <div className="flex flex-col items-center cursor-pointer hover:text-[#8C7A6B] transition-colors">
-              <FiUser size={20} />
-              <span className="text-[10px] text-gray-500 mt-0.5">Account</span>
+              <Link to="/login" className="flex flex-col items-center cursor-pointer hover:text-[#8C7A6B] transition-colors">
+                <FiUser size={20} />
+                <span className="text-[10px] text-gray-500 mt-0.5">Account</span>
+              </Link>
+
             </div>
 
             {/* Lists */}
