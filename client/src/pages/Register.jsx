@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Footer from "../components/Common/Footer";
 import Navbar from "../components/Common/Navbar";
-import register from "../assets/register.webp"
-;
+import register from "../assets/register.webp";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -12,17 +11,17 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Login:", email, password);
+    console.log("User Register:", { name, email, password });
   };
 
   return (
-    <div className="grid grid-cols-1 min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gray-50"> 
       <Navbar />
 
       {/* Main Section */}
       <div className="flex flex-1">
 
-        {/* Left Side - Login Form */}
+        {/* Left Side - Register Form */}
         <div className="w-full md:w-1/2 flex items-center justify-center px-6 py-12 md:px-16 bg-white">
           <div className="w-full max-w-md">
 
@@ -32,7 +31,7 @@ const Register = () => {
                 Rabbit
               </h2>
               <p className="text-gray-500 mt-2 text-sm">
-                Welcome back! Please sign in to continue.
+                Create an account to get started. 
               </p>
             </div>
 
@@ -54,7 +53,6 @@ const Register = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Name
                 </label>
-
                 <input
                   type="text"
                   value={name}
@@ -69,9 +67,8 @@ const Register = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Email
                 </label>
-
                 <input
-                  type="text"
+                  type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email address"
@@ -84,7 +81,6 @@ const Register = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Password
                 </label>
-
                 <input
                   type="password"
                   value={password}
@@ -102,11 +98,11 @@ const Register = () => {
                 Register
               </button>
 
-              {/* Register Link */}
+              {/* Login Link */}
               <p className="mt-6 text-center text-sm text-gray-600">
-                Don't have an account?{" "}
+                Already have an account?{" "} 
                 <Link
-                  to="/register"
+                  to="/login" 
                   className="text-black font-semibold hover:underline"
                 >
                   Sign In
@@ -117,7 +113,7 @@ const Register = () => {
         </div>
 
         {/* Right Side - Image */}
-        <div className="hidden md:block md:w-2/5 relative overflow-hidden rounded-2xl">
+        <div className="hidden md:flex md:w-1/2 relative overflow-hidden"> 
           <img
             src={register}
             alt="Register for account"
@@ -125,15 +121,13 @@ const Register = () => {
           />
 
           {/* Dark Overlay */}
-          <div className="absolute inset-0 bg-black/30"></div>
-
+          <div className="absolute inset-0 bg-black/40"></div> 
           {/* Text Overlay */}
-          <div className="absolute inset-0 flex flex-col justify-center items-center text-white px-10 text-center">
+          <div className="absolute inset-0 flex flex-col justify-end p-12 text-white"> 
             <h2 className="text-5xl font-extrabold mb-4 leading-tight">
               Discover Your <br /> Perfect Style
             </h2>
-
-            <p className="text-lg text-gray-200 max-w-md">
+            <p className="text-base text-gray-200 max-w-md leading-relaxed">
               Shop the latest trends with premium quality fashion designed for your everyday lifestyle.
             </p>
           </div>

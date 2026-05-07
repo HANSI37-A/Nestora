@@ -10,11 +10,11 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Login:", email, password);
+    console.log("Login:", { email, password });
   };
 
   return (
-    <div className="grid grid-cols-1 min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       <Navbar />
 
       {/* Main Section */}
@@ -52,7 +52,6 @@ const Login = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Email
                 </label>
-
                 <input
                   type="email"
                   value={email}
@@ -67,7 +66,6 @@ const Login = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Password
                 </label>
-
                 <input
                   type="password"
                   value={password}
@@ -85,22 +83,23 @@ const Login = () => {
                 Sign In
               </button>
 
-              {/* Register Link */}
+            
               <p className="mt-6 text-center text-sm text-gray-600">
                 Don't have an account?{" "}
                 <Link
                   to="/register"
                   className="text-black font-semibold hover:underline"
                 >
-                  Sign Up
+                  Create Account
                 </Link>
               </p>
+
             </form>
           </div>
         </div>
 
         {/* Right Side - Image */}
-        <div className="hidden md:block md:w-2/5 relative overflow-hidden rounded-2xl">
+        <div className="hidden md:flex md:w-1/2 relative overflow-hidden">
           <img
             src={login}
             alt="Login to account"
@@ -108,15 +107,14 @@ const Login = () => {
           />
 
           {/* Dark Overlay */}
-          <div className="absolute inset-0 bg-black/30"></div>
+          <div className="absolute inset-0 bg-black/40"></div>
 
           {/* Text Overlay */}
-          <div className="absolute inset-0 flex flex-col justify-center items-center text-white px-10 text-center">
+          <div className="absolute inset-0 flex flex-col justify-end p-12 text-white">
             <h2 className="text-5xl font-extrabold mb-4 leading-tight">
               Discover Your <br /> Perfect Style
             </h2>
-
-            <p className="text-lg text-gray-200 max-w-md">
+            <p className="text-base text-gray-200 max-w-md leading-relaxed">
               Shop the latest trends with premium quality fashion designed for your everyday lifestyle.
             </p>
           </div>
