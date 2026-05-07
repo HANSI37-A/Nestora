@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Footer from "../components/Common/Footer";
 import Navbar from "../components/Common/Navbar";
-import login from "../assets/login.webp";
+import register from "../assets/register.webp"
+;
 
-const Login = () => {
+const Register = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -40,12 +42,27 @@ const Login = () => {
               className="bg-white border border-gray-200 shadow-xl rounded-2xl p-8"
             >
               <h2 className="text-3xl font-bold text-gray-900 mb-2 text-center">
-                Sign In
+                Register
               </h2>
 
               <p className="text-sm text-gray-500 text-center mb-8">
-                Enter your username and password to login
+                Create a new account to get started
               </p>
+
+              {/* Name */}
+              <div className="mb-5">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Name
+                </label>
+
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter your name"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition"
+                />
+              </div>
 
               {/* Email */}
               <div className="mb-5">
@@ -54,7 +71,7 @@ const Login = () => {
                 </label>
 
                 <input
-                  type="email"
+                  type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email address"
@@ -82,7 +99,7 @@ const Login = () => {
                 type="submit"
                 className="w-full bg-black text-white py-3 rounded-xl font-semibold tracking-wide hover:bg-gray-800 transition duration-300 shadow-md"
               >
-                Sign In
+                Register
               </button>
 
               {/* Register Link */}
@@ -92,7 +109,7 @@ const Login = () => {
                   to="/register"
                   className="text-black font-semibold hover:underline"
                 >
-                  Sign Up
+                  Sign In
                 </Link>
               </p>
             </form>
@@ -102,8 +119,8 @@ const Login = () => {
         {/* Right Side - Image */}
         <div className="hidden md:block md:w-2/5 relative overflow-hidden rounded-2xl">
           <img
-            src={login}
-            alt="Login to account"
+            src={register}
+            alt="Register for account"
             className="w-full h-full object-cover"
           />
 
@@ -129,4 +146,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
