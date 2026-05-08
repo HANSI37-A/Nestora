@@ -75,6 +75,25 @@ const MyOrdersPage = () => {
                   <td className="py-2 px-2 sm:py-4 sm:px-4">
                     <img src={order.orderItems[0].image} alt={order.orderItems[0].name} className="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-lg" />
                   </td>
+                  <td className="py-2 px-2 sm:py-4 font-medium text-gray -900 whitespace-nowrap">#{order._id}</td>
+                  <td className="py-2 px-2 sm:py-4 sm:px-4">
+                    {new Date(order.createdAt).toLocaleDateString()}
+                    {new Date(order.createdAt).toLocaleTimeString()}
+                  </td>
+                  <td className="py-2 px-2 sm:py-4 sm:px-4">
+                    {order.shippingAddress ? `${order.shippingAddress.city}, ${order.shippingAddress.country}` : "N/A"}
+                  </td>
+                  <td className="py-2 px-2 sm:py-4 sm:px-4">
+                    {order.orderItems.length} 
+                  </td>
+                  <td className="py-2 px-2 sm:py-4 sm:px-4">
+                    ${order.totalPrice}
+                  </td>
+                  <td>
+                    <span className={`${order.isPaid ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"} px-2 py-1 rounded-full text-xs font-semibold`}>
+                      {order.isPaid ? "Paid" : "Not Paid"}
+                    </span>
+                  </td>
                 </tr>
             )) 
           ) : (
