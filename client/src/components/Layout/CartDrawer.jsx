@@ -4,6 +4,10 @@ import CartContents from "../Cart/CartContents";
 
 const CartDrawer = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const navigate = useNavigate();
+  const handleCheckout = () => {
+        navigate("/checkout");
+  }
 
   
 const [cartItems, setCartItems] = useState([
@@ -73,7 +77,7 @@ const [cartItems, setCartItems] = useState([
 
         {/* Footer */}
         <div className="p-6 bg-[#FAFAFA] border-t border-gray-100">
-          <button className="w-full bg-[#2C2C2C] text-white py-4 text-sm font-medium tracking-widest uppercase hover:bg-[#8C7A6B] transition-colors duration-300 shadow-sm">
+          <button onClick={handleCheckout} className="w-full bg-[#2C2C2C] text-white py-4 text-sm font-medium tracking-widest uppercase hover:bg-[#8C7A6B] transition-colors duration-300 shadow-sm">
             Checkout
           </button>
           <p className="text-xs text-gray-400 mt-4 text-center font-light tracking-wide">

@@ -4,6 +4,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
 import Collection from './pages/Collection';
+import ProductDetails from './components/Products/ProductDetails';
+import CheckOut from './components/Cart/CheckOut';
 
 
 const App = () => {
@@ -15,6 +17,8 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/collection/:category" element={<Collection />} />
+        <Route path="product/:id" element={<ProductDetails />} />
+        <Route path="chechout" element={<Checkout />} />
       </Routes>
     </BrowserRouter>
   );
