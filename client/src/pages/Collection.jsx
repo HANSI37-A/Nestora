@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react'; 
+import { useEffect, useRef, useState } from 'react'; 
 import { FaFilter } from "react-icons/fa";
 import FilterSidebar from '../components/Products/FilterSidebar';
 import Navbar from '../components/Common/Navbar';
+import SortOptions from '../components/Products/SortOptions';
+import ProductGrid from '../components/Products/ProductGrid';
 
 const Collection = () => {
   const [products, setProducts] = useState([]);
@@ -12,16 +14,18 @@ const Collection = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const handleClickOutSide = (e) =>{
-
-    if (sidebarRef.current && !sidebarRef.current.contains(e.target)){
+  const handleClickOutSide = (e) => {
+    if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
       setIsSidebarOpen(false);
     }
-  }
+  };
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutSide);
-  });
+    return () => { 
+      document.removeEventListener("mousedown", handleClickOutSide);
+    };
+  }, []); 
 
   useEffect(() => {
     setTimeout(() => {
@@ -30,7 +34,7 @@ const Collection = () => {
           _id: 1,
           name: "Product 1",
           price: 100,
-          images: [{ url: "https://placehold.co/150x150?text=Product+1", altText: "Product 1" }], 
+          images: [{ url: "https://placehold.co/150x150?text=Product+1", altText: "Product 1" }],
           category: "Clothing",
           color: "Red",
           size: ["S", "M", "L"],
@@ -54,48 +58,51 @@ const Collection = () => {
           size: ["One Size"],
         },
       ];
-
       setProducts(fetchedProducts);
     }, 1000);
   }, []);
 
   return (
     <>
-    <Navbar />
-    <div className="flex flex-col lg:flex-row gap-6 p-4">
+      <Navbar />
+      <div className="flex flex-col lg:flex-row gap-6 p-4">
 
-      {/* Mobile Filter Button */}
-      <button className="lg:hidden border p-2 flex justify-center items-center gap-2 text-sm font-medium">
-        <FaFilter className="mr-2" />
-        Filter
-      </button>
+        {/* Mobile Filter Button */}
+        <button
+          onClick={toggleSidebar} 
+          className="lg:hidden border p-2 flex justify-center items-center gap-2 text-sm font-medium"
+        >
+          <FaFilter className="mr-2" />
+          Filter
+        </button>
 
-      {/* Sidebar */}
-      <div ref={sidebarRef} className="lg:w-1/4">
-        <FilterSidebar />
-      </div>
+        {/* Sidebar */}
+        <div
+          ref={sidebarRef}
+          className={`fixed top-0 left-0 h-full w-3/4 bg-white shadow-lg z-50 transform transition-transform duration-300 lg:relative lg:translate-x-0 lg:w-1/4 lg:shadow-none ${
+            isSidebarOpen ? "translate-x-0" : "-translate-x-full" 
+          }`}
+        >
+          <FilterSidebar />
+        </div>
+        <div className="grow p-4">
+          <h2 className="text-2xl uppercase mb-4">All Collection</h2>
 
-      {/* Product Grid */}
-      <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.length === 0 ? (
-          <p className="text-gray-500 text-sm">Loading products...</p>
-        ) : (
-          products.map((product) => (
-            <div key={product._id} className="bg-white rounded-lg shadow p-4 hover:shadow-md transition">
-              <img
-                src={product.images[0]?.url}
-                alt={product.images[0]?.altText || product.name}
-                className="w-full h-48 object-cover rounded mb-3"
-                onError={(e) => { e.target.src = "https://placehold.co/150x150?text=No+Image"; }}
-              />
-              <h3 className="text-sm font-medium text-gray-800">{product.name}</h3>
-              <p className="text-sm text-gray-500">${product.price}</p>
-            </div>
-          ))
+          <SortOptions />
+
+          <ProductGrid products={products} />
+        </div>
+
+        {/* Overlay for mobile */}
+        {isSidebarOpen && (
+          <div
+            className="fixed inset-0 bg-black/40 z-40 lg:hidden" 
+            onClick={() => setIsSidebarOpen(false)}
+          />
         )}
-      </div>
 
-    </div>
+
+      </div>
     </>
   );
 };
