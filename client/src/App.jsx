@@ -3,6 +3,7 @@ import UserLayout from './components/Layout/UserLayout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
+import Collection from './pages/Collection';
 
 
 const App = () => {
