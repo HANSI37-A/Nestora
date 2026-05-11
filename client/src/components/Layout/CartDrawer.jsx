@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { FiShoppingBag } from "react-icons/fi";
 import CartContents from "../Cart/CartContents";
+import { useNavigate } from "react-router-dom";
 
 const CartDrawer = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
   const handleCheckout = () => {
-        navigate("/checkout");
+        navigate("/checkOut");
   }
 
   
