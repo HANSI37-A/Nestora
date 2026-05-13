@@ -6,31 +6,32 @@ import { useNavigate } from "react-router-dom";
 const CartDrawer = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
-  const handleCheckout = () => {
-        navigate("/checkOut");
-  }
 
-  
-const [cartItems, setCartItems] = useState([
-  {
-    id: 1,
-    name: "Product 1",
-    size: "M",
-    color: "Red",
-    price: 29.99,
-    quantity: 1,
-    Image: "https://placehold.co/80x96?text=Product+1", 
-  },
-  {
-    id: 2,
-    name: "Product 2",
-    size: "L",
-    color: "Blue",
-    price: 49.99,
-    quantity: 2,
-    Image: "https://placehold.co/80x96?text=Product+2", 
-  },
-]);
+  const handleCheckout = () => {
+    setDrawerOpen(false);
+    navigate("/checkOut");
+  };
+
+  const [cartItems, setCartItems] = useState([
+    {
+      id: 1,
+      name: "Product 1",
+      size: "M",
+      color: "Red",
+      price: 29.99,
+      quantity: 1,
+      Image: "https://placehold.co/80x96?text=Product+1",
+    },
+    {
+      id: 2,
+      name: "Product 2",
+      size: "L",
+      color: "Blue",
+      price: 49.99,
+      quantity: 2,
+      Image: "https://placehold.co/80x96?text=Product+2",
+    },
+  ]);
 
   return (
     <>
@@ -52,11 +53,17 @@ const [cartItems, setCartItems] = useState([
       )}
 
       {/* Drawer */}
-      <div className={`fixed top-0 right-0 h-full w-full sm:w-100 bg-white shadow-2xl z-50 transform transition-transform duration-500 ease-in-out flex flex-col ${drawerOpen ? "translate-x-0" : "translate-x-full"}`}>
-
+      <div
+        className={`fixed top-0 right-0 h-full w-full sm:w-100 bg-white shadow-2xl z-50 transform transition-transform duration-500 ease-in-out flex flex-col ${
+          drawerOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
         {/* Header */}
         <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-          <h2 className="text-2xl font-light text-[#2C2C2C] tracking-wide">Your Cart</h2>
+          <h2 className="text-2xl font-light text-[#2C2C2C] tracking-wide">
+            Your Cart
+          </h2>
+
           <button
             onClick={() => setDrawerOpen(false)}
             className="text-gray-400 hover:text-[#8C7A6B] text-2xl transition-colors p-2"
@@ -72,20 +79,23 @@ const [cartItems, setCartItems] = useState([
               Your cart is currently empty.
             </p>
           ) : (
-            <CartContents cartItems={cartItems} /> 
+            <CartContents cartItems={cartItems} />
           )}
         </div>
 
         {/* Footer */}
         <div className="p-6 bg-[#FAFAFA] border-t border-gray-100">
-          <button onClick={handleCheckout} className="w-full bg-[#2C2C2C] text-white py-4 text-sm font-medium tracking-widest uppercase hover:bg-[#8C7A6B] transition-colors duration-300 shadow-sm">
+          <button
+            onClick={handleCheckout}
+            className="w-full bg-[#2C2C2C] text-white py-4 text-sm font-medium tracking-widest uppercase hover:bg-[#8C7A6B] transition-colors duration-300 shadow-sm"
+          >
             Checkout
           </button>
+
           <p className="text-xs text-gray-400 mt-4 text-center font-light tracking-wide">
             Shipping, taxes, and discount codes calculated at checkout.
           </p>
         </div>
-
       </div>
     </>
   );

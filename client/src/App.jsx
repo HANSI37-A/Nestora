@@ -6,6 +6,8 @@ import Profile from './pages/Profile';
 import Collection from './pages/Collection';
 import ProductDetails from './components/Products/ProductDetails';
 import CheckOut from './components/Cart/CheckOut';
+import OrderConfirmation from './pages/OrderConfirmation';
+import OrderDetailsPage from './pages/OrderDetailsPage';
 
 
 
@@ -20,7 +22,10 @@ const App = () => {
         <Route path="/collection/:category" element={<Collection />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/checkout" element={<CheckOut />} />
+        <Route path="/order-confirmation" element={<OrderConfirmation />} />
+        <Route path="/order/:id" element={<OrderDetailsPage />} />
       </Routes>
+      
     </BrowserRouter>
   );
 };
