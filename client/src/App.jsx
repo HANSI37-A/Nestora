@@ -8,6 +8,7 @@ import ProductDetails from './components/Products/ProductDetails';
 import CheckOut from './components/Cart/CheckOut';
 import OrderConfirmation from './pages/OrderConfirmation';
 import OrderDetailsPage from './pages/OrderDetailsPage';
+import MyOrdersPage from './pages/MyOrdersPage';
 
 
 
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/checkout" element={<CheckOut />} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
         <Route path="/order/:id" element={<OrderDetailsPage />} />
+        <Route path="/my-orders" element={<MyOrdersPage />} />
       </Routes>
       
     </BrowserRouter>
