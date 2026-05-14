@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 const checkout = {
   _id: "12323",
   createdAt: new Date(),
@@ -27,6 +29,8 @@ const checkout = {
 };
 
 const OrderConfirmation = () => {
+  
+const navigate = useNavigate();
 
   const calculateEstimatedDelivery = (createdAt) => {
     const orderDate = new Date(createdAt);
@@ -40,7 +44,7 @@ const OrderConfirmation = () => {
 
       {checkout && (
         <div className="p-6 rounded-lg border">
-          <div  lassName="flex justify-between mb-20">
+          <div  className="flex justify-between mb-20">
             <div>
               <h2>Order ID: {checkout._id}</h2>
               <p className="text-gray-500">

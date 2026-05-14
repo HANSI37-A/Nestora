@@ -1,9 +1,11 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const OrderDetailsPage = () => {
   const { id } = useParams();
   const [orderDetails, setOrderDetails] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const mockOrderDetails = {
@@ -103,9 +105,12 @@ const OrderDetailsPage = () => {
               </tbody>
             </table>
           </div>
-          <Link to="my-orders" className="text-blue-500 hover:underline">
+          <button
+            onClick={() => navigate("/my-orders")}
+            className="text-blue-500 hover:underline"
+          >
             ← Back to My Orders
-          </Link>
+          </button>
         </div>
       )}
     </div>
