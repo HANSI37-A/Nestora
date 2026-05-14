@@ -9,6 +9,7 @@ import CheckOut from './components/Cart/CheckOut';
 import OrderConfirmation from './pages/OrderConfirmation';
 import OrderDetailsPage from './pages/OrderDetailsPage';
 import MyOrdersPage from './pages/MyOrdersPage';
+import Home from './pages/Home';
 
 
 
@@ -16,6 +17,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route element={<Home />}>
         <Route path="/" element={<UserLayout />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -26,6 +28,7 @@ const App = () => {
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
         <Route path="/my-orders" element={<MyOrdersPage />} />
         <Route path="/order/:id" element={<OrderDetailsPage />} />
+        </Route>
       </Routes>
       
     </BrowserRouter>

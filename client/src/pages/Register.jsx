@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import Footer from "../components/Common/Footer";
-import Navbar from "../components/Common/Navbar";
 import register from "../assets/register.webp";
 
 const Register = () => {
@@ -16,7 +14,7 @@ const Register = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50"> 
-      <Navbar />
+      
 
       {/* Main Section */}
       <div className="flex flex-1">
@@ -135,7 +133,7 @@ const Register = () => {
 
       </div>
 
-      <Footer />
+      
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'; 
 import { FaFilter } from "react-icons/fa";
 import FilterSidebar from '../components/Products/FilterSidebar';
-import Navbar from '../components/Common/Navbar';
 import SortOptions from '../components/Products/SortOptions';
 import ProductGrid from '../components/Products/ProductGrid';
 
@@ -64,7 +63,7 @@ const Collection = () => {
 
   return (
     <>
-      <Navbar />
+
       <div className="flex flex-col lg:flex-row gap-6 p-4">
 
         {/* Mobile Filter Button */}
