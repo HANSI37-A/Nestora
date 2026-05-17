@@ -10,6 +10,7 @@ import OrderConfirmation from './pages/OrderConfirmation';
 import OrderDetailsPage from './pages/OrderDetailsPage';
 import MyOrdersPage from './pages/MyOrdersPage';
 import Home from './pages/Home';
+import AdminLayout from './components/Admin/AdminLayout';
 
 
 
@@ -29,6 +30,7 @@ const App = () => {
         <Route path="/my-orders" element={<MyOrdersPage />} />
         <Route path="/order/:id" element={<OrderDetailsPage />} />
         </Route>
+        <Route path="/admin" element={<AdminLayout />} />
       </Routes>
       
     </BrowserRouter>
