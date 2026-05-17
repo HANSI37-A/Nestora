@@ -1,6 +1,5 @@
 import React from 'react'
 import { Header } from '../Common/Header'
-import Footer from '../Common/Footer'
 import heroimg from '../../assets/heroimg.jpg'
 import ProductDetails from '../Products/ProductDetails'
 import FeaturedCollection from '../Products/FeaturedCollection'
@@ -110,7 +109,7 @@ const UserLayout = () => {
       
           <ProductDetails />
           <FeaturedCollection />
-          <Footer />
+        
 
     </div>
 
