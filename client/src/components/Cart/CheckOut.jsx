@@ -1,7 +1,5 @@
 import { useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../Common/Navbar';
-import Footer from '../Common/Footer';
 import PayPalButton from './PayPalButton';
 
 const cart = {
@@ -46,7 +44,7 @@ const Checkout = () => {
   }
   return (
     <>
-    <Navbar/>
+   
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto py-10 px-6 tracking-tighter">
       
       <div className="bg-white rounded-lg p-6">
@@ -163,7 +161,6 @@ const Checkout = () => {
         </div>
       </div>
     </div>
-    <Footer />
     </>
   );
 };

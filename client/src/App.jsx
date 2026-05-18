@@ -14,6 +14,8 @@ import AdminLayout from './components/Admin/AdminLayout';
 import AdminHomePage from './pages/AdminHomePage';
 import UserManaagement from './components/Admin/UserManaagement';
 import ProductManagement from './components/Admin/ProductManagement';
+import EditProductPage from './components/Admin/EditProductPage';
+import OrderManagement from './components/Admin/OrderManagement';
 
 
 
@@ -21,8 +23,8 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<UserLayout />}>
-        <Route path="/" element={<Home />} />
+        <Route element={<Home />}>
+        <Route path="/" element={<UserLayout />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
@@ -38,6 +40,8 @@ const App = () => {
           <Route index element={<AdminHomePage />} />
           <Route path="users" element={<UserManaagement />} />
           <Route path="products" element={<ProductManagement />} />
+          <Route path="products/:id/edit" element={<EditProductPage />} />
+          <Route path="orders" element={<OrderManagement />} />
         </Route>
 
       </Routes>
