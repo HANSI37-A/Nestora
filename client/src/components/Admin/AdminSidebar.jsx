@@ -34,7 +34,7 @@ const AdminSidebar = () => {
           <span>Users</span>
         </NavLink>
        <NavLink
-          to="/admin/product"
+          to="/admin/products"
           className={({ isActive }) =>
             isActive
               ? "bg-gray-700 text-white py-3 px-4 rounded flex items-center space-x-2"
