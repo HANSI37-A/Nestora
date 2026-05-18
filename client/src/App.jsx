@@ -14,12 +14,13 @@ import AdminLayout from './components/Admin/AdminLayout';
 
 
 
+
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<Home />}>
-        <Route path="/" element={<UserLayout />} />
+        <Route element={<UserLayout />}>
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
@@ -30,6 +31,7 @@ const App = () => {
         <Route path="/my-orders" element={<MyOrdersPage />} />
         <Route path="/order/:id" element={<OrderDetailsPage />} />
         </Route>
+
         <Route path="/admin" element={<AdminLayout />} />
       </Routes>
       
