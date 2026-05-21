@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { collection } = require('./User');
 
 const productSchema = new mongoose.Schema({
   name: {
@@ -40,28 +39,32 @@ const productSchema = new mongoose.Schema({
     type: [String],
     required: true,
   },
-  collection: {
+  sizes: {
+    type: [String],
+    default: [],
+  },
+  productCollection: {
     type: String,
     required: true,
   },
   material: {
     type: String,
   },
-   images: [
+  images: [
     {
       url: { type: String, required: true },
       alt: { type: String },
     },
   ],
   isFeatured: {
-  type: Boolean,
-  default: false,
-}, 
- isPublished: {
-  type: Boolean,
-  default: false,
-},
- rating: {
+    type: Boolean,
+    default: false,
+  }, 
+  isPublished: {
+    type: Boolean,
+    default: false,
+  },
+  rating: {
     type: Number,
     default: 0,
   },
@@ -71,13 +74,13 @@ const productSchema = new mongoose.Schema({
   },
   tags: {
     type: [String],
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
   },
-  metaTitale: {
+  user: {
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User',
+    required: true,
+  },
+  metaTitle: { 
     type: String,
   },
   metaDescription: {
