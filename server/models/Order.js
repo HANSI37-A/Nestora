@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const oderItemSchema = new mongoose.Schema({
+const orderItemSchema = new mongoose.Schema({
   productId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
@@ -31,7 +31,7 @@ const orderSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    requierd: true,
+    required: true,
   },
   orderItems: [orderItemSchema],
   shippingAddress: {
@@ -40,7 +40,7 @@ const orderSchema = new mongoose.Schema({
     postalCode: { type: String, required: true},
     country: { type: String, required: true},
   },
-  PaymentMethod: {
+  paymentMethod: {
     type: String,
     required: true,
   },
@@ -72,6 +72,6 @@ const orderSchema = new mongoose.Schema({
     default: "Processing",
   },
 
-},{ timeseries: true});
+},{ timestamps: true});
 
-module.exports = mongoose.model("order", orderSchema);
+module.exports = mongoose.model("Order", orderSchema);

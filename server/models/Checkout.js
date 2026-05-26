@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Product = require("./Product");
 
-const checkoutItemShema = new mongoose.Schema({
+const checkoutItemSchema = new mongoose.Schema({
   productId:{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
@@ -17,8 +17,12 @@ const checkoutItemShema = new mongoose.Schema({
   },
   price :{
     type: Number,
-    requierd: true,
+    required: true,
   },
+  quantity: {
+    type: Number,
+    required: true,
+  }
 },
 {_id: false }
 );
@@ -27,7 +31,7 @@ const checkoutSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    requierd: true,
+    required: true,
   },
   checkoutItems: [checkoutItemSchema],
   shippingAddress: {
@@ -53,7 +57,7 @@ const checkoutSchema = new mongoose.Schema({
   },
   paymentStatus: {
     type: String,
-    required: "pending",
+    default: "pending",
   },
   paymentDetails: {
     type: mongoose.Schema.Types.Mixed,
