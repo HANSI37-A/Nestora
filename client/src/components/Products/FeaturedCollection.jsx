@@ -10,17 +10,20 @@ const FeaturedCollection = () => {
           <div className="lg:w-1/2 p-8 text-center lg:text-left">
           <h2 className="text-lg font-semibold text-gray-700 mb-2">Featured Collection</h2>
 
-          <h2>Apparel made for your everyday life</h2>
+          {/* Re-engineered from apparel text to premium furniture alignment */}
+          <h2 className="text-3xl lg:text-4xl font-light tracking-wide text-neutral-900 mb-4 font-serif">
+            Artisanal curation made for your living space
+          </h2>
 
           <p className="text-lg text-gray-600 mb-6">
-            Discover our latest collection designed for comfort and style in your daily routine.
+            Discover our latest studio arrivals, meticulously engineered for structural longevity, timeless comfort, and refined minimalism.
           </p>
           <a href="/collections/all" className="bg-black text-white px-6 py-3 rounded-lg text-lg hover:bg-gray-800">Shop Now </a>
           </div>
 
           {/* right image */}
           <div className="lg:w-1/2">
-            <img src={heroimg} alt="Featured Collection" className="w-full h-full object-cover lg:rounded-tr-3xl lg:rounded-br-3xl"/>
+            <img src={heroimg} alt="NestOra Featured Collection Showroom" className="w-full h-full object-cover lg:rounded-tr-3xl lg:rounded-br-3xl"/>
           </div>
       </div>
     </section>

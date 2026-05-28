@@ -7,7 +7,7 @@ const checkout = {
     {
       productId: "1",
       name: "Oak Wood Lounge Chair",
-      color: "Natural",
+      color: "Natural Oak", // Matched premium finish description
       price: 450,
       quantity: 1,
       image: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&q=80&w=800",
@@ -15,7 +15,7 @@ const checkout = {
     {
       productId: "2",
       name: "Nordic Bouclé Sofa",
-      color: "Cream",
+      color: "Ivory Bouclé", // Matched premium fabric choice
       price: 1500,
       quantity: 1,
       image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800",
@@ -61,14 +61,14 @@ const navigate = useNavigate();
                 <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-md mr-4" />
                 <div>
                   <h4 className="text-md font-semibold">{item.name}</h4>
-                  <p className="text-gray-500 text-sm">{item.color}</p>
+                  <p className="text-gray-500 text-sm">Finish: {item.color}</p>
                 </div>
                 <div className="ml-auto text-right">
                   <p className="text-md">${item.price}</p>
                   <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                 </div>
-          </div>              
-              ))}
+              </div>              
+            ))}
           </div>
           <div className="grid grid-cols-2 gap-8">
             <div>
@@ -87,4 +87,4 @@ const navigate = useNavigate();
   )
 }
 
-export default OrderConfirmation
+export default OrderConfirmation;

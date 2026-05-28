@@ -13,24 +13,24 @@ const CartDrawer = () => {
     navigate("/checkout");
   };
 
-  const [cartItems, setCartItems] = useState([
+    const [cartItems, setCartItems] = useState([
     {
       id: 1,
-      name: "Product 1",
-      size: "M",
-      color: "Red",
-      price: 29.99,
+      name: "Eames-Inspired Velvet Accent Chair",
+      size: "Walnut / Emerald Velvet", // Replaced apparel sizes with high-end material/finish combinations
+      color: "Emerald",
+      price: 899.00, // Adjusted pricing structures to align with high-end furniture items
       quantity: 1,
-      image: "https://placehold.co/80x96?text=Product+1",
+      image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=120",
     },
     {
       id: 2,
-      name: "Product 2",
-      size: "L",
-      color: "Blue",
-      price: 49.99,
+      name: "Minimalist Oak Dining Chair",
+      size: "Solid White Oak", // Replaced apparel sizes with high-end material/finish combinations
+      color: "Natural Oak",
+      price: 149.00, // Adjusted pricing structures to align with high-end furniture items
       quantity: 2,
-      image: "https://placehold.co/80x96?text=Product+2",
+      image: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&q=80&w=120",
     },
   ]);
 
@@ -50,7 +50,7 @@ const CartDrawer = () => {
       >
         <div className="relative">
           <FiShoppingBag size={20} />
-         
+          
           {totalItemCount > 0 && (
             <span className="absolute -top-1.5 -right-1.5 bg-[#8C7A6B] text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center shadow-sm">
               {totalItemCount}
@@ -92,7 +92,7 @@ const CartDrawer = () => {
         {/* Body */}
         <div className="flex-1 overflow-y-auto p-6">
           {cartItems.length === 0 ? (
-           
+            
             <div className="flex flex-col items-center justify-center h-full gap-3 text-center">
               <FiShoppingBag size={40} className="text-gray-200" />
               <p className="text-sm text-gray-400 font-light">

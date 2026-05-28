@@ -40,7 +40,8 @@ const ProductDetails = ({ productId }) => {
 
   const handleAddToCart = () => {
     if (!selectedSize || !selectedColor) {
-      alert("Please select a size and color before adding to cart.");
+      // Swapped warning language to align with interior studio parameters
+      alert("Please select your desired configuration and finish options before adding to your collection.");
       return;
     }
 
@@ -54,12 +55,12 @@ const ProductDetails = ({ productId }) => {
         userId: user?._id,
       })
     );
-    alert(`Added ${quantity} x ${selectedProduct.name} (${selectedSize}, ${selectedColor}) to cart!`);
+    alert(`Added ${quantity} x ${selectedProduct.name} (${selectedSize}, ${selectedColor}) to your order selection!`);
   }; 
 
-  
+
   if (loading) {
-    return <div className="text-center p-10 font-light text-gray-500">Loading product details...</div>;
+    return <div className="text-center p-10 font-light text-gray-500">Loading premium catalog details...</div>;
   }
 
   if (error) {
@@ -67,7 +68,7 @@ const ProductDetails = ({ productId }) => {
   }
 
   if (!selectedProduct) {
-    return <div className="text-center p-10 text-gray-400">Product not found.</div>;
+    return <div className="text-center p-10 text-gray-400">Design piece not found.</div>;
   }
 
   return (
@@ -82,12 +83,12 @@ const ProductDetails = ({ productId }) => {
               <img
                 key={index}
                 src={img.url}
-                alt={img.altText || `Product Image ${index + 1}`}
+                alt={img.altText || `Showroom Angle ${index + 1}`}
                 className={`w-20 h-24 object-cover rounded cursor-pointer border-2 transition-all ${
                   mainImage === img.url ? "border-black" : "border-gray-200" 
                 }`}
                 onClick={() => setMainImage(img.url)}
-                onError={(e) => { e.target.src = "https://placehold.co/80x96?text=N/A"; }}
+                onError={(e) => { e.target.src = "https://placehold.co/80x96?text=Studio+View"; }}
               />
             ))}
           </div>
@@ -97,9 +98,9 @@ const ProductDetails = ({ productId }) => {
             {mainImage && ( 
               <img
                 src={mainImage}
-                alt={selectedProduct?.images?.[0]?.altText || "Product Image"}
+                alt={selectedProduct?.images?.[0]?.altText || "Featured Showroom Display"}
                 className="w-full h-125 object-cover rounded-lg shadow-sm"
-                onError={(e) => { e.target.src = "https://placehold.co/500x600?text=Image+Not+Found"; }} 
+                onError={(e) => { e.target.src = "https://placehold.co/500x600?text=Showroom+Piece+Not+Found"; }} 
               />
             )}
           </div>
@@ -113,14 +114,14 @@ const ProductDetails = ({ productId }) => {
             <p className="text-gray-500 text-sm leading-relaxed">{selectedProduct.description}</p>
 
             <div className="text-sm text-gray-500 space-y-1">
-              <p><span className="font-medium text-gray-700">Brand:</span> {selectedProduct.brand}</p>
-              <p><span className="font-medium text-gray-700">Category:</span> {selectedProduct.category}</p>
-              <p><span className="font-medium text-gray-700">Stock:</span> {selectedProduct.stock} available</p>
+              <p><span className="font-medium text-gray-700">Studio / Craftsman:</span> {selectedProduct.brand}</p>
+              <p><span className="font-medium text-gray-700">Living Zone:</span> {selectedProduct.category}</p>
+              <p><span className="font-medium text-gray-700">Availability:</span> {selectedProduct.stock} units remaining in studio</p>
             </div>
 
             {/* Size Selector */}
             <div>
-              <p className="text-sm font-medium text-gray-700 mb-2">Size:</p>
+              <p className="text-sm font-medium text-gray-700 mb-2">Dimensions & Configuration:</p>
               <div className="flex gap-2 flex-wrap">
                 {selectedProduct.sizes?.map((size) => (
                   <button
@@ -140,7 +141,7 @@ const ProductDetails = ({ productId }) => {
 
             {/* Color Selector */}
             <div>
-              <p className="text-sm font-medium text-gray-700 mb-2">Color:</p>
+              <p className="text-sm font-medium text-gray-700 mb-2">Finish & Material Palette:</p>
               <div className="flex gap-2 flex-wrap">
                 {selectedProduct.colors?.map((color) => (
                   <button

@@ -17,10 +17,10 @@ const Footer = () => {
             Stay Inspired
           </h3>
           <p className="text-gray-500 text-sm leading-relaxed mb-4">
-            Get updates on new arrivals, curated collections, and exclusive offers.
+            Get updates on new architectural arrivals, curated seasonal collections, and exclusive interior styling insights.
           </p>
           <p className="text-sm text-gray-600 mb-6">
-            Enjoy 10% off your first order.
+            Enjoy 10% off your first artisanal acquisition.
           </p>
 
           <form className="flex items-center bg-white border border-gray-300 rounded-md overflow-hidden focus-within:ring-1 focus-within:ring-[#8C7A6B]">
@@ -42,10 +42,10 @@ const Footer = () => {
             Explore
           </h3>
           <ul className="space-y-3 text-sm text-gray-600">
-            <li><Link to="#" className="hover:text-[#8C7A6B]">About Us</Link></li>
-            <li><Link to="#" className="hover:text-[#8C7A6B]">Contact</Link></li>
-            <li><Link to="#" className="hover:text-[#8C7A6B]">FAQ</Link></li>
-            <li><Link to="#" className="hover:text-[#8C7A6B]">Features</Link></li>
+            <li><Link to="#" className="hover:text-[#8C7A6B]">Our Story</Link></li>
+            <li><Link to="#" className="hover:text-[#8C7A6B]">Design Studio Contact</Link></li>
+            <li><Link to="#" className="hover:text-[#8C7A6B]">Artisanal Showrooms</Link></li>
+            <li><Link to="#" className="hover:text-[#8C7A6B]">Custom Materials & Care</Link></li>
           </ul>
         </div>
 
@@ -55,8 +55,8 @@ const Footer = () => {
             Customer Care
           </h3>
           <ul className="space-y-3 text-sm text-gray-600">
-            <li><Link to="#" className="hover:text-[#8C7A6B]">Shipping & Returns</Link></li>
-            <li><Link to="#" className="hover:text-[#8C7A6B]">Order Tracking</Link></li>
+            <li><Link to="#" className="hover:text-[#8C7A6B]">White-Glove Delivery & Returns</Link></li>
+            <li><Link to="#" className="hover:text-[#8C7A6B]">Fulfillment & Assembly Tracking</Link></li>
             <li><Link to="#" className="hover:text-[#8C7A6B]">Privacy Policy</Link></li>
             <li><Link to="#" className="hover:text-[#8C7A6B]">Terms & Conditions</Link></li>
           </ul>

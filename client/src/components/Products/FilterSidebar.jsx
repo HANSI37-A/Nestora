@@ -9,15 +9,20 @@ const FilterSidebar = () => {
     material: [],
     brand: [],
     minPrice: 0,
-    maxPrice: 100,
+    maxPrice: 5000, 
   });
 
-  const [priceRange, setPriceRange] = useState([0, 100]);
+  const [priceRange, setPriceRange] = useState([0, 5000]); // Balanced default range to support premium pricing schemas
 
-  const categories = ["Top Wear", "Bottom Wear"];
-  const colors = ["Red", "Blue", "Black", "Green", "Yellow", "Gray", "White", "Pink", "Beige", "Navy"];
-  const materials = ["Wood", "Iron", "Plastic"];
-  const brands = ["Urban Threads", "Modern Fit", "Street Breeze"];
+  // Swapped out clothing categories for distinct living layout concepts
+  const categories = ["Living Space", "Dining & Studio", "Bedroom Oasis", "Outdoor Comfort"];
+  
+  // Re-mapped to standard sophisticated finish values matching premium furniture lines
+  const colors = ["Walnut", "Oak", "Charcoal", "Emerald", "Boucle", "Travertine", "Beige", "Brass"];
+  const materials = ["Solid Wood", "Honed Travertine", "Premium Velvet", "Italian Bouclé", "Cast Iron"];
+  
+  // Transformed clothing lines to architectural design studios & master craftsmen collections
+  const brands = ["Atelier Nestora", "Nordic Minimalist", "Heritage Craft"];
 
   useEffect(() => {
     const params = Object.fromEntries([...searchParams]);
@@ -27,9 +32,9 @@ const FilterSidebar = () => {
       material: params.material ? params.material.split(",") : [],
       brand: params.brand ? params.brand.split(",") : [],
       minPrice: params.minPrice || 0,
-      maxPrice: params.maxPrice || 100,
+      maxPrice: params.maxPrice || 5000,
     });
-    setPriceRange([0, params.maxPrice || 100]);
+    setPriceRange([0, params.maxPrice || 5000]);
   }, [searchParams]);
 
   const updateURLParams = (newFilters) => {
@@ -39,7 +44,7 @@ const FilterSidebar = () => {
     if (newFilters.material.length > 0) params.material = newFilters.material.join(",");
     if (newFilters.brand.length > 0) params.brand = newFilters.brand.join(",");
     if (newFilters.minPrice > 0) params.minPrice = newFilters.minPrice;
-    if (newFilters.maxPrice !== 100) params.maxPrice = newFilters.maxPrice;
+    if (newFilters.maxPrice !== 5000) params.maxPrice = newFilters.maxPrice;
     setSearchParams(params);
   };
 
@@ -71,6 +76,21 @@ const FilterSidebar = () => {
     updateURLParams(updated);
   };
 
+  // Safe background color fallback parser for wood & textile specific color palettes
+  const getColorHexValue = (colorName) => {
+    const finishes = {
+      walnut: '#4E3629',
+      oak: '#B59473',
+      charcoal: '#2D2D2D',
+      emerald: '#046307',
+      boucle: '#F4F1EA',
+      travertine: '#E2D9C8',
+      beige: '#F5F5DC',
+      brass: '#D4AF37'
+    };
+    return finishes[colorName.toLowerCase()] || colorName.toLowerCase();
+  };
+
   return (
     <div className="p-4 w-64 border-r border-gray-100 min-h-screen">
 
@@ -78,7 +98,7 @@ const FilterSidebar = () => {
 
       {/* Category */}
       <div className="mb-6">
-        <h3 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Category</h3>
+        <h3 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Collection Area</h3>
         {categories.map((cat) => (
           <label key={cat} className="flex items-center gap-2 mb-2 cursor-pointer">
             <input
@@ -96,7 +116,7 @@ const FilterSidebar = () => {
 
       {/* Color */}
       <div className="mb-6">
-        <h3 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Color</h3>
+        <h3 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Finish / Hue</h3>
         <div className="flex flex-wrap gap-2">
           {colors.map((color) => (
             <button
@@ -106,7 +126,7 @@ const FilterSidebar = () => {
               className={`w-7 h-7 rounded-full border-2 transition-all ${
                 filters.color === color ? "border-black scale-110" : "border-gray-200"
               }`}
-              style={{ backgroundColor: color.toLowerCase() }}
+              style={{ backgroundColor: getColorHexValue(color) }}
             />
           ))}
         </div>
@@ -152,14 +172,14 @@ const FilterSidebar = () => {
         <input
           type="range"
           min={0}
-          max={100}
+          max={5000}
           value={priceRange[1]}
           onChange={handlePriceChange}
           className="w-full accent-black"
         />
         <div className="flex justify-between text-xs text-gray-400 mt-1">
           <span>$0</span>
-          <span>$100</span>
+          <span>$5,000</span>
         </div>
       </div>
 

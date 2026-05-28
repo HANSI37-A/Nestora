@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { FiSearch, FiUser, FiMenu } from 'react-icons/fi';
+import { FiSearch, FiUser, FiMenu, FiShoppingBag } from 'react-icons/fi';
 import CartDrawer from '../Layout/CartDrawer';
 import { IoMdClose } from "react-icons/io";
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 const categories = [
-  { name: 'All', path: '/collection/all' },
-  { name: 'Furniture', path: '/collection/furniture' },
-  { name: 'Rugs', path: '/collection/rugs' },
-  { name: 'Outdoor', path: '/collection/outdoor' },
-  { name: 'Bedding', path: '/collection/bedding' },
-  { name: 'Bath', path: '/collection/bath' },
-  { name: 'Lighting', path: '/collection/lighting' },
+  { name: 'All Collection', path: '/collection/all' },
+  { name: 'Living Room', path: '/collection/living-room' },
+  { name: 'Dining & Kitchen', path: '/collection/dining' },
+  { name: 'Bedroom Oasis', path: '/collection/bedroom' },
+  { name: 'Lighting Studios', path: '/collection/lighting' },
+  { name: 'Rugs & Textiles', path: '/collection/rugs-textiles' },
+  { name: 'Outdoor Living', path: '/collection/outdoor' },
 ];
 
 export const Navbar = () => {
@@ -77,7 +77,7 @@ export const Navbar = () => {
                 >
                   <input
                     type="text"
-                    placeholder="Search home decor..."
+                    placeholder="Search premium design catalog..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full bg-transparent text-xs text-neutral-800 outline-none placeholder-neutral-400"
@@ -93,9 +93,16 @@ export const Navbar = () => {
                 </button>
               </form>
 
-              {/* Shopping Cart Drawer Badge Component */}
-              <div className="flex items-center">
-                <CartDrawer />
+              {/* Shopping Cart Bag Action Area */}
+              <div className="flex items-center relative group">
+                <CartDrawer buttonElement={
+                  <button className="p-2 text-neutral-700 hover:text-[#8C7A6B] transition-colors duration-300 focus:outline-none" aria-label="Open your design bag">
+                    <FiShoppingBag size={19} />
+                  </button>
+                } />
+                <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-neutral-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none">
+                  Your Bag
+                </span>
               </div>
 
               {/* User Profile / Login Action */}
@@ -159,7 +166,7 @@ export const Navbar = () => {
         {/* Drawer Navigation Links */}
         <div className="flex-1 overflow-y-auto px-6 py-8 space-y-6">
           <div className="space-y-4">
-            <p className="text-[10px] uppercase font-bold tracking-widest text-neutral-400">Collections</p>
+            <p className="text-[10px] uppercase font-bold tracking-widest text-neutral-400">Design Collections</p>
             <div className="flex flex-col space-y-3">
               {categories.map((cat) => (
                 <Link
@@ -189,7 +196,7 @@ export const Navbar = () => {
                 onClick={() => setNavDrawerOpen(false)}
                 className="text-sm font-medium text-neutral-700 hover:text-[#8C7A6B] tracking-wide transition-colors"
               >
-                My Orders
+                Track Commissions & Orders
               </Link>
             </div>
           </div>
