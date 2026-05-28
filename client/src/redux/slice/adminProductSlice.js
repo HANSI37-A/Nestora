@@ -20,10 +20,10 @@ export const fetchAdminProducts = createAsyncThunk(
 // Async function to create a new product 
 export const createProduct = createAsyncThunk(
   "adminProducts/createProduct",
-  async (prodcutData) => {
+  async (productData) => {
     const response = await axios.post(
       `${API_URL}/api/admin/products`,
-      prodcutData,
+      productData,
       {
         headers: {
           Authorization: USER_TOKEN,
@@ -37,10 +37,10 @@ export const createProduct = createAsyncThunk(
 // async thunk to uspade an existing product
 export const updateProduct = createAsyncThunk(
   "adminProducts/updateProduct",
-  async ({ id, prodcutData }) => {
+  async ({ id, productData }) => {
     const response =await axios.put(
       `${API_URL}/api/admin/products/${id}`,
-      prodcutData,
+      productData,
       {
         headers: {
           Authorization: USER_TOKEN,
@@ -62,7 +62,7 @@ export const deleteProduct = createAsyncThunk(
   }
 );
 
-const adminProductSlice = creatSlice({
+const adminProductSlice = createSlice({
   name: "adminProducts",
   initialState: {
     products: [],
@@ -108,4 +108,4 @@ const adminProductSlice = creatSlice({
   },
 });
 
-export default adminProductSlice.reducers;
+export default adminProductSlice.reducer;
