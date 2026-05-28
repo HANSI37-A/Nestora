@@ -3,11 +3,23 @@ import { FaFilter } from "react-icons/fa";
 import FilterSidebar from '../components/Products/FilterSidebar';
 import SortOptions from '../components/Products/SortOptions';
 import ProductGrid from '../components/Products/ProductGrid';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProductsByFilters } from '../redux/slice/productsSlice';
 
 const Collection = () => {
-  const [products, setProducts] = useState([]);
+  const { collection } = useParams();
+  const [searchParams] = useSearchParams();  
+  const dispatch = useDispatch();
+  const { products, loading, error } = useSelector((state) => state.products);
+  const queryParams = Object.fromEntries([...searchParams]);
+
   const sidebarRef = useRef(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    dispatch(fetchProductsByFilters({ collection, ...queryParams }));
+  }, [dispatch, collection, searchParams]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -26,44 +38,8 @@ const Collection = () => {
     };
   }, []); 
 
-  useEffect(() => {
-    setTimeout(() => {
-      const fetchedProducts = [
-        {
-          _id: 1,
-          name: "Product 1",
-          price: 100,
-          images: [{ url: "https://placehold.co/150x150?text=Product+1", altText: "Product 1" }],
-          category: "Clothing",
-          color: "Red",
-          size: ["S", "M", "L"],
-        },
-        {
-          _id: 2,
-          name: "Product 2",
-          price: 200,
-          images: [{ url: "https://placehold.co/150x150?text=Product+2", altText: "Product 2" }],
-          category: "Clothing",
-          color: "Blue",
-          size: ["M", "L", "XL"],
-        },
-        {
-          _id: 3,
-          name: "Product 3",
-          price: 300,
-          images: [{ url: "https://placehold.co/150x150?text=Product+3", altText: "Product 3" }],
-          category: "Accessories",
-          color: "Black",
-          size: ["One Size"],
-        },
-      ];
-      setProducts(fetchedProducts);
-    }, 1000);
-  }, []);
-
   return (
     <>
-
       <div className="flex flex-col lg:flex-row gap-6 p-4">
 
         {/* Mobile Filter Button */}
@@ -89,7 +65,7 @@ const Collection = () => {
 
           <SortOptions />
 
-          <ProductGrid products={products} />
+          <ProductGrid products={products} loading={loading} error={error} />
         </div>
 
         {/* Overlay for mobile */}
@@ -99,7 +75,6 @@ const Collection = () => {
             onClick={() => setIsSidebarOpen(false)}
           />
         )}
-
 
       </div>
     </>

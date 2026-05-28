@@ -32,24 +32,43 @@ const FilterSidebar = () => {
     setPriceRange([0, params.maxPrice || 100]);
   }, [searchParams]);
 
+  const updateURLParams = (newFilters) => {
+    const params = {};
+    if (newFilters.category) params.category = newFilters.category;
+    if (newFilters.color) params.color = newFilters.color;
+    if (newFilters.material.length > 0) params.material = newFilters.material.join(",");
+    if (newFilters.brand.length > 0) params.brand = newFilters.brand.join(",");
+    if (newFilters.minPrice > 0) params.minPrice = newFilters.minPrice;
+    if (newFilters.maxPrice !== 100) params.maxPrice = newFilters.maxPrice;
+    setSearchParams(params);
+  };
+
   const handleCategoryChange = (cat) => {
-    setFilters({ ...filters, category: cat });
+    const updated = { ...filters, category: cat };
+    setFilters(updated);
+    updateURLParams(updated);
   };
 
   const handleColorChange = (color) => {
-    setFilters({ ...filters, color });
+    const updated = { ...filters, color };
+    setFilters(updated);
+    updateURLParams(updated);
   };
 
   const handleCheckbox = (key, value) => {
-    const updated = filters[key].includes(value)
+    const updatedArray = filters[key].includes(value)
       ? filters[key].filter((i) => i !== value)
       : [...filters[key], value];
-    setFilters({ ...filters, [key]: updated });
+    const updated = { ...filters, [key]: updatedArray };
+    setFilters(updated);
+    updateURLParams(updated);
   };
 
   const handlePriceChange = (e) => {
     setPriceRange([0, e.target.value]);
-    setFilters({ ...filters, maxPrice: e.target.value });
+    const updated = { ...filters, maxPrice: e.target.value };
+    setFilters(updated);
+    updateURLParams(updated);
   };
 
   return (

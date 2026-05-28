@@ -4,7 +4,7 @@ import axios from "axios";
 //Helper function to load cart from localStorage
 const loadCartFromStorage = () => {
   const storedCart = localStorage.getItem("cart");
-  return storedCart ? JSON.parase(storedCart) : { products: [] };
+  return storedCart ? JSON.parse(storedCart) : { products: [] };
 };
 
 // Helper function to save cart to localStorage
@@ -26,7 +26,7 @@ export const fetchCart = createAsyncThunk(
       return response.data;
     } catch(error){
       console.error(error);
-      return isRejectedWithValue(error.response.date);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -51,7 +51,7 @@ export const updateCartItemsQuantity = createAsyncThunk(
   "cart/updateCartItemQuantity", async ({productId, quantity, guestId, userId, size, color}, {rejectWithValue}) => {
     try{
       const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/cart`,{
-        productId, quantity, questId, userId, size, color,
+        productId, quantity, guestId, userId, size, color,
       });
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -65,7 +65,7 @@ export const removeFromCart = createAsyncThunk("cart/removeFromCart", async ({ p
     const response = await axios({
       method: "DELETE",
       url: `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
-      data: { productId, guestId, usertId, size, color },
+      data: { productId, guestId, userId, size, color },
     });
     return response.data;
   } catch (error){
@@ -83,11 +83,11 @@ export const mergeCart = createAsyncThunk(
         { guestId, user},
         {
          headers:{
-          Authorization: `Bearer ${localStorage.getItem("userTkon")}`,
+          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
          },
         }
       );
-      return response.date;
+      return response.data;
     } catch (error){
       return rejectWithValue(error.response.data);
     }
@@ -133,7 +133,7 @@ const cartSlice = createSlice({
     })
     .addCase(addToCart.rejected, (state, action) => {
       state.loading = true;
-      state.error = action.payload?.message || "Failed to add cto art";
+      state.error = action.payload?.message || "Failed to add to cart";
     })
     .addCase(updateCartItemsQuantity.pending, (state) => {
       state.loading = true;

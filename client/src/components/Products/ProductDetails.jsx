@@ -1,5 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProductGrid from "./ProductGrid";
+import { useParams } from "react-router-dom";
+import { fetchProductDetails, fetchSimilarProducts } from "../../redux/slice/productsSlice";
+import { addToCart } from "../../redux/slice/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const selectedProduct = {
   name: "Stylish Jacket",
@@ -32,23 +36,52 @@ const similarProducts = [
   }
 ];
 
-const ProductDetails = () => {
+const ProductDetails = ({ productId }) => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+const { selectedProduct, loading, error } = useSelector((state) => state.products);
+  const { user, guestId } = useSelector((state) => state.auth);
   const [mainImage, setMainImage] = useState(selectedProduct?.images?.[0]?.url || null); 
   
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
 
+  const productFetchId = productId || id;
+
+  useEffect(() => {
+    if(productFetchId){
+      dispatch(fetchProductDetails(productFetchId));
+      dispatch(fetchSimilarProducts({id: productFetchId}));
+    }
+  }, [dispatch, productFetchId]);
+
   const handleAddToCart = () => {
     if (!selectedSize || !selectedColor) {
       alert("Please select a size and color before adding to cart.");
       return;
     }
+
+    dispatch(
+      addToCart({
+        productId: productFetchId,
+        quantity,
+        color: selectedColor,
+        size: selectedSize,
+        guestId,
+        userId: user?._id,
+      })
+    );
     alert(`Added ${quantity} x ${selectedProduct.name} (${selectedSize}, ${selectedColor}) to cart!`);
-  };
+  }; 
+
+if(loading){
+  return <p>Loading....</p>;
+}
 
   return (
     <div className="p-6">
+      {selectedProduct && (
       <div className="max-w-6xl mx-auto bg-white p-8 rounded-lg">
         <div className="flex flex-col md:flex-row gap-8">
 
@@ -159,13 +192,19 @@ const ProductDetails = () => {
               Add to Cart
             </button>
           </div>
-        </div>
+      
       </div>
        <div className="mt-20">
           <h2 className="text-2xl text-center font-medium mb-4">You May Also Like</h2>
-          <ProductGrid products={similarProducts} />
+          <ProductGrid products={similarProducts} loading={loading} error={error}/>
         </div>
+
+        </div>
+    
+    )}
+       
     </div>
+    
   );
 };
 
