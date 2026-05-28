@@ -5,56 +5,38 @@ import { fetchProductDetails, fetchSimilarProducts } from "../../redux/slice/pro
 import { addToCart } from "../../redux/slice/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-const selectedProduct = {
-  name: "Stylish Jacket",
-  price: "$79.99",
-  description: "Elevate your style with our trendy jacket, perfect for any occasion. Crafted from high-quality materials, it offers both comfort and durability. Featuring a sleek design and versatile color options, this jacket is a must-have addition to your wardrobe.",
-  brand: "FashionCo",
-  category: "Outerwear",
-  stock: 25,
-  sizes: ["XS", "S", "M", "L", "XL"],
-  colors: ["Red", "Black", "White"],
-  images: [
-    { url: "https://picsum.photos/500/600?random=1", altText: "Stylish Jacket Front View" },
-    { url: "https://picsum.photos/500/600?random=2", altText: "Stylish Jacket Side View" },
-    { url: "https://picsum.photos/500/600?random=3", altText: "Stylish Jacket Back View" },
-  ],
-};
 
-const similarProducts = [
-  {
-    _id: "1",
-    name: "Casual Hoodie",
-    price: "$49.99",
-    images: [{ url: "https://picsum.photos/300/400?random=4", altText: "Casual Hoodie" }],
-  },
-  {
-    _id: "2",
-    name: "Slim Fit Jeans",
-    price: "$69.99",
-    images: [{ url: "https://picsum.photos/300/400?random=5", altText: "Slim Fit Jeans" }],
-  }
-];
 
 const ProductDetails = ({ productId }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
-const { selectedProduct, loading, error } = useSelector((state) => state.products);
-  const { user, guestId } = useSelector((state) => state.auth);
-  const [mainImage, setMainImage] = useState(selectedProduct?.images?.[0]?.url || null); 
   
+  // Pull live data from Redux stores
+  const { selectedProduct, similarProducts, loading, error } = useSelector((state) => state.products);
+  const { user, guestId } = useSelector((state) => state.auth);
+  
+  // Controlled internal layout state properties
+  const [mainImage, setMainImage] = useState(null); 
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
 
   const productFetchId = productId || id;
 
+  // 1. Fetch data from backend on mount or route shift
   useEffect(() => {
-    if(productFetchId){
+    if (productFetchId) {
       dispatch(fetchProductDetails(productFetchId));
-      dispatch(fetchSimilarProducts({id: productFetchId}));
+      dispatch(fetchSimilarProducts({ id: productFetchId }));
     }
   }, [dispatch, productFetchId]);
+
+  
+  useEffect(() => {
+    if (selectedProduct?.images?.length > 0) {
+      setMainImage(selectedProduct.images[0].url);
+    }
+  }, [selectedProduct]);
 
   const handleAddToCart = () => {
     if (!selectedSize || !selectedColor) {
@@ -75,19 +57,28 @@ const { selectedProduct, loading, error } = useSelector((state) => state.product
     alert(`Added ${quantity} x ${selectedProduct.name} (${selectedSize}, ${selectedColor}) to cart!`);
   }; 
 
-if(loading){
-  return <p>Loading....</p>;
-}
+  
+  if (loading) {
+    return <div className="text-center p-10 font-light text-gray-500">Loading product details...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center p-10 text-red-500">Error: {error}</div>;
+  }
+
+  if (!selectedProduct) {
+    return <div className="text-center p-10 text-gray-400">Product not found.</div>;
+  }
 
   return (
     <div className="p-6">
-      {selectedProduct && (
       <div className="max-w-6xl mx-auto bg-white p-8 rounded-lg">
         <div className="flex flex-col md:flex-row gap-8">
 
           {/* Left — Image Thumbnails */}
           <div className="hidden md:flex flex-col space-y-4 mr-6">
-            {selectedProduct.images.map((img, index) => (
+            
+            {selectedProduct.images?.map((img, index) => (
               <img
                 key={index}
                 src={img.url}
@@ -107,7 +98,7 @@ if(loading){
               <img
                 src={mainImage}
                 alt={selectedProduct?.images?.[0]?.altText || "Product Image"}
-                className="w-full h-125 object-cover rounded-lg"
+                className="w-full h-125 object-cover rounded-lg shadow-sm"
                 onError={(e) => { e.target.src = "https://placehold.co/500x600?text=Image+Not+Found"; }} 
               />
             )}
@@ -116,7 +107,9 @@ if(loading){
           {/* Right — Product Info */}
           <div className="flex-1 flex flex-col justify-start space-y-4">
             <h1 className="text-2xl font-semibold text-gray-800">{selectedProduct.name}</h1>
-            <p className="text-xl text-gray-600">{selectedProduct.price}</p>
+            <p className="text-xl text-gray-600">
+              {typeof selectedProduct.price === "number" ? `$${selectedProduct.price.toFixed(2)}` : selectedProduct.price}
+            </p>
             <p className="text-gray-500 text-sm leading-relaxed">{selectedProduct.description}</p>
 
             <div className="text-sm text-gray-500 space-y-1">
@@ -129,7 +122,7 @@ if(loading){
             <div>
               <p className="text-sm font-medium text-gray-700 mb-2">Size:</p>
               <div className="flex gap-2 flex-wrap">
-                {selectedProduct.sizes.map((size) => (
+                {selectedProduct.sizes?.map((size) => (
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
@@ -149,7 +142,7 @@ if(loading){
             <div>
               <p className="text-sm font-medium text-gray-700 mb-2">Color:</p>
               <div className="flex gap-2 flex-wrap">
-                {selectedProduct.colors.map((color) => (
+                {selectedProduct.colors?.map((color) => (
                   <button
                     key={color}
                     onClick={() => setSelectedColor(color)}
@@ -177,7 +170,7 @@ if(loading){
                 </button>
                 <span className="text-sm font-medium">{quantity}</span>
                 <button
-                  onClick={() => setQuantity((q) => Math.min(selectedProduct.stock, q + 1))} 
+                  onClick={() => setQuantity((q) => Math.min(selectedProduct.stock || 10, q + 1))} 
                   className="border px-3 py-1 rounded text-lg hover:bg-gray-100"
                 >
                   +
@@ -193,18 +186,17 @@ if(loading){
             </button>
           </div>
       
-      </div>
-       <div className="mt-20">
-          <h2 className="text-2xl text-center font-medium mb-4">You May Also Like</h2>
-          <ProductGrid products={similarProducts} loading={loading} error={error}/>
         </div>
 
+        {/* Similar Products Recommendation Slider Panel */}
+        <div className="mt-20">
+          <h2 className="text-2xl text-center font-medium mb-6">You May Also Like</h2>
+          
+          <ProductGrid products={similarProducts || []} loading={loading} error={error}/>
         </div>
-    
-    )}
-       
+
+      </div>
     </div>
-    
   );
 };
 

@@ -5,19 +5,19 @@ import PayPalButton from './PayPalButton';
 const cart = {
   products: [
     {
-      name: "Stylish Jacket",
-      color: "Black",
-      price: 120,
-      image: "https://picsum.photos/150?random=1",
+      name: "Oak Wood Lounge Chair",
+      color: "Natural",
+      price: 450,
+      image: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&q=80&w=800",
     },
     {
-      name: "Stylish Jacket",
-      color: "Black",
-      price: 120,
-      image: "https://picsum.photos/150?random=2",
+      name: "Nordic Bouclé Sofa",
+      color: "Cream",
+      price: 1500,
+      image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800",
     },
   ],
-  totalPrice: 195,
+  totalPrice: 1950,
 };
 
 const Checkout = () => {

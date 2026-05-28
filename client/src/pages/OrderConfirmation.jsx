@@ -5,24 +5,24 @@ const checkout = {
   createdAt: new Date(),
   checkoutItems: [
     {
-      productId:"1",
-      name: "Jacket",
-      color: "black",
-      price: 150,
+      productId: "1",
+      name: "Oak Wood Lounge Chair",
+      color: "Natural",
+      price: 450,
       quantity: 1,
-      image: "https://picsum.photos/150?random=1",
+      image: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&q=80&w=800",
     },
-     {
-      productId:"2",
-      name: "Jacket",
-      color: "black",
-      price: 150,
+    {
+      productId: "2",
+      name: "Nordic Bouclé Sofa",
+      color: "Cream",
+      price: 1500,
       quantity: 1,
-      image: "https://picsum.photos/150?random=2",
+      image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800",
     },
   ],
   shippingAddress: {
-    adress: "123 Fashion Street",
+    adress: "123 Oak Avenue",
     city: "New York",
     country: "USA"
   }

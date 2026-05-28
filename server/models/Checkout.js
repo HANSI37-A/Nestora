@@ -19,6 +19,14 @@ const checkoutItemSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  size: { 
+    type: String, 
+    required: false 
+  },
+  color: { 
+    type: String, 
+    required: false 
+  },
   quantity: {
     type: Number,
     required: true,
@@ -42,7 +50,7 @@ const checkoutSchema = new mongoose.Schema({
   },
   paymentMethod: {
     type: String,
-    required: true,
+    required: true, 
   },
   totalPrice: {
     type: Number,
@@ -51,6 +59,7 @@ const checkoutSchema = new mongoose.Schema({
   isPaid: {
     type: Boolean,
     required: false,
+    default: false,
   },
   paidAt: {
     type: Date,
@@ -60,7 +69,7 @@ const checkoutSchema = new mongoose.Schema({
     default: "pending",
   },
   paymentDetails: {
-    type: mongoose.Schema.Types.Mixed,
+    type: mongoose.Schema.Types.Mixed, 
   },
   isFinalized: {
     type: Boolean,

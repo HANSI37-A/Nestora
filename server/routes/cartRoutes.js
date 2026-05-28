@@ -32,8 +32,8 @@ router.post("/", async (req, res) =>{
       const productIndex = cart.products.findIndex(
         (p) =>
           p.productId.toString() === productId &&
-          p.size === size &&
-          p.color === color
+          p.size === size && 
+          p.color === color  
       );
 
       if (productIndex > -1) {
@@ -77,11 +77,11 @@ router.post("/", async (req, res) =>{
         totalPrice: product.price * quantity,
       });
       return res.status(201).json(newCart);
-    } 
+    }
  } catch (error){
   console.error(error);
   res.status(500).json({ message: "Server Error"});
- }
+  }
 });
 
 // @route PUT /api/cart
@@ -105,11 +105,12 @@ router.put("/", async (req, res) =>{
       } else {
         cart.products.splice(productIndex, 1);
       }
-       cart.totalPrice = cart.products.reduce(
-        (acc, item) => acc + item.price * item.quantity,0
-       );
-       await cart.save();
-       return res.status(200).json(cart);
+      cart.totalPrice = cart.products.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+      );
+      await cart.save();
+      return res.status(200).json(cart);
     } else {
       return res.status(404).json({ message: "Product not found in cart"});
     }
@@ -154,7 +155,7 @@ router.delete("/", async(req, res) =>{
  // @route POST /api/cart/merge
  // @desc Merge guest cart into user cart on login
  // @access Private
- router.post("/merge", protect, async (req, res) => {
+router.post("/merge", protect, async (req, res) => {
   const { guestId } = req.body;
 
   try {
@@ -193,25 +194,25 @@ router.delete("/", async(req, res) =>{
         } catch (error){
           console.error("Error seleting guest cart:", error);
         }
-         res.status(200).json(userCart);
+        return res.status(200).json(userCart);
       } else {
         //If the user has no existing cart, assign the guest cart to the user
         guestCart.user = req.user._id;
         guestCart.guestId = undefined;
         await guestCart.save();
 
-        res.status(200).json(guestCart);
+        return res.status(200).json(guestCart);
       }
     } else {
       if(userCart) {
         // Guest cart has already been merged, return user cart
         return res.status(200).json(userCart);
       }
-      res.status(404).json({ message: "Guest cart not found"});
+      return res.status(404).json({ message: "Guest cart reference missing" });
     }
   } catch(error){
     console.error(error);
     res.status(500).json({message: "Server Error"});
   }
- });
+});
 module.exports = router;
