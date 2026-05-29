@@ -1,47 +1,89 @@
-import { useState } from 'react'; 
+import { useState, useEffect } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import PayPalButton from './PayPalButton';
-
-const cart = {
-  products: [
-    {
-      name: "Oak Wood Lounge Chair",
-      color: "Natural",
-      price: 450,
-      image: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&q=80&w=800",
-    },
-    {
-      name: "Nordic Bouclé Sofa",
-      color: "Cream",
-      price: 1500,
-      image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800",
-    },
-  ],
-  totalPrice: 1950,
-};
+import { createCheckout } from '../../redux/slice/checkoutSlice';
+import { useDispatch, useSelector } from "react-redux";
 
 const Checkout = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
+  
+  const { cart } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.auth);
+  const { loading: checkoutLoading } = useSelector((state) => state.checkout);
+
   const [checkoutId, setCheckoutId] = useState(null);
   const [shippingAddress, setShippingAddress] = useState({
     firstName: "",
     lastName: "",
+    email: user?.email || "",
     address: "",
     city: "",
     postalCode: "",
     country: "",
     phone: "",
-  })
+  });
+
+  
+  const cartItems = cart?.products || [];
+  
+  
+  const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+  const shippingFee = 0; 
+  const grandTotal = subtotal + shippingFee;
+
+  
+  useEffect(() => {
+    if (!checkoutLoading && cartItems.length === 0) {
+      alert("Your cart is empty. Redirecting to collections.");
+      navigate("/");
+    }
+  }, [cartItems, navigate, checkoutLoading]);
 
   const handleCreateCheckout = (e) => {
     e.preventDefault();
-    setCheckoutId(123);
+
+    const token = localStorage.getItem("userToken");
+
+    if (!token) {
+      alert("Please login first");
+      navigate("/login");
+      return;
+    }
+    
+    
+    const checkoutData = {
+      checkoutItems: cartItems.map(item => ({
+        productId: item.productId,
+        name: item.name,
+        image: item.image,
+        price: item.price,
+        quantity: item.quantity,
+        color: item.color || "Default",
+        size: item.size || "Standard"
+      })),
+      shippingAddress,
+      paymentMethod: "PayPal",
+      totalPrice: grandTotal,
+    };
+
+    dispatch(createCheckout(checkoutData))
+      .unwrap()
+      .then((res) => {
+        if (res && res._id) {
+          setCheckoutId(res._id); 
+        }
+      })
+      .catch((err) => {
+        alert(err?.message || "Failed to initiate checkout session. Please check details.");
+      });
   };
 
   const handlePaymentSuccess = (details) => {
     console.log("Payment Successful", details);
     navigate("/order-confirmation");
-  }
+  };
   return (
     <>
    
@@ -53,7 +95,13 @@ const Checkout = () => {
           <h3 className="text-lg mb-4">Contact Details</h3>
           <div className="mb-4">
             <label className="block text-gray-700">Email</label>
-            <input type="email" value="user@example.com" className="w-full p-2 border rounded" disabled/>
+          <input 
+            type="email" 
+            value={shippingAddress.email} 
+            onChange={(e) => setShippingAddress({ ...shippingAddress, email: e.target.value })} 
+            className="w-full p-2 border rounded" 
+            required
+          />
           </div>
           <h3 className="text-lg mb-4">Delivery</h3>
           <div className="mb-4 grid grid-cols-2 gap-4">

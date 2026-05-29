@@ -3,18 +3,36 @@ import { Link } from "react-router-dom";
 import login from "../assets/login.webp";
 import { loginUser } from "../redux/slice/authSlice";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const userData = { email, password};
-    dispatch(loginUser({ email, password}));
-  };
+  try {
+    const result = await dispatch(
+      loginUser({ email, password })
+    ).unwrap();
+
+    console.log("LOGIN SUCCESS:", result);
+
+    console.log(
+      "TOKEN AFTER LOGIN:",
+      localStorage.getItem("userToken")
+    );
+
+    navigate("/");
+
+  } catch (error) {
+    console.log("LOGIN ERROR:", error);
+    alert(error.message || "Login failed");
+  }
+};
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">

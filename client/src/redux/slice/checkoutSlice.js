@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { act } from "react";
 
-// Async thunk to create a checkout session
 export const createCheckout = createAsyncThunk(
   "checkout/createCheckout",
   async (checkoutdata, { rejectWithValue }) => {
@@ -18,7 +16,8 @@ export const createCheckout = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      const message = error.response?.data?.message || error.message || "Failed to process request";
+      return rejectWithValue(message);
     }
   }
 );
@@ -33,18 +32,18 @@ const checkoutSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-    .addCase(createCheckout.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(createCheckout.fulfilled, (state, action) => {
-      state.loading = false;
-      state.checkout = action.payload;
-    })
-    .addCase(createCheckout.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload.message;
-    })
+      .addCase(createCheckout.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createCheckout.fulfilled, (state, action) => {
+        state.loading = false;
+        state.checkout = action.payload;
+      })
+      .addCase(createCheckout.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload; 
+      });
   },
 });
 

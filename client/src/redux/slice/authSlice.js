@@ -21,23 +21,50 @@ const initialState = {
 // Async Thunk for User Login
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
-  async (userData, { rejectWithValue}) =>{
-    try{
+  async (userData, { rejectWithValue }) => {
+    try {
+
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/users/login`,userData
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/login`,
+        userData
       );
-      localStorage.setItem("userInfo", JSON.stringify(resumeAndPrerenderToNodeStream.data.user));
-      localStorage.setItem("userToken", response.data.token);
 
-      return response.data.user; //Return the user abject from the response
+      console.log("FULL LOGIN RESPONSE:", response.data);
 
-    } catch (error){
-      const errorMessage = error.response?.data?.message || error.message || "An error occurred";
-  return rejectWithValue({ message: errorMessage });
+      if (!response.data.token) {
+        throw new Error("Token not received");
+      }
+
+      localStorage.setItem(
+        "userInfo",
+        JSON.stringify(response.data.user)
+      );
+
+      localStorage.setItem(
+        "userToken",
+        response.data.token
+      );
+
+      console.log(
+        "TOKEN SAVED:",
+        localStorage.getItem("userToken")
+      );
+
+      return response.data.user;
+
+    } catch (error) {
+
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Login failed";
+
+      return rejectWithValue({
+        message: errorMessage,
+      });
     }
   }
 );
-
 
 // Async Thunk for User Register
 export const registerUser = createAsyncThunk(
@@ -47,10 +74,10 @@ export const registerUser = createAsyncThunk(
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/users/register`,userData
       );
-      localStorage.setItem("userInfo", JSON.stringify(resumeAndPrerenderToNodeStream.data.user));
+      localStorage.setItem("userInfo", JSON.stringify(response.data.user));
       localStorage.setItem("userToken", response.data.token);
 
-      return response.data.user; //Return the user abject from the response
+      return response.data.user; 
 
     } catch (error){
       const errorMessage = error.response?.data?.message || error.message || "An error occurred";
@@ -66,10 +93,10 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) =>{
       state.user = null;
-      state.geustId = `guest_${new Date().getTime()}`; // Reset guest ID on logout
+      state.guestId = `guest_${new Date().getTime()}`; 
       localStorage.removeItem("userInfo");
       localStorage.removeItem("userToken");
-      localStorage.setItem("gueesId", state.guestId); // Set new guest ID in localStorage
+      localStorage.setItem("guestId", state.guestId);
     },
     genarateNewGuestId: (state) => {
       state.guestId = `guest_${new Date().getTime()}`;
@@ -84,7 +111,7 @@ const authSlice = createSlice({
     })
     .addCase(loginUser.fulfilled, (state, action) =>{
       state.loading = false;
-      state.error = action.payload;
+      state.user = action.payload;
     })
     .addCase(loginUser.rejected, (state, action) =>{
       state.loading = false;
@@ -97,7 +124,7 @@ const authSlice = createSlice({
     })
     .addCase(registerUser.fulfilled, (state, action) =>{
       state.loading = false;
-      state.error = action.payload;
+      state.user = action.payload;
     })
     .addCase(registerUser.rejected, (state, action) =>{
       state.loading = false;
