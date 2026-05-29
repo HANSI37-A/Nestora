@@ -24,32 +24,37 @@ import store from "./redux/store";
 const App = () => {
   return (
     <Provider store={store}>
-    <BrowserRouter>
-      <Routes>
-        <Route element={<Home />}>
-        <Route path="/" element={<UserLayout />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/collection/:collection" element={<Collection />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/checkout" element={<CheckOut />} />
-        <Route path="/order-confirmation" element={<OrderConfirmation />} />
-        <Route path="/my-orders" element={<MyOrdersPage />} />
-        <Route path="/order/:id" element={<OrderDetailsPage />} />
-        </Route>
+      <BrowserRouter>
+        <Routes>
+          
+          {/* 1. Main E-Commerce Client Layout Wrapper */}
+          <Route path="/" element={<UserLayout />}>
+            {/* 'index' means this page renders when the user hits exactly "/" */}
+            <Route index element={<Home />} />
+            
+            {/* All nested pages here will cleanly share the sticky Navbar */}
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="collection/:collection" element={<Collection />} />
+            <Route path="product/:id" element={<ProductDetails />} />
+            <Route path="checkout" element={<CheckOut />} />
+            <Route path="order-confirmation" element={<OrderConfirmation />} />
+            <Route path="my-orders" element={<MyOrdersPage />} />
+            <Route path="order/:id" element={<OrderDetailsPage />} />
+          </Route>
 
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminHomePage />} />
-          <Route path="users" element={<UserManaagement />} />
-          <Route path="products" element={<ProductManagement />} />
-          <Route path="products/:id/edit" element={<EditProductPage />} />
-          <Route path="orders" element={<OrderManagement />} />
-        </Route>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminHomePage />} />
+            <Route path="users" element={<UserManaagement />} />
+            <Route path="products" element={<ProductManagement />} />
+            <Route path="products/:id/edit" element={<EditProductPage />} />
+            <Route path="orders" element={<OrderManagement />} />
+          </Route>
 
-      </Routes>
+        </Routes>
       
-    </BrowserRouter>
+      </BrowserRouter>
     </Provider>
   );
 };
