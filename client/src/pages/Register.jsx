@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; 
 import register from "../assets/register.webp";
 import { registerUser } from "../redux/slice/authSlice";
 import { useDispatch } from "react-redux";
@@ -9,16 +9,28 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate(); 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(registerUser({ name, email, password}));
+  
+    if (!name || !email || !password) return;
+
+    try {
+      const result = await dispatch(registerUser({ name, email, password })).unwrap();
+      
+      if (result) {
+        navigate("/profile");
+      }
+    } catch (err) {
+      console.error("Failed to register user:", err);
+    }
   };
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50"> 
       
-
+      
       {/* Main Section */}
       <div className="flex flex-1">
 

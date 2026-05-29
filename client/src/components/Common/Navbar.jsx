@@ -3,6 +3,7 @@ import { FiSearch, FiUser, FiMenu, FiShoppingBag } from 'react-icons/fi';
 import CartDrawer from '../Layout/CartDrawer';
 import { IoMdClose } from "react-icons/io";
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux'; 
 
 const categories = [
   { name: 'All Collection', path: '/collection/all' },
@@ -19,6 +20,9 @@ export const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+
+
+  const { user } = useSelector((state) => state.auth);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -107,13 +111,14 @@ export const Navbar = () => {
 
               {/* User Profile / Login Action */}
               <Link 
-                to="/profile" 
-                className="p-2 text-neutral-700 hover:text-[#8C7A6B] transition-colors duration-300 relative group"
+                to={user ? "/profile" : "/login"} 
+                className="p-2 text-neutral-700 hover:text-[#8C7A6B] transition-colors duration-300 relative group flex items-center gap-1"
                 aria-label="View user profile"
               >
                 <FiUser size={19} />
+                {user && <span className="text-[10px] max-w-[60px] truncate hidden md:inline text-neutral-500">Hi, {user.name.split(" ")[0]}</span>}
                 <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-neutral-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none">
-                  Profile
+                  {user ? "Profile" : "Login"}
                 </span>
               </Link>
 
@@ -185,19 +190,19 @@ export const Navbar = () => {
             <p className="text-[10px] uppercase font-bold tracking-widest text-neutral-400">My Account</p>
             <div className="flex flex-col space-y-3">
               <Link
-                to="/profile"
+                to={user ? "/profile" : "/login"}
                 onClick={() => setNavDrawerOpen(false)}
                 className="text-sm font-medium text-neutral-700 hover:text-[#8C7A6B] tracking-wide transition-colors"
               >
-                My Profile
+                {user ? "My Profile" : "Login / Register"}
               </Link>
-              <Link
-                to="/my-orders"
-                onClick={() => setNavDrawerOpen(false)}
-                className="text-sm font-medium text-neutral-700 hover:text-[#8C7A6B] tracking-wide transition-colors"
-              >
-                Track Commissions & Orders
-              </Link>
+                <Link
+                  to="/my-orders"
+                  onClick={() => setNavDrawerOpen(false)}
+                  className="text-sm font-medium text-neutral-700 hover:text-[#8C7A6B] tracking-wide transition-colors"
+                >
+                  Track Commissions & Orders
+                </Link>
             </div>
           </div>
         </div>
