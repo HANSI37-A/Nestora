@@ -4,7 +4,7 @@ const Cart = require("../models/Cart");
 const Product = require("../models/Product");
 const Order = require("../models/Order");
 const { protect } = require("../middleware/authMiddleware");
-const { checkout } = require("./cartRoutes");
+
 
 
 const router = express.Router();
@@ -85,7 +85,7 @@ router.post("/:id/finalize", protect, async (req, res) =>{
       //Create final order based on the checkout details
       const finalOrder = await Order.create({
         user: checkout.user,
-        ordrItems: checkout.checkoutItems,
+        orderItems: checkout.checkoutItems,
         shippingAddress: checkout.shippingAddress,
         paymentMethod: checkout.paymentMethod,
         totalPrice: checkout.totalPrice,

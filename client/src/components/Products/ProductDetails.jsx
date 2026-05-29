@@ -5,8 +5,6 @@ import { fetchProductDetails, fetchSimilarProducts } from "../../redux/slice/pro
 import { addToCart } from "../../redux/slice/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-
-
 const ProductDetails = ({ productId }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -31,33 +29,48 @@ const ProductDetails = ({ productId }) => {
     }
   }, [dispatch, productFetchId]);
 
-  
   useEffect(() => {
     if (selectedProduct?.images?.length > 0) {
       setMainImage(selectedProduct.images[0].url);
     }
   }, [selectedProduct]);
 
-  const handleAddToCart = () => {
-    if (!selectedSize || !selectedColor) {
-      // Swapped warning language to align with interior studio parameters
-      alert("Please select your desired configuration and finish options before adding to your collection.");
-      return;
+  // =========================================================================
+  // 🛡️ ANTI-GRAVITY PATCH: DEFENSIVE DESERIALIZATION FOR APPAREL vs FURNITURE DATA
+  // =========================================================================
+  const availableSizes = selectedProduct?.sizes || selectedProduct?.size || [];
+  const sizeArray = Array.isArray(availableSizes) ? availableSizes : [availableSizes].filter(Boolean);
+
+  const availableColors = selectedProduct?.colors || selectedProduct?.color || [];
+  const colorArray = Array.isArray(availableColors) ? availableColors : [availableColors].filter(Boolean);
+
+  // Auto-select configurations if there's only 1 or fallback options are missing
+  useEffect(() => {
+    if (sizeArray.length > 0 && !selectedSize) {
+      setSelectedSize(sizeArray[0]);
     }
+    if (colorArray.length > 0 && !selectedColor) {
+      setSelectedColor(colorArray[0]);
+    }
+  }, [selectedProduct, sizeArray, colorArray]);
+
+  const handleAddToCart = () => {
+    // Ultimate fallbacks to completely bypass validation bricking if arrays are empty
+    const finalSize = selectedSize || sizeArray[0] || "Standard";
+    const finalColor = selectedColor || colorArray[0] || "Default";
 
     dispatch(
       addToCart({
         productId: productFetchId,
         quantity,
-        color: selectedColor,
-        size: selectedSize,
+        color: finalColor,
+        size: finalSize,
         guestId,
         userId: user?._id,
       })
     );
-    alert(`Added ${quantity} x ${selectedProduct.name} (${selectedSize}, ${selectedColor}) to your order selection!`);
+    alert(`Added ${quantity} x ${selectedProduct.name} (${finalSize}, ${finalColor}) to your order selection!`);
   }; 
-
 
   if (loading) {
     return <div className="text-center p-10 font-light text-gray-500">Loading premium catalog details...</div>;
@@ -78,7 +91,6 @@ const ProductDetails = ({ productId }) => {
 
           {/* Left — Image Thumbnails */}
           <div className="hidden md:flex flex-col space-y-4 mr-6">
-            
             {selectedProduct.images?.map((img, index) => (
               <img
                 key={index}
@@ -123,19 +135,24 @@ const ProductDetails = ({ productId }) => {
             <div>
               <p className="text-sm font-medium text-gray-700 mb-2">Dimensions & Configuration:</p>
               <div className="flex gap-2 flex-wrap">
-                {selectedProduct.sizes?.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`px-3 py-1 text-sm border rounded transition-all ${
-                      selectedSize === size
-                        ? "bg-black text-white border-black"
-                        : "border-gray-300 hover:border-black"
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
+                {sizeArray.length > 0 ? (
+                  sizeArray.map((size) => (
+                    <button
+                      key={size}
+                      type="button"
+                      onClick={() => setSelectedSize(size)}
+                      className={`px-3 py-1 text-sm border rounded transition-all ${
+                        selectedSize === size
+                          ? "bg-black text-white border-black"
+                          : "border-gray-300 hover:border-black"
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  ))
+                ) : (
+                  <span className="text-xs text-gray-400 italic">Standard Dimensions Only</span>
+                )}
               </div>
             </div>
 
@@ -143,19 +160,24 @@ const ProductDetails = ({ productId }) => {
             <div>
               <p className="text-sm font-medium text-gray-700 mb-2">Finish & Material Palette:</p>
               <div className="flex gap-2 flex-wrap">
-                {selectedProduct.colors?.map((color) => (
-                  <button
-                    key={color}
-                    onClick={() => setSelectedColor(color)}
-                    className={`px-3 py-1 text-sm border rounded transition-all ${
-                      selectedColor === color
-                        ? "bg-black text-white border-black"
-                        : "border-gray-300 hover:border-black"
-                    }`}
-                  >
-                    {color}
-                  </button>
-                ))}
+                {colorArray.length > 0 ? (
+                  colorArray.map((color) => (
+                    <button
+                      key={color}
+                      type="button"
+                      onClick={() => setSelectedColor(color)}
+                      className={`px-3 py-1 text-sm border rounded transition-all ${
+                        selectedColor === color
+                          ? "bg-black text-white border-black"
+                          : "border-gray-300 hover:border-black"
+                      }`}
+                    >
+                      {color}
+                    </button>
+                  ))
+                ) : (
+                  <span className="text-xs text-gray-400 italic">Default Showroom Finish</span>
+                )}
               </div>
             </div>
 
@@ -164,6 +186,7 @@ const ProductDetails = ({ productId }) => {
               <p className="text-sm font-medium text-gray-700 mb-2">Quantity:</p>
               <div className="flex items-center gap-3">
                 <button
+                  type="button"
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))} 
                   className="border px-3 py-1 rounded text-lg hover:bg-gray-100"
                 >
@@ -171,6 +194,7 @@ const ProductDetails = ({ productId }) => {
                 </button>
                 <span className="text-sm font-medium">{quantity}</span>
                 <button
+                  type="button"
                   onClick={() => setQuantity((q) => Math.min(selectedProduct.stock || 10, q + 1))} 
                   className="border px-3 py-1 rounded text-lg hover:bg-gray-100"
                 >
@@ -192,7 +216,6 @@ const ProductDetails = ({ productId }) => {
         {/* Similar Products Recommendation Slider Panel */}
         <div className="mt-20">
           <h2 className="text-2xl text-center font-medium mb-6">You May Also Like</h2>
-          
           <ProductGrid products={similarProducts || []} loading={loading} error={error}/>
         </div>
 

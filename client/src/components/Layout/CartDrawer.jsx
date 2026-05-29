@@ -1,111 +1,116 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiShoppingBag } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
 import CartContents from "../Cart/CartContents";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCart, updateCartItemsQuantity, removeFromCart } from "../../redux/slice/cartSlice";
 
 const CartDrawer = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { cart, loading } = useSelector((state) => state.cart);
+  const { user, guestId } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(fetchCart({ userId: user?._id, guestId }));
+  }, [dispatch, user, guestId]);
 
   const handleCheckout = () => {
     setDrawerOpen(false);
     navigate("/checkout");
   };
 
-    const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Eames-Inspired Velvet Accent Chair",
-      size: "Walnut / Emerald Velvet", // Replaced apparel sizes with high-end material/finish combinations
-      color: "Emerald",
-      price: 899.00, // Adjusted pricing structures to align with high-end furniture items
-      quantity: 1,
-      image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=120",
-    },
-    {
-      id: 2,
-      name: "Minimalist Oak Dining Chair",
-      size: "Solid White Oak", // Replaced apparel sizes with high-end material/finish combinations
-      color: "Natural Oak",
-      price: 149.00, // Adjusted pricing structures to align with high-end furniture items
-      quantity: 2,
-      image: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&q=80&w=120",
-    },
-  ]);
+  const handleUpdateQuantity = (productId, quantity, size, color) => {
+    if (quantity < 1) return;
+    dispatch(updateCartItemsQuantity({ productId, quantity, guestId, userId: user?._id, size, color }))
+      .then(() => {
+        dispatch(fetchCart({ userId: user?._id, guestId }));
+      });
+  };
 
-  const totalPrice = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
+  const handleRemoveItem = (productId, size, color) => {
+    dispatch(removeFromCart({ productId, guestId, userId: user?._id, size, color }))
+      .then(() => {
+        dispatch(fetchCart({ userId: user?._id, guestId }));
+      });
+  };
+
+  const cartItems = cart?.products || [];
+  
+  // Calculate pricing totals and quantities dynamically
+  const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const totalItemCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <>
-      {/* Cart Icon Button */}
+      {/* Cart Icon Button with Premium Badge */}
       <button
         onClick={() => setDrawerOpen(true)}
         className="relative flex flex-col items-center text-neutral-700 hover:text-[#8C7A6B] transition-colors duration-300 focus:outline-none"
-        aria-label="Open cart"
+        aria-label="Open cart drawer"
       >
         <div className="relative">
-          <FiShoppingBag size={20} />
-          
+          <FiShoppingBag size={20} className="text-neutral-700 hover:text-[#8C7A6B] transition-colors" />
           {totalItemCount > 0 && (
-            <span className="absolute -top-1.5 -right-1.5 bg-[#8C7A6B] text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center shadow-sm">
+            <span className="absolute -top-1.5 -right-1.5 bg-[#8C7A6B] text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center tracking-tight shadow-sm scale-95 transition-transform">
               {totalItemCount}
             </span>
           )}
         </div>
-        <span className="text-[10px] text-gray-500 mt-0.5">Cart</span>
       </button>
 
-      
+      {/* Backdrop Overlay with exact z-indexing just under drawer */}
       {drawerOpen && (
         <div
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-60 transition-opacity duration-300"
+          className="fixed inset-0 bg-neutral-900/40 backdrop-blur-sm z-[999] transition-opacity duration-300"
           onClick={() => setDrawerOpen(false)}
         />
       )}
 
-      
+      {/* Premium Sliding Cart Drawer Panel */}
       <div
-        className={`fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-2xl z-70 transform transition-transform duration-500 ease-in-out flex flex-col ${
+        className={`fixed top-0 right-0 h-screen w-full sm:w-96 bg-white shadow-2xl z-[1000] transform transition-transform duration-500 ease-in-out flex flex-col ${
           drawerOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        {/* Header */}
-        <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+        {/* Header - Non-shrinking, pinned to top */}
+        <div className="flex-shrink-0 p-6 border-b border-neutral-100 flex justify-between items-center bg-white">
           <h2 className="text-xl font-medium text-neutral-800 tracking-wide">
             Your Cart
           </h2>
           
           <button
             onClick={() => setDrawerOpen(false)}
-            className="p-2 text-gray-400 hover:text-[#8C7A6B] transition-colors duration-300 focus:outline-none"
+            className="p-2 text-neutral-400 hover:text-[#8C7A6B] transition-colors duration-300 focus:outline-none"
             aria-label="Close cart"
           >
             <IoMdClose size={22} />
           </button>
         </div>
 
-        {/* Body */}
-        <div className="flex-1 overflow-y-auto p-6">
+        {/* Scrollable Body - Takes remaining space and overflows */}
+        <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
           {cartItems.length === 0 ? (
-            
             <div className="flex flex-col items-center justify-center h-full gap-3 text-center">
-              <FiShoppingBag size={40} className="text-gray-200" />
-              <p className="text-sm text-gray-400 font-light">
+              <FiShoppingBag size={40} className="text-neutral-200" />
+              <p className="text-sm text-neutral-400 font-light">
                 Your cart is currently empty.
               </p>
             </div>
           ) : (
-            <CartContents cartItems={cartItems} />
+            <CartContents 
+              cartItems={cartItems} 
+              onUpdateQuantity={handleUpdateQuantity} 
+              onRemoveItem={handleRemoveItem}
+            />
           )}
         </div>
 
-        
-        <div className="p-6 bg-[#FAFAFA] border-t border-gray-100">
+        {/* Footer - Non-shrinking, pinned to bottom */}
+        <div className="flex-shrink-0 p-6 bg-neutral-50 border-t border-neutral-100 bg-white">
           <div className="flex justify-between items-center mb-4">
             <span className="text-sm text-neutral-500 tracking-wide">Subtotal</span>
             <span className="text-base font-semibold text-neutral-900">
@@ -116,12 +121,12 @@ const CartDrawer = () => {
           <button
             onClick={handleCheckout}
             disabled={cartItems.length === 0}
-            className="w-full bg-[#2C2C2C] disabled:bg-neutral-300 disabled:cursor-not-allowed text-white py-4 text-sm font-medium tracking-widest uppercase hover:bg-[#8C7A6B] transition-colors duration-300 shadow-sm"
+            className="w-full bg-[#2C2C2C] disabled:bg-neutral-200 disabled:cursor-not-allowed text-white py-4 text-sm font-medium tracking-widest uppercase hover:bg-[#8C7A6B] transition-colors duration-300 shadow-sm"
           >
             Checkout
           </button>
 
-          <p className="text-xs text-gray-400 mt-4 text-center font-light tracking-wide">
+          <p className="text-xs text-neutral-400 mt-4 text-center font-light tracking-wide">
             Shipping, taxes, and discount codes calculated at checkout.
           </p>
         </div>

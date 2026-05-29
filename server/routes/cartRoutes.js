@@ -14,6 +14,21 @@ const getCart = async (userId, guestId) =>{
   return null;
 }
 
+// @route GET /api/cart
+// @desc Get the cart for a user or guest
+// @access Public
+router.get("/", async (req, res) => {
+  const { userId, guestId } = req.query;
+  try {
+    const cart = await getCart(userId, guestId);
+    if (!cart) return res.status(200).json({ products: [] });
+    return res.status(200).json(cart);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server Error" });
+  }
+});
+
 // @route POST / api/cart
 // @desc add a product to the cart for the guset or logged in user
 // @access Public
@@ -44,7 +59,7 @@ router.post("/", async (req, res) =>{
         cart.products.push({
           productId,
           name: product.name,
-          image: product.images[0].url,
+          image: product.images?.[0]?.url || "https://placehold.co/80x96?text=No+Image",
           price: product.price,
           size,
           color,
@@ -67,7 +82,7 @@ router.post("/", async (req, res) =>{
           {
             productId,
             name: product.name,
-            image: product.images[0].url,
+            image: product.images?.[0]?.url || "https://placehold.co/80x96?text=No+Image",
             price: product.price,
             size,
             color,

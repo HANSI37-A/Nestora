@@ -228,6 +228,9 @@ router.get("/", async (req, res) => {
     if (brand && brand.toLocaleLowerCase() !== "all") {
       query.brand =  { $in: brand.split(",")};
     }
+    if (color && color.toLocaleLowerCase() !== "all") {
+      query.color = { $in: color.split(",")};
+    }
     if (minPrice || maxPrice) {
       query.price = {};
       if (minPrice)        query.price.$gte = Number(minPrice);
@@ -244,16 +247,18 @@ router.get("/", async (req, res) => {
     if (sortBy) {
       switch (sortBy) {
         case "PriceAsc":
+        case "priceAsc":
           sort = { price: 1 };
           break;
         case "PriceDesc":
+        case "priceDesc":
           sort = { price: -1 };
           break;
-          case "popularity":
-            sort = { rating: -1 };
-            break;
-            default:
-              break;
+        case "popularity":
+          sort = { rating: -1 };
+          break;
+        default:
+          break;
       }
     }
 

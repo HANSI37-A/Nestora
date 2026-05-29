@@ -101,7 +101,7 @@ export const Navbar = () => {
                   </button>
                 } />
                 <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-neutral-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap pointer-events-none">
-                  Your Bag
+                  Cart
                 </span>
               </div>
 

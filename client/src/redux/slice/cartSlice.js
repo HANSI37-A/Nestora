@@ -53,6 +53,7 @@ export const updateCartItemsQuantity = createAsyncThunk(
       const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/cart`,{
         productId, quantity, guestId, userId, size, color,
       });
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
