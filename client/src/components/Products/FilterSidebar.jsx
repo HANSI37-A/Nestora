@@ -12,16 +12,11 @@ const FilterSidebar = () => {
     maxPrice: 5000, 
   });
 
-  const [priceRange, setPriceRange] = useState([0, 5000]); // Balanced default range to support premium pricing schemas
+  const [priceRange, setPriceRange] = useState([0, 5000]); 
 
-  // Swapped out clothing categories for distinct living layout concepts
-  const categories = ["Living Space", "Dining & Studio", "Bedroom Oasis", "Outdoor Comfort"];
-  
-  // Re-mapped to standard sophisticated finish values matching premium furniture lines
+  const categories = ["Living Room", "Dining Room", "Bedroom", "Office", "Decor"];
   const colors = ["Walnut", "Oak", "Charcoal", "Emerald", "Boucle", "Travertine", "Beige", "Brass"];
   const materials = ["Solid Wood", "Honed Travertine", "Premium Velvet", "Italian Bouclé", "Cast Iron"];
-  
-  // Transformed clothing lines to architectural design studios & master craftsmen collections
   const brands = ["Atelier Nestora", "Nordic Minimalist", "Heritage Craft"];
 
   useEffect(() => {
@@ -76,7 +71,6 @@ const FilterSidebar = () => {
     updateURLParams(updated);
   };
 
-  // Safe background color fallback parser for wood & textile specific color palettes
   const getColorHexValue = (colorName) => {
     const finishes = {
       walnut: '#4E3629',
@@ -92,8 +86,7 @@ const FilterSidebar = () => {
   };
 
   return (
-    <div className="p-4 w-64 border-r border-gray-100 min-h-screen">
-
+    <div className="w-full bg-white">
       <h2 className="text-lg font-semibold text-gray-800 mb-6 uppercase tracking-wide">Filters</h2>
 
       {/* Category */}
@@ -182,7 +175,6 @@ const FilterSidebar = () => {
           <span>$5,000</span>
         </div>
       </div>
-
     </div>
   );
 };
