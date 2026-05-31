@@ -1,96 +1,71 @@
 import { Link } from "react-router-dom"; 
-import { TbBrandMeta } from "react-icons/tb";
-import { IoLogoInstagram } from "react-icons/io";
-import { RiTwitterXLine } from "react-icons/ri";
-import { FiPhoneCall } from "react-icons/fi";
+import { RiInstagramLine, RiTwitterXLine, RiFacebookCircleLine } from "react-icons/ri";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#F9F9F7] border-t border-gray-200 ">
+    <footer className="bg-[#1A1A1A] text-white border-t border-neutral-900">
       
-      {/* Main Footer */}
-      <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+      
+      <div className="max-w-7xl mx-auto px-8 sm:px-12 py-20 grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-8">
 
-        {/* Newsletter */}
-        <div>
-          <h3 className="text-xl font-light text-gray-800 mb-4 tracking-wide">
-            Stay Inspired
-          </h3>
-          <p className="text-gray-500 text-sm leading-relaxed mb-4">
-            Get updates on new architectural arrivals, curated seasonal collections, and exclusive interior styling insights.
-          </p>
-          <p className="text-sm text-gray-600 mb-6">
-            Enjoy 10% off your first artisanal acquisition.
-          </p>
-
-          <form className="flex items-center bg-white border border-gray-300 rounded-md overflow-hidden focus-within:ring-1 focus-within:ring-[#8C7A6B]">
-            <input
-              type="email"
-              placeholder="Your email address"
-              className="px-4 py-3 w-full text-sm outline-none"
-              required
-            />
-            <button className="bg-[#2C2C2C] text-white px-5 py-3 text-sm hover:bg-[#8C7A6B] transition-colors">
-              Join
-            </button>
-          </form>
-        </div>
-
-        {/* Shop Links */}
-        <div>
-          <h3 className="text-lg font-light text-gray-800 mb-4 tracking-wide">
-            Explore
-          </h3>
-          <ul className="space-y-3 text-sm text-gray-600">
-            <li><Link to="#" className="hover:text-[#8C7A6B]">Our Story</Link></li>
-            <li><Link to="#" className="hover:text-[#8C7A6B]">Design Studio Contact</Link></li>
-            <li><Link to="#" className="hover:text-[#8C7A6B]">Artisanal Showrooms</Link></li>
-            <li><Link to="#" className="hover:text-[#8C7A6B]">Custom Materials & Care</Link></li>
-          </ul>
-        </div>
-
-        {/* Customer */}
-        <div>
-          <h3 className="text-lg font-light text-gray-800 mb-4 tracking-wide">
-            Customer Care
-          </h3>
-          <ul className="space-y-3 text-sm text-gray-600">
-            <li><Link to="#" className="hover:text-[#8C7A6B]">White-Glove Delivery & Returns</Link></li>
-            <li><Link to="#" className="hover:text-[#8C7A6B]">Fulfillment & Assembly Tracking</Link></li>
-            <li><Link to="#" className="hover:text-[#8C7A6B]">Privacy Policy</Link></li>
-            <li><Link to="#" className="hover:text-[#8C7A6B]">Terms & Conditions</Link></li>
-          </ul>
-        </div>
-
-        {/* Social + Contact */}
-        <div>
-          <h3 className="text-lg font-light text-gray-800 mb-4 tracking-wide">
-            Connect
-          </h3>
-
-          <div className="flex space-x-4 mb-6 text-gray-600">
-            <a href="#" className="hover:text-[#8C7A6B] transition-colors">
-              <TbBrandMeta size={20} />
+      
+        <div className="md:col-span-6 lg:col-span-5 flex flex-col justify-between space-y-6">
+          <div>
+            <h3 className="text-2xl font-serif tracking-[0.2em] uppercase text-white mb-6">
+              Nestora
+            </h3>
+            <p className="text-[#A8A29E] text-xs font-light leading-relaxed max-w-sm tracking-wide">
+              Architectural furniture for spaces of distinction. Crafting heritage since 1974.
+            </p>
+          </div>
+          
+          <div className="flex space-x-5 text-[#A8A29E]">
+            <a href="#" className="hover:text-white transition-colors" aria-label="Instagram link">
+              <RiInstagramLine size={18} />
             </a>
-            <a href="#" className="hover:text-[#8C7A6B] transition-colors">
-              <IoLogoInstagram size={20} />
+            <a href="#" className="hover:text-white transition-colors" aria-label="Twitter link">
+              <RiTwitterXLine size={16} />
             </a>
-            <a href="#" className="hover:text-[#8C7A6B] transition-colors">
-              <RiTwitterXLine size={20} />
+            <a href="#" className="hover:text-white transition-colors" aria-label="Facebook link">
+              <RiFacebookCircleLine size={18} />
             </a>
           </div>
+        </div>
 
-          <p className="text-sm text-gray-500 mb-2">Call us</p>
-          <p className="text-sm text-gray-700 flex items-center">
-            <FiPhoneCall className="mr-2" /> 012 345 6789
-          </p>
+        <div className="md:col-span-3 lg:col-span-3 lg:col-start-7">
+          <h4 className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#A8A29E] mb-6">
+            Company
+          </h4>
+          <ul className="space-y-4 text-xs font-light tracking-wide text-[#A8A29E]">
+            <li><Link to="#" className="hover:text-white transition-colors">Sustainability</Link></li>
+            <li><Link to="#" className="hover:text-white transition-colors">Our Heritage</Link></li>
+            <li><Link to="#" className="hover:text-white transition-colors">Design Studio Journal</Link></li>
+            <li><Link to="#" className="hover:text-white transition-colors">Artisanal Showrooms</Link></li>
+          </ul>
+        </div>
+
+        <div className="md:col-span-3 lg:col-span-3">
+          <h4 className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#A8A29E] mb-6">
+            Legal
+          </h4>
+          <ul className="space-y-4 text-xs font-light tracking-wide text-[#A8A29E]">
+            <li><Link to="#" className="hover:text-white transition-colors">Terms of Service</Link></li>
+            <li><Link to="#" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+            <li><Link to="#" className="hover:text-white transition-colors">Cookie Configurations</Link></li>
+            <li><Link to="#" className="hover:text-white transition-colors">White-Glove Logistics</Link></li>
+          </ul>
         </div>
 
       </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-gray-200 py-6 text-center text-sm text-gray-500">
-        © 2026 NestOra. All rights reserved.
+      <div className="border-t border-neutral-900 max-w-7xl mx-auto px-8 sm:px-12 py-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] tracking-[0.15em] uppercase text-neutral-500 font-medium">
+        <div>
+          © 2026 Nestora Architectural Furniture. All rights reserved.
+        </div>
+        <div className="flex gap-6">
+          <span className="cursor-pointer hover:text-white transition-colors">EU</span>
+          <span className="cursor-pointer hover:text-white transition-colors">US</span>
+        </div>
       </div>
 
     </footer>
