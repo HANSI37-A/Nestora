@@ -8,6 +8,9 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); 
+  const [joinJournal, setJoinJournal] = useState(false); 
+  
   const dispatch = useDispatch();
   const navigate = useNavigate(); 
 
@@ -15,10 +18,14 @@ const Register = () => {
     e.preventDefault();
   
     if (!name || !email || !password) return;
+    
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
 
     try {
       const result = await dispatch(registerUser({ name, email, password })).unwrap();
-      
       if (result) {
         navigate("/profile");
       }
@@ -28,127 +35,149 @@ const Register = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50"> 
-      
-      
-      {/* Main Section */}
-      <div className="flex flex-1">
+  
+    <div className="flex min-h-screen bg-[#F9F7F2] text-[#1A1A1A] font-sans antialiased select-none"> 
+      <div className="flex flex-1 w-full">
 
-        {/* Left Side - Register Form */}
-        <div className="w-full md:w-1/2 flex items-center justify-center px-6 py-12 md:px-16 bg-white">
-          <div className="w-full max-w-md">
+        <div className="hidden md:flex md:w-1/2 relative overflow-hidden"> 
+          <img
+            src={register}
+            alt="Nestora Architectural Space"
+            className="w-full h-full object-cover"
+          />
+          
+          <div className="absolute top-12 left-12 text-white">
+            <h2 className="text-2xl font-serif tracking-wide">Nestora</h2>
+          </div>
 
-            {/* Logo */}
-            <div className="mb-8 text-center">
-              <h2 className="text-4xl font-extrabold tracking-tight text-gray-900">
-                Rabbit
-              </h2>
-              <p className="text-gray-500 mt-2 text-sm">
-                Create an account to get started. 
+          <div className="absolute bottom-16 left-12 right-12 text-white max-w-md"> 
+            <span className="text-[10px] font-bold tracking-[0.25em] text-gray-300 uppercase block mb-2">
+              Architectural Heritage
+            </span>
+            <h2 className="text-4xl font-serif leading-tight tracking-wide">
+              Design that transcends <br /> time and space.
+            </h2>
+          </div>
+        </div>
+
+
+        <div className="w-full md:w-1/2 flex items-center justify-center px-8 py-12 sm:px-16 lg:px-24 bg-[#F9F7F2]">
+          <div className="w-full max-w-sm">
+
+            <div className="mb-10">
+              <h1 className="text-3xl font-serif text-[#1A1A1A] mb-2 font-normal tracking-wide">
+                Create an Account
+              </h1>
+              <p className="text-xs text-[#A8A29E] leading-relaxed font-light">
+                Join our curated community of designers and collectors.
               </p>
             </div>
 
-            {/* Form Card */}
-            <form
-              onSubmit={handleSubmit}
-              className="bg-white border border-gray-200 shadow-xl rounded-2xl p-8"
-            >
-              <h2 className="text-3xl font-bold text-gray-900 mb-2 text-center">
-                Register
-              </h2>
 
-              <p className="text-sm text-gray-500 text-center mb-8">
-                Create a new account to get started
-              </p>
+            <form onSubmit={handleSubmit} className="space-y-6">
 
-              {/* Name */}
-              <div className="mb-5">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Name
+              <div className="relative border-b border-[#1A1A1A]/20 pb-1 focus-within:border-[#1A1A1A] transition-colors duration-300">
+                <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-[#A8A29E] mb-2">
+                  Full Name
                 </label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter your name"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition"
+                  placeholder="Mies van der Rohe"
+                  className="w-full bg-transparent text-sm font-light tracking-wide placeholder-[#A8A29E]/40 focus:outline-none text-[#1A1A1A]"
+                  required
                 />
               </div>
 
-              {/* Email */}
-              <div className="mb-5">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Email
+              <div className="relative border-b border-[#1A1A1A]/20 pb-1 focus-within:border-[#1A1A1A] transition-colors duration-300">
+                <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-[#A8A29E] mb-2">
+                  Email Address
                 </label>
                 <input
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email address"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition"
+                  placeholder="mies@bauhaus.de"
+                  className="w-full bg-transparent text-sm font-light tracking-wide placeholder-[#A8A29E]/40 focus:outline-none text-[#1A1A1A]"
+                  required
                 />
               </div>
 
-              {/* Password */}
-              <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <div className="relative border-b border-[#1A1A1A]/20 pb-1 focus-within:border-[#1A1A1A] transition-colors duration-300">
+                <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-[#A8A29E] mb-2">
                   Password
                 </label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition"
+                  placeholder="••••••••"
+                  className="w-full bg-transparent text-sm font-light tracking-widest placeholder-[#A8A29E]/40 focus:outline-none text-[#1A1A1A]"
+                  required
                 />
               </div>
 
-              {/* Button */}
-              <button
-                type="submit"
-                className="w-full bg-black text-white py-3 rounded-xl font-semibold tracking-wide hover:bg-gray-800 transition duration-300 shadow-md"
-              >
-                Register
-              </button>
+              <div className="relative border-b border-[#1A1A1A]/20 pb-1 focus-within:border-[#1A1A1A] transition-colors duration-300">
+                <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-[#A8A29E] mb-2">
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full bg-transparent text-sm font-light tracking-widest placeholder-[#A8A29E]/40 focus:outline-none text-[#1A1A1A]"
+                  required
+                />
+              </div>
 
-              {/* Login Link */}
-              <p className="mt-6 text-center text-sm text-gray-600">
-                Already have an account?{" "} 
-                <Link
-                  to="/login" 
-                  className="text-black font-semibold hover:underline"
+              <div className="flex items-start gap-3 pt-2">
+                <input
+                  id="journal-opt-in"
+                  type="checkbox"
+                  checked={joinJournal}
+                  onChange={(e) => setJoinJournal(e.target.checked)}
+                  className="mt-0.5 w-3.5 h-3.5 accent-[#1A1A1A] border-gray-300 rounded focus:ring-0 focus:ring-offset-0"
+                />
+                <label htmlFor="journal-opt-in" className="text-[11px] text-[#A8A29E] leading-normal font-light">
+                  Join the <span className="font-medium text-[#1A1A1A]">Nestora Journal</span> for early access to new collections and architectural stories.
+                </label>
+              </div>
+
+              <div className="pt-4 space-y-6">
+                <button
+                  type="submit"
+                  className="w-full bg-[#1A1A1A] text-white py-3.5 text-xs font-semibold tracking-[0.25em] uppercase hover:bg-[#6B543D] transition-colors duration-300 shadow-sm"
                 >
-                  Sign In
-                </Link>
-              </p>
+                  Join Nestora
+                </button>
+
+                <p className="text-center text-xs text-[#A8A29E] font-light">
+                  Already a member?{" "} 
+                  <Link
+                    to="/login" 
+                    className="text-[#1A1A1A] font-medium underline underline-offset-4 hover:text-[#6B543D] transition-colors"
+                  >
+                    Sign In
+                  </Link>
+                </p>
+              </div>
+
             </form>
-          </div>
-        </div>
 
-        {/* Right Side - Image */}
-        <div className="hidden md:flex md:w-1/2 relative overflow-hidden"> 
-          <img
-            src={register}
-            alt="Register for account"
-            className="w-full h-full object-cover"
-          />
+            <div className="mt-16 flex items-center justify-between text-[10px] tracking-wide text-[#A8A29E]/50 font-light">
+              <div className="flex gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-black block"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-gray-300 block"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-[#6B543D]/50 block"></span>
+              </div>
+            </div>
 
-          {/* Dark Overlay */}
-          <div className="absolute inset-0 bg-black/40"></div> 
-          {/* Text Overlay */}
-          <div className="absolute inset-0 flex flex-col justify-end p-12 text-white"> 
-            <h2 className="text-5xl font-extrabold mb-4 leading-tight">
-              Discover Your <br /> Perfect Style
-            </h2>
-            <p className="text-base text-gray-200 max-w-md leading-relaxed">
-              Shop the latest trends with premium quality fashion designed for your everyday lifestyle.
-            </p>
           </div>
         </div>
 
       </div>
-
-      
     </div>
   );
 };

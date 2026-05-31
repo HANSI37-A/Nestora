@@ -7,7 +7,7 @@ const checkout = {
     {
       productId: "1",
       name: "Oak Wood Lounge Chair",
-      color: "Natural Oak", // Matched premium finish description
+      color: "Natural Oak", 
       price: 450,
       quantity: 1,
       image: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&q=80&w=800",
@@ -15,7 +15,7 @@ const checkout = {
     {
       productId: "2",
       name: "Nordic Bouclé Sofa",
-      color: "Ivory Bouclé", // Matched premium fabric choice
+      color: "Ivory Bouclé", 
       price: 1500,
       quantity: 1,
       image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800",
