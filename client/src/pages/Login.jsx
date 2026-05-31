@@ -11,133 +11,131 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    const result = await dispatch(
-      loginUser({ email, password })
-    ).unwrap();
+    try {
+      const result = await dispatch(
+        loginUser({ email, password })
+      ).unwrap();
 
-    console.log("LOGIN SUCCESS:", result);
+      console.log("LOGIN SUCCESS:", result);
 
-    console.log(
-      "TOKEN AFTER LOGIN:",
-      localStorage.getItem("userToken")
-    );
+      console.log(
+        "TOKEN AFTER LOGIN:",
+        localStorage.getItem("userToken")
+      );
 
-    navigate("/");
+      navigate("/");
 
-  } catch (error) {
-    console.log("LOGIN ERROR:", error);
-    alert(error.message || "Login failed");
-  }
-};
+    } catch (error) {
+      console.log("LOGIN ERROR:", error);
+      alert(error.message || "Login failed");
+    }
+  };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
-     
+    <div className="flex min-h-screen bg-[#F9F7F2] text-[#1A1A1A] font-sans antialiased select-none">
+      <div className="flex flex-1 w-full">
+        
+        <div className="hidden md:flex md:w-1/2 relative overflow-hidden">
+          <img
+            src={login}
+            alt="Nestora Living Workspace"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
 
-      {/* Main Section */}
-      <div className="flex flex-1">
+          <div className="absolute bottom-12 left-12 text-white">
+            <h2 className="text-4xl font-serif tracking-wide mb-1">Nestora</h2>
+            <p className="text-[10px] tracking-[0.3em] uppercase text-gray-300 font-light">
+              ESTABLISHED 1924
+            </p>
+          </div>
+        </div>
 
-        {/* Left Side - Login Form */}
-        <div className="w-full md:w-1/2 flex items-center justify-center px-6 py-12 md:px-16 bg-white">
-          <div className="w-full max-w-md">
+        <div className="w-full md:w-1/2 flex items-center justify-center px-8 py-12 sm:px-16 lg:px-24 bg-[#F9F7F2]">
+          <div className="w-full max-w-sm">
 
-            {/* Logo */}
-            <div className="mb-8 text-center">
-              <h2 className="text-4xl font-extrabold tracking-tight text-gray-900">
-                Rabbit
-              </h2>
-              <p className="text-gray-500 mt-2 text-sm">
-                Welcome back! Please sign in to continue.
+            <div className="mb-12">
+              <h1 className="text-3xl sm:text-4xl font-serif text-[#1A1A1A] mb-3 font-normal tracking-wide">
+                Welcome Back
+              </h1>
+              <p className="text-xs text-[#A8A29E] leading-relaxed max-w-xs font-light">
+                Please enter your credentials to access the private gallery.
               </p>
             </div>
 
-            {/* Form Card */}
-            <form
-              onSubmit={handleSubmit}
-              className="bg-white border border-gray-200 shadow-xl rounded-2xl p-8"
-            >
-              <h2 className="text-3xl font-bold text-gray-900 mb-2 text-center">
-                Sign In
-              </h2>
-
-              <p className="text-sm text-gray-500 text-center mb-8">
-                Enter your username and password to login
-              </p>
-
-              {/* Email */}
-              <div className="mb-5">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Email
+            <form onSubmit={handleSubmit} className="space-y-8">
+              
+              <div className="relative border-b border-[#1A1A1A]/20 pb-1 focus-within:border-[#1A1A1A] transition-colors duration-300">
+                <label className="block text-[9px] font-bold uppercase tracking-[0.2em] text-[#A8A29E] mb-2">
+                  Email Address
                 </label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email address"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition"
+                  placeholder="architect@nestora.com"
+                  className="w-full bg-transparent text-sm font-light tracking-wide placeholder-[#A8A29E]/40 focus:outline-none text-[#1A1A1A]"
+                  required
                 />
               </div>
 
-              {/* Password */}
-              <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Password
-                </label>
+
+              <div className="relative border-b border-[#1A1A1A]/20 pb-1 focus-within:border-[#1A1A1A] transition-colors duration-300">
+                <div className="flex justify-between items-center mb-2">
+                  <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#A8A29E]">
+                    Password
+                  </label>
+                  <Link 
+                    to="/forgot-password" 
+                    className="text-[9px] tracking-[0.1em] uppercase text-[#A8A29E] hover:text-[#1A1A1A] transition-colors"
+                  >
+                    Forgot Password?
+                  </Link>
+                </div>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition"
+                  placeholder="••••••••"
+                  className="w-full bg-transparent text-sm font-light tracking-widest placeholder-[#A8A29E]/40 focus:outline-none text-[#1A1A1A]"
+                  required
                 />
               </div>
 
-              {/* Button */}
-              <button
-                type="submit"
-                className="w-full bg-black text-white py-3 rounded-xl font-semibold tracking-wide hover:bg-gray-800 transition duration-300 shadow-md"
-              >
-                Sign In
-              </button>
+              <div className="space-y-4 pt-4">
+                
+                <button
+                  type="submit"
+                  className="w-full bg-[#1A1A1A] text-white py-3.5 text-xs font-semibold tracking-[0.25em] uppercase hover:bg-[#6B543D] transition-colors duration-300 shadow-sm"
+                >
+                  Sign In
+                </button>
 
-            
-              <p className="mt-6 text-center text-sm text-gray-600">
-                Don't have an account?{" "}
+                <div className="relative flex py-2 items-center">
+                  <div className="flex-grow border-t border-[#A8A29E]/10"></div>
+                  <span className="flex-shrink mx-4 text-[9px] uppercase tracking-widest text-[#A8A29E] font-light">or</span>
+                  <div className="flex-grow border-t border-[#A8A29E]/10"></div>
+                </div>
+
                 <Link
                   to="/register"
-                  className="text-black font-semibold hover:underline"
+                  className="block w-full text-center bg-transparent text-[#1A1A1A] border border-[#1A1A1A]/20 py-3.5 text-xs font-semibold tracking-[0.25em] uppercase hover:border-[#1A1A1A] transition-colors duration-300"
                 >
-                  Create Account
+                  Create an Account
                 </Link>
-              </p>
-
+              </div>
             </form>
-          </div>
-        </div>
 
-        {/* Right Side - Image */}
-        <div className="hidden md:flex md:w-1/2 relative overflow-hidden">
-          <img
-            src={login}
-            alt="Login to account"
-            className="w-full h-full object-cover"
-          />
 
-          {/* Dark Overlay */}
-          <div className="absolute inset-0 bg-black/40"></div>
+            <div className="mt-20 text-center">
+              <p className="text-[10px] tracking-wide text-[#A8A29E]/70 font-light">
+                &copy; {new Date().getFullYear()} Nestora Architectural Furniture
+              </p>
+            </div>
 
-          {/* Text Overlay */}
-          <div className="absolute inset-0 flex flex-col justify-end p-12 text-white">
-            <h2 className="text-5xl font-extrabold mb-4 leading-tight">
-              Discover Your <br /> Perfect Style
-            </h2>
-            <p className="text-base text-gray-200 max-w-md leading-relaxed">
-              Shop the latest trends with premium quality fashion designed for your everyday lifestyle.
-            </p>
           </div>
         </div>
 

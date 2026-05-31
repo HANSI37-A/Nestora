@@ -91,164 +91,206 @@ const Checkout = () => {
     console.log("Order finalized in database:", finalOrder);
     navigate("/order-confirmation", { state: { order: finalOrder } });
   };
+
+  const inputFieldsStyle = "w-full bg-transparent border-b border-[#1A1A1A]/20 p-2 text-sm font-light tracking-wide focus:outline-none focus:border-[#1A1A1A] transition-colors placeholder-[#A8A29E]/50";
+
   return (
-    <>
-   
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto py-10 px-6 tracking-tighter">
+    <div className="w-full bg-[#F9F7F2] min-h-screen text-[#1A1A1A] font-sans antialiased select-none">
+      <div className="max-w-7xl mx-auto py-16 px-4 sm:px-8 lg:px-12">
         
-        <div className="bg-white rounded-lg p-6">
-          <h2 className="text-2xl uppercase mb-6 font-semibold">Checkout</h2>
-          <form onSubmit={handleCreateCheckout}>
-            
-            <h3 className="text-lg mb-4 font-medium">Contact Details</h3>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm mb-1">Email</label>
-              <input 
-                type="email" 
-                value={shippingAddress.email} 
-                onChange={(e) => setShippingAddress({ ...shippingAddress, email: e.target.value })} 
-                className="w-full p-2 border rounded focus:outline-none focus:border-neutral-500" 
-                required
-              />
-            </div>
-
-            <h3 className="text-lg mb-4 font-medium">Delivery</h3>
-            <div className="mb-4 grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-gray-700 text-sm mb-1">First Name</label>
-                <input 
-                  type="text" 
-                  value={shippingAddress.firstName} 
-                  onChange={(e) => setShippingAddress({ ...shippingAddress, firstName: e.target.value })} 
-                  className="w-full p-2 border rounded" 
-                  required 
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 text-sm mb-1">Last Name</label>
-                <input 
-                  type="text" 
-                  value={shippingAddress.lastName} 
-                  onChange={(e) => setShippingAddress({ ...shippingAddress, lastName: e.target.value })} 
-                  className="w-full p-2 border rounded" 
-                  required 
-                />
-              </div>
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm mb-1">Address</label>
-              <input 
-                type="text" 
-                value={shippingAddress.address} 
-                onChange={(e) => setShippingAddress({ ...shippingAddress, address: e.target.value })} 
-                className="w-full p-2 border rounded" 
-                required 
-              />
-            </div>
-
-            <div className="mb-4 grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-gray-700 text-sm mb-1">City</label>
-                <input 
-                  type="text" 
-                  value={shippingAddress.city} 
-                  onChange={(e) => setShippingAddress({ ...shippingAddress, city: e.target.value })} 
-                  className="w-full p-2 border rounded" 
-                  required 
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 text-sm mb-1">Postal Code</label>
-                <input 
-                  type="text" 
-                  value={shippingAddress.postalCode} 
-                  onChange={(e) => setShippingAddress({ ...shippingAddress, postalCode: e.target.value })} 
-                  className="w-full p-2 border rounded" 
-                  required 
-                />
-              </div>
-            </div>
-
-            <div className="mb-4 grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-gray-700 text-sm mb-1">Country</label>
-                <input 
-                  type="text" 
-                  value={shippingAddress.country} 
-                  onChange={(e) => setShippingAddress({ ...shippingAddress, country: e.target.value })} 
-                  className="w-full p-2 border rounded" 
-                  required 
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 text-sm mb-1">Phone Number</label>
-                <input 
-                  type="tel" 
-                  value={shippingAddress.phone} 
-                  onChange={(e) => setShippingAddress({ ...shippingAddress, phone: e.target.value })} 
-                  className="w-full p-2 border rounded" 
-                  required 
-                />
-              </div>
-            </div>
-            <div className="mt-6">
-              {!checkoutId ? (
-                <button type="submit" className="w-full bg-black text-white py-3 rounded font-medium uppercase tracking-wider hover:bg-zinc-800 transition-colors">
-                  Continue to Payment
-                </button>
-              ) : (
-                <div className="border-t pt-4">
-                  <h3 className="text-lg mb-4 font-medium text-neutral-800">Pay with Debit / Credit Card or PayPal</h3>
-                  <PayPalButton 
-                    amount={grandTotal} 
-                    checkoutId={checkoutId}
-                    onSuccess={handlePaymentSuccess} 
-                    onError={(err) => alert(err || "Payment processing failed. Try again")} 
-                  />
-                </div>  
-              )}
-            </div>
-          </form>
+        {/* Main Section Header */}
+        <div className="border-b border-[#A8A29E]/20 pb-6 mb-12">
+          <span className="text-[10px] font-bold tracking-[0.25em] text-[#A8A29E] uppercase block mb-1">Secure Transaction</span>
+          <h1 className="text-4xl font-serif tracking-wide text-[#1A1A1A]">Checkout</h1>
         </div>
 
-        {/* Right Hand Side Order Summaries */}
-        <div className="bg-gray-50 p-6 rounded-lg self-start">
-          <h3 className="text-lg mb-4 font-medium">Order Summary</h3>
-          <div className="max-h-[50vh] overflow-y-auto pr-2">
-            {cartItems.map((product, index) => (
-              <div key={index} className="flex items-start justify-between py-3 border-b">
-                <div className="flex items-start">
-                  <img src={product.image} alt={product.name} className="w-20 h-24 object-cover mr-4 rounded border bg-white" />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 xl:gap-20 items-start">
+          
+          {/* LEFT SIDE — MINIMALIST FORM SYSTEM */}
+          <div className="lg:col-span-7">
+            <form onSubmit={handleCreateCheckout} className="space-y-10">
+              
+              {/* Contact Information */}
+              <div>
+                <h3 className="text-xs font-bold tracking-[0.2em] text-[#A8A29E] uppercase mb-5 pb-2 border-b border-[#A8A29E]/10">
+                  Contact Details
+                </h3>
+                <div className="relative">
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#A8A29E] mb-1">Email Address</label>
+                  <input 
+                    type="email" 
+                    placeholder="name@domain.com"
+                    value={shippingAddress.email} 
+                    onChange={(e) => setShippingAddress({ ...shippingAddress, email: e.target.value })} 
+                    className={inputFieldsStyle}
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Delivery Destination Coordinates */}
+              <div className="space-y-6">
+                <h3 className="text-xs font-bold tracking-[0.2em] text-[#A8A29E] uppercase mb-5 pb-2 border-b border-[#A8A29E]/10">
+                  Delivery Destination
+                </h3>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
-                    <h3 className="text-sm font-medium text-neutral-800">{product.name}</h3>
-                    <p className="text-xs text-gray-500 mt-0.5">Color: {product.color || "Default"}</p>
-                    <p className="text-xs text-gray-400">Qty: {product.quantity}</p>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#A8A29E] mb-1">First Name</label>
+                    <input 
+                      type="text" 
+                      value={shippingAddress.firstName} 
+                      onChange={(e) => setShippingAddress({ ...shippingAddress, firstName: e.target.value })} 
+                      className={inputFieldsStyle}
+                      required 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#A8A29E] mb-1">Last Name</label>
+                    <input 
+                      type="text" 
+                      value={shippingAddress.lastName} 
+                      onChange={(e) => setShippingAddress({ ...shippingAddress, lastName: e.target.value })} 
+                      className={inputFieldsStyle}
+                      required 
+                    />
                   </div>
                 </div>
-                <p className="text-sm font-semibold text-neutral-900">${(product.price * product.quantity).toLocaleString()}</p>
-              </div>              
-            ))}          
+
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#A8A29E] mb-1">Street Address</label>
+                  <input 
+                    type="text" 
+                    placeholder="Suite, Street, Apartment reference"
+                    value={shippingAddress.address} 
+                    onChange={(e) => setShippingAddress({ ...shippingAddress, address: e.target.value })} 
+                    className={inputFieldsStyle}
+                    required 
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#A8A29E] mb-1">City</label>
+                    <input 
+                      type="text" 
+                      value={shippingAddress.city} 
+                      onChange={(e) => setShippingAddress({ ...shippingAddress, city: e.target.value })} 
+                      className={inputFieldsStyle}
+                      required 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#A8A29E] mb-1">Postal Code</label>
+                    <input 
+                      type="text" 
+                      value={shippingAddress.postalCode} 
+                      onChange={(e) => setShippingAddress({ ...shippingAddress, postalCode: e.target.value })} 
+                      className={inputFieldsStyle}
+                      required 
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#A8A29E] mb-1">Country</label>
+                    <input 
+                      type="text" 
+                      value={shippingAddress.country} 
+                      onChange={(e) => setShippingAddress({ ...shippingAddress, country: e.target.value })} 
+                      className={inputFieldsStyle}
+                      required 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-[#A8A29E] mb-1">Phone Number</label>
+                    <input 
+                      type="tel" 
+                      value={shippingAddress.phone} 
+                      onChange={(e) => setShippingAddress({ ...shippingAddress, phone: e.target.value })} 
+                      className={inputFieldsStyle}
+                      required 
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-4">
+                {!checkoutId ? (
+                  <button type="submit" className="w-full bg-[#1A1A1A] text-white py-4 text-xs font-semibold tracking-[0.25em] uppercase hover:bg-[#6B543D] transition-colors duration-300 shadow-sm">
+                    Continue to Payment
+                  </button>
+                ) : (
+                  <div className="border-t border-[#A8A29E]/20 pt-6">
+                    <h3 className="text-xs font-bold tracking-[0.2em] text-[#A8A29E] uppercase mb-4">
+                      Gateway Authorization
+                    </h3>
+                    <div className="bg-transparent p-1 rounded-none">
+                      <PayPalButton 
+                        amount={grandTotal} 
+                        checkoutId={checkoutId}
+                        onSuccess={handlePaymentSuccess} 
+                        onError={(err) => alert(err || "Payment processing failed. Try again")} 
+                      />
+                    </div>
+                  </div>  
+                )}
+              </div>
+            </form>
           </div>
 
-          <div className="mt-4 space-y-2.5">
-            <div className="flex justify-between items-center text-sm text-gray-600">
-              <p>Subtotal</p>
-              <p>${subtotal.toLocaleString()}</p>
+          {/* RIGHT SIDE — LINE ITEM ORDER RECAP UTILITY */}
+          <div className="lg:col-span-5 bg-transparent border border-[#A8A29E]/20 p-6 sm:p-8 sticky top-28">
+            <h3 className="text-xs font-bold tracking-[0.2em] text-[#A8A29E] uppercase mb-6 pb-2 border-b border-[#A8A29E]/10">
+              Order Summary
+            </h3>
+            
+            {/* Scrollable products list view */}
+            <div className="max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar space-y-4">
+              {cartItems.map((product, index) => (
+                <div key={index} className="flex items-start justify-between py-2 border-b border-[#A8A29E]/10 pb-4 last:border-0 last:pb-0">
+                  <div className="flex items-start">
+                    <div className="w-16 aspect-[4/5] bg-[#1A1A1A]/5 overflow-hidden mr-4 shrink-0">
+                      <img src={product.image} alt="" className="w-full h-full object-cover" />
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="text-sm font-serif text-[#1A1A1A] truncate pr-2">{product.name}</h4>
+                      <p className="text-[10px] tracking-wide text-[#A8A29E] mt-0.5">
+                        Finish: <span className="text-[#1A1A1A] font-medium">{product.color || "Default"}</span>
+                      </p>
+                      <p className="text-[10px] tracking-wide text-[#A8A29E]">
+                        Qty: <span className="text-[#1A1A1A] font-medium">{product.quantity}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-xs font-semibold text-[#1A1A1A] tracking-wider shrink-0">
+                    ${(product.price * product.quantity).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  </p>
+                </div>              
+              ))}          
             </div>
-            <div className="flex justify-between items-center text-sm text-gray-600">
-              <p>Shipping</p>
-              <p>{shippingFee === 0 ? "Free" : `$${shippingFee}`}</p>
-            </div>
-            <div className="flex justify-between items-center text-lg font-semibold mt-4 border-t pt-4 text-neutral-900">
-              <p>Total</p>
-              <p>${grandTotal.toLocaleString()}</p>
+
+            {/* Price Ledger Calculations Stack */}
+            <div className="mt-6 border-t border-[#A8A29E]/20 pt-6 space-y-3">
+              <div className="flex justify-between items-center text-xs tracking-wide text-[#A8A29E]">
+                <p>Subtotal</p>
+                <p className="font-medium text-[#1A1A1A]">${subtotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
+              </div>
+              <div className="flex justify-between items-center text-xs tracking-wide text-[#A8A29E]">
+                <p>Shipping</p>
+                <p className="font-medium text-[#1A1A1A]">{shippingFee === 0 ? "Complimentary" : `$${shippingFee.toFixed(2)}`}</p>
+              </div>
+              <div className="flex justify-between items-center text-sm font-semibold mt-4 border-t border-[#A8A29E]/20 pt-4 text-[#1A1A1A]">
+                <p className="uppercase tracking-[0.15em] text-xs text-[#A8A29E]">Total Due</p>
+                <p className="text-lg font-serif font-medium">${grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
+              </div>
             </div>
           </div>
         </div>
 
       </div>
-    </>
+    </div>
   );
 };
 

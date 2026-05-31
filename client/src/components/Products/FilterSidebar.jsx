@@ -141,7 +141,6 @@ const FilterSidebar = ({ closeMobileSidebar }) => {
             </div>
           </div>
 
-          {/* PRICE RANGE SECTION */}
           <div>
             <h3 className="text-[10px] font-bold tracking-[0.25em] text-[#1A1A1A] uppercase mb-3">Price Range</h3>
             <div className="px-1">
@@ -164,7 +163,6 @@ const FilterSidebar = ({ closeMobileSidebar }) => {
         </div>
       </div>
 
-      {/* FIXED BASE CTA SUBMISSION LAYER */}
       <div className="pt-6 border-t border-[#A8A29E]/20 mt-6">
         <button
           onClick={handleApplyFilters}
