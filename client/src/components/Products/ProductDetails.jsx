@@ -97,7 +97,7 @@ const ProductDetails = ({ productId }) => {
             Design piece data could not be displayed.
           </div>
         ) : (
-          /* Main Interactive Information Layout Grid Display */
+
           <div className="flex flex-col md:flex-row gap-8">
 
             {/* Left — Image Thumbnails */}
