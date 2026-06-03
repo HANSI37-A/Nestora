@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { IoMdClose } from "react-icons/io";
 import { BiHomeAlt, BiBed, BiChair, BiBriefcase, BiCompass, BiLayer, BiDisc } from "react-icons/bi";
+import { fetchCategories } from "../../redux/slice/categoriesSlice";
 
 const FilterSidebar = ({ closeMobileSidebar }) => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const dispatch = useDispatch();
+  const { categories } = useSelector((state) => state.categories);
+  
   const [filters, setFilters] = useState({
     category: "",
     color: "",
@@ -14,21 +19,27 @@ const FilterSidebar = ({ closeMobileSidebar }) => {
     maxPrice: 5000, 
   });
 
-  const [priceRange, setPriceRange] = useState([0, 5000]); 
+  const [priceRange, setPriceRange] = useState([0, 5000]);
 
-  const categories = [
-    { name: "Living Room", icon: <BiHomeAlt size={15} /> },
-    { name: "Bedroom", icon: <BiBed size={15} /> },
-    { name: "Dining Room", icon: <BiChair size={15} /> },
-    { name: "Office", icon: <BiBriefcase size={15} /> },
-    { name: "Decor", icon: <BiCompass size={15} /> }
-  ];
+  // Icon mapping based on category name
+  const iconMap = {
+    "living room": <BiHomeAlt size={15} />,
+    "bedroom": <BiBed size={15} />,
+    "dining room": <BiChair size={15} />,
+    "office": <BiBriefcase size={15} />,
+    "decor": <BiCompass size={15} />,
+  };
 
   const materials = [
     { name: "Walnut", icon: <BiLayer size={14} /> },
     { name: "Italian Bouclé", icon: <BiDisc size={14} /> },
     { name: "Travertine", icon: <BiLayer size={14} /> }
   ];
+
+  // Fetch categories on mount
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   useEffect(() => {
     const params = Object.fromEntries([...searchParams]);
@@ -101,7 +112,7 @@ const FilterSidebar = ({ closeMobileSidebar }) => {
                 const isSelected = filters.category === cat.name;
                 return (
                   <button
-                    key={cat.name}
+                    key={cat._id}
                     onClick={() => handleCategoryChange(cat.name)}
                     className={`w-full flex items-center gap-3 px-3 py-2 text-xs tracking-wider font-medium transition-all duration-300 ${
                       isSelected 
@@ -109,8 +120,10 @@ const FilterSidebar = ({ closeMobileSidebar }) => {
                         : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#1A1A1A]/2 border-l-2 border-transparent"
                     }`}
                   >
-                    <span className={`${isSelected ? "text-[#6B543D]" : "text-[#A8A29E]"}`}>{cat.icon}</span>
-                    <span>{cat.name}</span>
+                    <span className={`${isSelected ? "text-[#6B543D]" : "text-[#A8A29E]"}`}>
+                      {iconMap[cat.name.toLowerCase()] || <BiHomeAlt size={15} />}
+                    </span>
+                    <span className="capitalize">{cat.name}</span>
                   </button>
                 );
               })}

@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const User = require('./models/User');
 const Cart = require('./models/Cart')
 const Product = require('./models/Product');
+const Category = require('./models/Category');
 const Products = require('./data/products');
 
 
@@ -15,6 +16,16 @@ const seedData = async () => {
     await User.deleteMany();
     await Product.deleteMany();
     await Cart.deleteMany();
+    await Category.deleteMany();
+
+    // Seed categories
+    const categories = await Category.insertMany([
+      { name: 'living room', description: 'Living room furniture', icon: 'BiHomeAlt' },
+      { name: 'bedroom', description: 'Bedroom furniture', icon: 'BiBed' },
+      { name: 'dining room', description: 'Dining room furniture', icon: 'BiChair' },
+      { name: 'office', description: 'Office furniture', icon: 'BiBriefcase' },
+      { name: 'decor', description: 'Home decor items', icon: 'BiCompass' }
+    ]);
 
     const createdUser = await User.create({
       name: 'Admin User',
