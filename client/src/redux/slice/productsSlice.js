@@ -4,57 +4,73 @@ import axios from "axios";
 // Async Thunk to Fetch Products by collection and optional filters
 export const fetchProductsByFilters = createAsyncThunk(
   "products/fetchByFilters",
-  async (filters) => {
-    const query = new URLSearchParams();
-    
-    // Clean up loop to automatically append truthy filters
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== "") {
-        query.append(key, value);
-      }
-    });
+  async (filters, { rejectWithValue }) => {
+    try {
+      const query = new URLSearchParams();
+      
+      // Clean up loop to automatically append truthy filters
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          query.append(key, value);
+        }
+      });
 
-    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products?${query.toString()}`);
-    return response.data;
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products?${query.toString()}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message || "Failed to fetch products");
+    }
   }
 );
 
 // Async thunk to fetch a single product by ID
 export const fetchProductDetails = createAsyncThunk(
   "products/fetchProductDetails",
-  async (id) => {
-    const response = await axios.get(
-      `${import.meta.env.VITE_BACKEND_URL}/api/products/${id}`
-    );
-    return response.data;
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/products/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message || "Failed to fetch product details");
+    }
   }
 );
 
 // Async thunk to update administrative product details
 export const updateProduct = createAsyncThunk(
   "products/updateProduct",
-  async ({ id, productData }) => {
-    const response = await axios.put(
-      `${import.meta.env.VITE_BACKEND_URL}/api/products/${id}`, 
-      productData,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-        },
-      }
-    );
-    return response.data;
+  async ({ id, productData }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/api/products/${id}`, 
+        productData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message || "Failed to update product details");
+    }
   }
 );
 
 // Async thunk to fetch similar products recommendation arrays
 export const fetchSimilarProducts = createAsyncThunk(
   "products/fetchSimilarProducts",
-  async ({ id }) => {
-    const response = await axios.get(
-      `${import.meta.env.VITE_BACKEND_URL}/api/products/similar/${id}`
-    );
-    return response.data;
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/products/similar/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message || "Failed to fetch similar products");
+    }
   }
 );
 
@@ -112,7 +128,7 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProductsByFilters.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload || action.error.message;
       })
 
       // Handle fetching single product details
@@ -126,7 +142,7 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProductDetails.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload || action.error.message;
       })
 
       // Handle administrative dashboard updates
@@ -144,7 +160,7 @@ const productsSlice = createSlice({
       })
       .addCase(updateProduct.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload || action.error.message;
       })
 
       // Handle recommendation slider background arrays smoothly
@@ -157,7 +173,7 @@ const productsSlice = createSlice({
       })
       .addCase(fetchSimilarProducts.rejected, (state, action) => {
         state.similarLoading = false;
-        console.error("Recommendations error failed silently:", action.error.message);
+        console.error("Recommendations error failed silently:", action.payload || action.error.message);
       });
   },
 });

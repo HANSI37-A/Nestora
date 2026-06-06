@@ -16,6 +16,7 @@ import UserManaagement from './components/Admin/UserManaagement';
 import ProductManagement from './components/Admin/ProductManagement';
 import EditProductPage from './components/Admin/EditProductPage';
 import OrderManagement from './components/Admin/OrderManagement';
+import AccountSettings from './pages/AccountSettings';
 
 import { Provider } from "react-redux";
 import store from "./redux/store";
@@ -36,6 +37,7 @@ const App = () => {
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="account-settings" element={<AccountSettings />} />
             <Route path="collection/:collection" element={<Collection />} />
             <Route path="product/:id" element={<ProductDetails />} />
             <Route path="checkout" element={<CheckOut />} />

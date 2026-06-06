@@ -4,19 +4,21 @@ import axios from "axios";
 // Async Thunk to fetch user orders
 export const fetchUserOrders = createAsyncThunk(
   "orders/fetchUserOrders",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, getState }) => {
     try {
+      const token = getState().auth?.token || localStorage.getItem("userToken");
+
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/orders/my-orders`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || { message: "Something went wrong" });  
+      return rejectWithValue(error.response?.data || { message: "Something went wrong" });
     }
   }
 );
@@ -24,13 +26,14 @@ export const fetchUserOrders = createAsyncThunk(
 // Async thunk to fetch order details by ID
 export const fetchOrderDetails = createAsyncThunk(
   "orders/fetchOrderDetails",
-  async (orderId, { rejectWithValue }) => {
+  async (orderId, { rejectWithValue, getState }) => {
     try {
+      const token = getState().auth?.token || localStorage.getItem("userToken");
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/orders/${orderId}`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );

@@ -199,7 +199,7 @@ const ProductDetails = ({ productId }) => {
                   <span className="text-sm font-medium">{quantity}</span>
                   <button
                     type="button"
-                    onClick={() => setQuantity((q) => Math.min(selectedProduct.stock || 10, q + 1))}
+                    onClick={() => setQuantity((q) => Math.min(selectedProduct.countInStock || 10, q + 1))}
                     className="border px-3 py-1 rounded text-lg hover:bg-gray-100"
                   >
                     +

@@ -43,8 +43,18 @@ const Checkout = () => {
 
 
   useEffect(() => {
-    if (user?.email) {
-      setShippingAddress((prev) => ({ ...prev, email: user.email }));
+    if (user) {
+      setShippingAddress((prev) => ({
+        ...prev,
+        firstName: user.name ? user.name.split(' ')[0] : prev.firstName,
+        lastName: user.name ? user.name.split(' ').slice(1).join(' ') : prev.lastName,
+        email: user.email || prev.email,
+        address: user.shippingAddress?.addressLine || prev.address,
+        city: user.shippingAddress?.city || prev.city,
+        postalCode: user.shippingAddress?.postalCode || prev.postalCode,
+        country: user.shippingAddress?.country || prev.country,
+        phone: user.phone || prev.phone,
+      }));
     }
   }, [user]);
 

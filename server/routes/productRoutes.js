@@ -214,27 +214,44 @@ router.get("/", async (req, res) => {
       collection, color, minPrice, maxPrice, sortBy,search, category, material, brand, limit,
     } = req.query;
 
+    const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const buildRegex = (value) => {
+      const tokens = value
+        .split(',')
+        .map((item) => item.trim())
+        .filter(Boolean)
+        .map(escapeRegex);
+
+      if (!tokens.length) return null;
+      return new RegExp(tokens.join('|'), 'i');
+    };
+
     let query = {};
 
-    if(collection && collection.toLocaleLowerCase() !== "all") {
-      query.productCollection = collection;
+    if (collection && collection.toLocaleLowerCase() !== "all") {
+      const regex = buildRegex(collection);
+      if (regex) query.productCollection = regex;
     }
     if (category && category.toLocaleLowerCase() !== "all") {
-      query.category = category;
+      const regex = buildRegex(category);
+      if (regex) query.category = regex;
     }
     if (material && material.toLocaleLowerCase() !== "all") {
-      query.material = { $in: material.split(",")};
+      const regex = buildRegex(material);
+      if (regex) query.material = regex;
     }
     if (brand && brand.toLocaleLowerCase() !== "all") {
-      query.brand =  { $in: brand.split(",")};
+      const regex = buildRegex(brand);
+      if (regex) query.brand = regex;
     }
     if (color && color.toLocaleLowerCase() !== "all") {
-      query.color = { $in: color.split(",")};
+      const regex = buildRegex(color);
+      if (regex) query.color = regex;
     }
     if (minPrice || maxPrice) {
       query.price = {};
-      if (minPrice)        query.price.$gte = Number(minPrice);
-      if (maxPrice)        query.price.$lte = Number(maxPrice);
+      if (minPrice) query.price.$gte = Number(minPrice);
+      if (maxPrice) query.price.$lte = Number(maxPrice);
     }
 
     if (search) {

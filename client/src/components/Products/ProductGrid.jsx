@@ -1,6 +1,22 @@
 import { Link } from "react-router-dom";
 
-const ProductGrid = ({ products = [] }) => {
+const ProductGrid = ({ products = [], loading, error }) => {
+  if (loading) {
+    return (
+      <div className="text-center py-20 font-light text-xs tracking-widest uppercase text-[#A8A29E] animate-pulse">
+        Curating design pieces...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-20 text-xs font-semibold uppercase tracking-wider text-red-500 bg-red-50 border border-red-200 rounded p-6">
+        Error cataloging pieces: {error}
+      </div>
+    );
+  }
+
   if (!products || products.length === 0) {
     return (
       <p className="text-center text-xs tracking-wider font-light text-[#A8A29E] italic py-16">
@@ -47,7 +63,9 @@ const ProductGrid = ({ products = [] }) => {
       {products.map((product, index) => {
         const materialTag = formatMaterialTag(product);
    
-        const swatchColor = getSwatchColor(product?.color || product?.material);
+        const swatchColor = getSwatchColor(
+          Array.isArray(product?.color) ? product.color[0] : product?.color || product?.material
+        );
 
         return (
           <Link 
@@ -59,7 +77,7 @@ const ProductGrid = ({ products = [] }) => {
             <div className="w-full h-[420px] mb-4 overflow-hidden bg-[#1A1A1A]/5 relative">
               <img
                 src={product?.images?.[0]?.url || "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800"}
-                alt={product?.images?.[0]?.altText || product?.name || "Nestora Design Catalog"}
+                alt={product?.images?.[0]?.alt || product?.images?.[0]?.altText || product?.name || "Nestora Design Catalog"}
                 className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-102"
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/2 transition-colors duration-500" />

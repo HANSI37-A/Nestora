@@ -20,7 +20,7 @@ router.get("/users", protect,admin, async (req, res) =>{
 // @route POST /api/admin/users
 // @desc Add a new user (admin only)
 // @access Private(admin)
-router.post("/", protect, admin, async (req, res)=>{
+router.post("/users", protect, admin, async (req, res)=>{
   const { name, email, password, role} = req.body;
 
   try{
@@ -44,7 +44,7 @@ router.post("/", protect, admin, async (req, res)=>{
 // @route PUT /api/admin/users/:id
 // @desc Update user info (admin only) - Name, emali and role
 // @access Private/Admin
-router.put("/:id", protect, admin, async (req, res) =>{
+router.put("/users/:id", protect, admin, async (req, res) =>{
   try{
     const user = await User.findById(req.params.id);
     if(user){
@@ -64,14 +64,14 @@ router.put("/:id", protect, admin, async (req, res) =>{
 // @desc Delete a user
 // @access Private/Admin
 
-router.delete("/:id", protect, admin, async (req, res)=>{
+router.delete("/users/:id", protect, admin, async (req, res)=>{
   try{
     const user = await User.findById(req.params.id);
     if(user){
       await user.deleteOne();
       res.json({message: "User deleted successfully"});
     } else{
-      express.status(404).json({ message: "User not found"});
+      res.status(404).json({ message: "User not found"});
     }
   } catch(error){
     console.error(error);

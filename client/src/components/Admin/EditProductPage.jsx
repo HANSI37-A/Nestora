@@ -1,27 +1,56 @@
-import { useState } from "react"
-import Collection from "../../pages/Collection"
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProductDetails } from "../../redux/slice/productsSlice";
+import { updateProduct } from "../../redux/slice/adminProductSlice";
+import axios from "axios";
 
 const EditProductPage = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [productData, setProductData] = useState({
-    name: '',
-    description: '',
-    price: '',
+    name: "",
+    description: "",
+    price: 0,
     countInStock: 0,
-    sku: '',
-    category: '',
-    brand:'',
+    sku: "",
+    category: "",
+    brand: "",
     colors: [],
-    collections: '',
-    material: '',
-    images: [
-      {
-        url: 'https://picsum.photos/150?random=1',
-      },
-      {
-        url: 'https://picsum.photos/150?random=1',
-      },
-    ],
+    collections: "",
+    material: "",
+    images: [],
   });
+
+  const [uploading, setUploading] = useState(false);
+  const [saveLoading, setSaveLoading] = useState(false);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchProductDetails(id))
+        .unwrap()
+        .then((product) => {
+          if (product) {
+            setProductData({
+              name: product.name || "",
+              description: product.description || "",
+              price: product.price || 0,
+              countInStock: product.countInStock || 0,
+              sku: product.sku || "",
+              category: product.category || "",
+              brand: product.brand || "",
+              colors: Array.isArray(product.color) ? product.color : (product.color ? [product.color] : []),
+              collections: product.productCollection || "",
+              material: product.material || "",
+              images: product.images || [],
+            });
+          }
+        })
+        .catch((err) => alert(err || "Failed to load product details."));
+    }
+  }, [id, dispatch]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,68 +60,244 @@ const EditProductPage = () => {
     }));
   };
 
-const handleImageUpload = (e) => {
-  const file = e.target.files[0];
-  console.log(file);
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-};
+    const formData = new FormData();
+    formData.append("image", file);
+    setUploading(true);
 
-const handleSubmit = (e) => {
-  e.preventDefault();
-  console.log(productData);
-};
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/upload`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      setProductData((prev) => ({
+        ...prev,
+        images: [...prev.images, { url: res.data.imageUrl, alt: prev.name }],
+      }));
+      alert("Image uploaded successfully.");
+    } catch (err) {
+      console.error("Image upload failure:", err);
+      alert("Failed to upload image. Please try again.");
+    } finally {
+      setUploading(false);
+    }
+  };
 
+  const handleRemoveImage = (indexToRemove) => {
+    setProductData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, idx) => idx !== indexToRemove),
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSaveLoading(true);
+
+    
+    const formattedData = {
+      ...productData,
+      color: productData.colors,
+      productCollection: productData.collections,
+    };
+
+    dispatch(updateProduct({ id, productData: formattedData }))
+      .unwrap()
+      .then(() => {
+        alert("Product specification updated cleanly.");
+        navigate("/admin/products");
+      })
+      .catch((err) => {
+        alert(err || "Failed to save product edits.");
+      })
+      .finally(() => {
+        setSaveLoading(false);
+      });
+  };
 
   return (
-    <div className="max-w-5xl mx-auto p-6 shadow-md rounded-md">
-      <h2 className="text-3xl font-bold mb-6">Edit Product</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">Product Name</label>
-          <input type="text" name="name" value={productData.name} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2" required />
+    <div className="max-w-4xl mx-auto p-6 bg-white border border-gray-100 shadow-sm rounded-xl select-none font-sans text-gray-800 antialiased">
+      <h2 className="text-3xl font-bold mb-6 text-gray-900">Edit Product</h2>
+      
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-xs font-semibold text-gray-600 mb-2">Product Name</label>
+            <input 
+              type="text" 
+              name="name" 
+              value={productData.name} 
+              onChange={handleChange} 
+              className="w-full border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:border-gray-900" 
+              required 
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-gray-600 mb-2">SKU</label>
+            <input 
+              type="text" 
+              name="sku" 
+              value={productData.sku} 
+              onChange={handleChange} 
+              className="w-full border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:border-gray-900" 
+              required 
+            />
+          </div>
         </div>
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">Description</label>
-          <textarea name="description" value={productData.description} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2" rows={4} required />
+
+        <div>
+          <label className="block text-xs font-semibold text-gray-600 mb-2">Description</label>
+          <textarea 
+            name="description" 
+            value={productData.description} 
+            onChange={handleChange} 
+            className="w-full border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:border-gray-900" 
+            rows={4} 
+            required 
+          />
         </div>
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">Price</label>
-          <input type="number" name="price" value={productData.price} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2" required />
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div>
+            <label className="block text-xs font-semibold text-gray-600 mb-2">Price ($)</label>
+            <input 
+              type="number" 
+              name="price" 
+              value={productData.price} 
+              onChange={handleChange} 
+              className="w-full border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:border-gray-900" 
+              required 
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-gray-600 mb-2">Count in Stock</label>
+            <input 
+              type="number" 
+              name="countInStock" 
+              value={productData.countInStock} 
+              onChange={handleChange} 
+              className="w-full border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:border-gray-900" 
+              required 
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-gray-600 mb-2">Material</label>
+            <input 
+              type="text" 
+              name="material" 
+              value={productData.material} 
+              onChange={handleChange} 
+              className="w-full border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:border-gray-900" 
+              placeholder="e.g. American Walnut"
+            />
+          </div>
         </div>
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">Count</label>
-          <input type="number" name="countInStock" value={productData.countInStock} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2" required />
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div>
+            <label className="block text-xs font-semibold text-gray-600 mb-2">Category</label>
+            <input 
+              type="text" 
+              name="category" 
+              value={productData.category} 
+              onChange={handleChange} 
+              className="w-full border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:border-gray-900" 
+              placeholder="e.g. Living Room"
+              required 
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-gray-600 mb-2">Brand</label>
+            <input 
+              type="text" 
+              name="brand" 
+              value={productData.brand} 
+              onChange={handleChange} 
+              className="w-full border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:border-gray-900" 
+              placeholder="e.g. Nestora Heritage"
+              required 
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-gray-600 mb-2">Collection</label>
+            <input 
+              type="text" 
+              name="collections" 
+              value={productData.collections} 
+              onChange={handleChange} 
+              className="w-full border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:border-gray-900" 
+              placeholder="e.g. walnut-series"
+              required 
+            />
+          </div>
         </div>
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">SKU</label>
-          <input type="text" name="sku" value={productData.sku} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2" required />
+
+        <div>
+          <label className="block text-xs font-semibold text-gray-600 mb-2">Colors (comma-separated finishes)</label>
+          <input 
+            type="text" 
+            name="colors" 
+            value={productData.colors.join(', ')} 
+            onChange={(e) => setProductData({
+              ...productData,
+              colors: e.target.value.split(',').map(color => color.trim()).filter(Boolean)
+            })} 
+            className="w-full border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:border-gray-900" 
+            placeholder="e.g. Solid Walnut, charcoal"
+          />
         </div>
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">Color (comma-separated)</label>
-          <input type="text" name="colors" value={productData.colors.join(', ')} onChange={(e) => setProductData({
-            ...productData,
-            colors: e.target.value.split(',').map(color => color.trim())
-          })} className="w-full border border-gray-300 rounded-md p-2"  />
-        </div>
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">Upload Image</label>
-          <input type="file" onChange={handleImageUpload}/>
-          <div className="flex gap-4 mt-4">
+
+        <div>
+          <label className="block text-xs font-semibold text-gray-600 mb-2">Upload Image</label>
+          <input 
+            type="file" 
+            onChange={handleImageUpload} 
+            disabled={uploading} 
+            className="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer"
+          />
+          {uploading && <p className="text-[10px] text-[#A8A29E] mt-2 animate-pulse">Uploading design asset...</p>}
+          
+          <div className="flex flex-wrap gap-4 mt-4">
             {productData.images.map((image, index) => (
-              <div key={index}>
-                <img src={image.url} alt={image.altText || "Product Image"} className="w-20 h-20 object-cover rounded-md shadow-md r"/>
+              <div key={index} className="relative w-20 h-20 group">
+                <img 
+                  src={image.url} 
+                  alt="Product Visual Asset" 
+                  className="w-full h-full object-cover rounded-md shadow-sm border border-gray-100"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleRemoveImage(index)}
+                  className="absolute -top-1.5 -right-1.5 bg-red-600 text-white w-4 h-4 rounded-full text-[10px] flex items-center justify-center hover:bg-red-700 shadow-sm"
+                >
+                  &times;
+                </button>
               </div>  
             ))}
           </div>
         </div>
-        <button type="submit" className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition-colors"
+
+        <button 
+          type="submit" 
+          disabled={saveLoading}
+          className="w-full bg-[#1A1A1A] text-white py-3 text-xs font-semibold tracking-[0.2em] uppercase hover:bg-[#6B543D] transition-colors rounded shadow-sm disabled:opacity-50"
         >
-          Update Product
+          {saveLoading ? "Saving Changes..." : "Update Product Specifications"}
         </button>
       </form>
-
     </div>
-  )
-}
+  );
+};
 
-export default EditProductPage
+export default EditProductPage;

@@ -101,4 +101,65 @@ router.get('/profile', protect, async (req, res) => {
   }
 });
 
+router.put('/profile', protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+      
+      user.name = req.body.name || user.name;
+      
+      if (req.body.email && req.body.email !== user.email) {
+        const emailExists = await User.findOne({ email: req.body.email.toLowerCase() });
+        if (emailExists) {
+          return res.status(400).json({ message: 'Email address is already in use.' });
+        }
+        user.email = req.body.email.toLowerCase();
+      }
+
+      if (req.body.password) {
+        if (req.body.password.length < 6) {
+          return res.status(400).json({ message: 'Password must be at least 6 characters long.' });
+        }
+        user.password = req.body.password;
+      }
+
+      if (req.body.phone !== undefined) {
+        user.phone = req.body.phone;
+      }
+
+      if (req.body.shippingAddress) {
+        user.shippingAddress = {
+          addressLine: req.body.shippingAddress.addressLine || user.shippingAddress?.addressLine || "",
+          city: req.body.shippingAddress.city || user.shippingAddress?.city || "",
+          state: req.body.shippingAddress.state || user.shippingAddress?.state || "",
+          postalCode: req.body.shippingAddress.postalCode || user.shippingAddress?.postalCode || "",
+          country: req.body.shippingAddress.country || user.shippingAddress?.country || ""
+        };
+      }
+
+      const updatedUser = await user.save();
+      const payload = { user: { id: updatedUser._id, role: updatedUser.role } };
+      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "40h" });
+
+      res.status(200).json({
+        message: 'Profile updated successfully',
+        user: {
+          _id: updatedUser._id,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          role: updatedUser.role,
+          phone: updatedUser.phone,
+          shippingAddress: updatedUser.shippingAddress,
+        },
+        token: token
+      });
+    } else {
+      res.status(404).json({ message: 'User account not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message || 'Server error modifying user profile' });
+  }
+});
+
 module.exports = router;

@@ -4,9 +4,13 @@ import axios from "axios";
 
 export const fetchCategories = createAsyncThunk(
   "categories/fetchAll",
-  async () => {
-    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/categories`);
-    return response.data;
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/categories`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message || "Failed to fetch categories");
+    }
   }
 );
 
@@ -29,7 +33,7 @@ const categoriesSlice = createSlice({
       })
       .addCase(fetchCategories.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload || action.error.message;
       });
   },
 });

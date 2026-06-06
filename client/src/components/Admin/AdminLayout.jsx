@@ -1,10 +1,16 @@
 import { useState } from "react";
 import { FaBars } from "react-icons/fa";
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import AdminSidebar from "./AdminSidebar";
 
 const AdminLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { user } = useSelector((state) => state.auth);
+
+  if (!user || user.role !== "admin") {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div className="min-h-screen flex bg-gray-100">
