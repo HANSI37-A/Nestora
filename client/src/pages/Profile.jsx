@@ -1,14 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'; 
 import { useNavigate } from 'react-router-dom'; 
 import { logout } from '../redux/slice/authSlice'; 
 import MyOrdersPage from './MyOrdersPage';
+import AccountSettings from './AccountSettings';
 
 const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [activeTab, setActiveTab] = useState('overview');
+
   const { user } = useSelector((state) => state.auth);
+  
   useEffect(() => {
     if (!user) {
       navigate('/login');
@@ -34,7 +38,7 @@ const Profile = () => {
    
       <aside className="hidden md:flex flex-col w-64 border-r border-[#1A1A1A]/5 bg-[#F4F1EA] p-6 justify-between shrink-0">
         <div className="space-y-10">
-          {/* Brand Logo */}
+         
           <div className="pt-2">
             <h2 className="text-2xl font-serif tracking-wide text-[#1A1A1A]">Nestora</h2>
           </div>
@@ -54,27 +58,32 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* Structural Navigation Context */}
           <nav className="space-y-1">
-            <button className="w-full flex items-center gap-3 px-3 py-2 text-xs font-medium tracking-wide rounded bg-[#EAE5DB] text-[#1A1A1A]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#1A1A1A]"></span>
+            <button 
+              onClick={() => setActiveTab('overview')}
+              className={`w-full flex items-center gap-3 px-3 py-2 text-xs font-medium tracking-wide rounded transition-all duration-200 ${
+                activeTab === 'overview' 
+                  ? 'bg-[#EAE5DB] text-[#1A1A1A]' 
+                  : 'text-[#A8A29E] hover:text-[#1A1A1A]'
+              }`}
+            >
+              <span className={`w-1.5 h-1.5 rounded-full ${activeTab === 'overview' ? 'bg-[#1A1A1A]' : 'bg-transparent'}`}></span>
               Overview
             </button>
-            <button className="w-full flex items-center gap-3 px-3 py-2 text-xs font-light tracking-wide text-[#A8A29E] hover:text-[#1A1A1A] transition-colors">
-              <span className="w-1.5 h-1.5 rounded-full bg-transparent"></span>
-              Order History
-            </button>
-            <button className="w-full flex items-center gap-3 px-3 py-2 text-xs font-light tracking-wide text-[#A8A29E] hover:text-[#1A1A1A] transition-colors">
-              <span className="w-1.5 h-1.5 rounded-full bg-transparent"></span>
+            
+            <button 
+              onClick={() => setActiveTab('settings')}
+              className={`w-full flex items-center gap-3 px-3 py-2 text-xs font-medium tracking-wide rounded transition-all duration-200 ${
+                activeTab === 'settings' 
+                  ? 'bg-[#EAE5DB] text-[#1A1A1A]' 
+                  : 'text-[#A8A29E] hover:text-[#1A1A1A]'
+              }`}
+            >
+              <span className={`w-1.5 h-1.5 rounded-full ${activeTab === 'settings' ? 'bg-[#1A1A1A]' : 'bg-transparent'}`}></span>
               Account Settings
-            </button>
-            <button className="w-full flex items-center gap-3 px-3 py-2 text-xs font-light tracking-wide text-[#A8A29E] hover:text-[#1A1A1A] transition-colors">
-              <span className="w-1.5 h-1.5 rounded-full bg-transparent"></span>
-              Security
             </button>
           </nav>
         </div>
-
 
         <div>
           <button 
@@ -97,15 +106,21 @@ const Profile = () => {
           </p>
         </header>
 
-        <div className="space-y-4 w-full">
-          <span className="block text-[10px] font-bold uppercase tracking-[0.25em] text-[#A8A29E]">
-            01. Latest Acquisitions
-          </span>
-          <div className="bg-[#F4F1EA]/50 border border-[#1A1A1A]/5 rounded p-2 sm:p-4 w-full">
-
-            <MyOrdersPage />
+        {activeTab === 'overview' ? (
+          <div className="space-y-4 w-full animate-fadeIn">
+            <span className="block text-[10px] font-bold uppercase tracking-[0.25em] text-[#A8A29E]">
+              01. Latest Acquisitions
+            </span>
+            <div className="bg-[#F4F1EA]/50 border border-[#1A1A1A]/5 rounded p-2 sm:p-4 w-full">
+              <MyOrdersPage />
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="w-full animate-fadeIn">
+            {/* Passes the Redux user context payload directly down into settings inputs */}
+            <AccountSettings user={user} />
+          </div>
+        )}
 
       </main>
     </div>
