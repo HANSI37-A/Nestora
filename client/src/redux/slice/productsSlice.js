@@ -7,8 +7,7 @@ export const fetchProductsByFilters = createAsyncThunk(
   async (filters, { rejectWithValue }) => {
     try {
       const query = new URLSearchParams();
-      
-      // Clean up loop to automatically append truthy filters
+  
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== "") {
           query.append(key, value);
@@ -85,7 +84,7 @@ const productsSlice = createSlice({
     error: null,
     filters: {
       category: "",
-      size: "",
+      sizes: "", 
       color: "",
       brand: "",
       minPrice: "",
@@ -103,7 +102,7 @@ const productsSlice = createSlice({
     clearFilters: (state) => {
       state.filters = {
         category: "",
-        size: "",
+        sizes: "", 
         color: "",
         brand: "",
         minPrice: "",

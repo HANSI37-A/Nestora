@@ -4,7 +4,7 @@ import FilterSidebar from '../components/Products/FilterSidebar';
 import ProductGrid from '../components/Products/ProductGrid';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProductsByFilters, setFilters } from '../redux/slice/productsSlice';
+import { fetchProductsByFilters, setFilters, clearFilters } from '../redux/slice/productsSlice';
 
 const Collection = () => {
   const [searchParams] = useSearchParams();
@@ -17,7 +17,19 @@ const Collection = () => {
 
   useEffect(() => {
     const queryParams = Object.fromEntries([...searchParams]);
-    const appliedFilters = { collection: collection || 'all', ...queryParams };
+    
+    const targetCollection = collection || 'all';
+    const appliedFilters = { 
+      collection: targetCollection, 
+      ...queryParams 
+    };
+
+    if (queryParams.size && !queryParams.sizes) {
+      appliedFilters.sizes = queryParams.size;
+      delete appliedFilters.size;
+    }
+
+    dispatch(clearFilters());
     dispatch(setFilters(appliedFilters));
     dispatch(fetchProductsByFilters(appliedFilters));
   }, [dispatch, collection, searchParams]);
@@ -67,7 +79,7 @@ const Collection = () => {
           
           <div className="border-b border-[#A8A29E]/20 pb-8 mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div className="max-w-2xl">
-              <h1 className="text-3xl sm:text-4xl font-serif text-[#1A1A1A] tracking-wide mb-3">
+              <h1 className="text-3xl sm:text-4xl font-serif text-[#1A1A1A] tracking-wide mb-3 capitalize">
                 {collection?.toLowerCase() === 'all' ? 'All Products' : `${collection} Collection`}
               </h1>
               <p className="text-[#A8A29E] font-light text-xs sm:text-sm leading-relaxed tracking-wide">

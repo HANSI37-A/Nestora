@@ -19,9 +19,8 @@ const FilterSidebar = ({ closeMobileSidebar }) => {
     maxPrice: 5000, 
   });
 
-  const [priceRange, setPriceRange] = useState([0, 5000]);
+  const [maxPriceValue, setMaxPriceValue] = useState(5000);
 
-  // Icon mapping based on category name
   const iconMap = {
     "living room": <BiHomeAlt size={15} />,
     "bedroom": <BiBed size={15} />,
@@ -36,61 +35,89 @@ const FilterSidebar = ({ closeMobileSidebar }) => {
     { name: "Travertine", icon: <BiLayer size={14} /> }
   ];
 
-  // Fetch categories on mount
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
 
   useEffect(() => {
     const params = Object.fromEntries([...searchParams]);
+    const parsedMaxPrice = Number(params.maxPrice) || 5000;
+
     setFilters({
       category: params.category || "",
       color: params.color || "",
       material: params.material ? params.material.split(",") : [],
       brand: params.brand ? params.brand.split(",") : [],
       minPrice: Number(params.minPrice) || 0,
-      maxPrice: Number(params.maxPrice) || 5000,
+      maxPrice: parsedMaxPrice,
     });
-    setPriceRange([0, Number(params.maxPrice) || 5000]);
+    
+    setMaxPriceValue(parsedMaxPrice);
   }, [searchParams]);
 
+  const updateURLParams = (updatedFilters) => {
+    const newParams = new URLSearchParams(searchParams);
+
+    if (updatedFilters.category) newParams.set("category", updatedFilters.category);
+    else newParams.delete("category");
+
+    if (updatedFilters.color) newParams.set("color", updatedFilters.color);
+    else newParams.delete("color");
+
+    if (updatedFilters.material.length > 0) newParams.set("material", updatedFilters.material.join(","));
+    else newParams.delete("material");
+
+    if (updatedFilters.brand.length > 0) newParams.set("brand", updatedFilters.brand.join(","));
+    else newParams.delete("brand");
+
+    if (updatedFilters.minPrice > 0) newParams.set("minPrice", updatedFilters.minPrice);
+    else newParams.delete("minPrice");
+
+    if (updatedFilters.maxPrice !== 5000) newParams.set("maxPrice", updatedFilters.maxPrice);
+    else newParams.delete("maxPrice");
+
+    setSearchParams(newParams);
+  };
+
   const handleCategoryChange = (catName) => {
-    const updatedCat = filters.category === catName ? "" : catName;
-    setFilters(prev => ({ ...prev, category: updatedCat }));
+    const normalizedName = catName.toLowerCase();
+    const updatedCat = filters.category.toLowerCase() === normalizedName ? "" : catName;
+    
+    const updated = { ...filters, category: updatedCat };
+    setFilters(updated);
+    updateURLParams(updated); 
   };
 
   const handleMaterialToggle = (matName) => {
     const updatedMaterials = filters.material.includes(matName)
       ? filters.material.filter((m) => m !== matName)
       : [...filters.material, matName];
-    setFilters(prev => ({ ...prev, material: updatedMaterials }));
+      
+    const updated = { ...filters, material: updatedMaterials };
+    setFilters(updated);
+        const newParams = new URLSearchParams(searchParams);
+      if (updatedMaterials.length > 0) {
+        newParams.set("material", updatedMaterials.join(","));
+      } else {
+        newParams.delete("material");
+      }
+      setSearchParams(newParams);
   };
 
   const handlePriceChange = (e) => {
     const val = Number(e.target.value);
-    setPriceRange([0, val]);
+    setMaxPriceValue(val);
     setFilters(prev => ({ ...prev, maxPrice: val }));
   };
 
   const handleApplyFilters = () => {
-    const params = {};
-    if (filters.category) params.category = filters.category;
-    if (filters.color) params.color = filters.color;
-    if (filters.material.length > 0) params.material = filters.material.join(",");
-    if (filters.brand.length > 0) params.brand = filters.brand.join(",");
-    if (filters.minPrice > 0) params.minPrice = filters.minPrice;
-    if (filters.maxPrice !== 5000) params.maxPrice = filters.maxPrice;
-    
-    setSearchParams(params);
+    updateURLParams(filters);
     if (closeMobileSidebar) closeMobileSidebar();
   };
 
   return (
-
     <div className="w-full bg-[#F9F7F2] pl-6 pr-4 py-8 flex flex-col h-full select-none justify-between">
-      
       <div>
-        {/* Sidebar Navigation Header Block */}
         <div className="flex justify-between items-center mb-8">
           <div>
             <h2 className="text-2xl font-serif text-[#1A1A1A] tracking-wide mb-1">Filters</h2>
@@ -101,18 +128,17 @@ const FilterSidebar = ({ closeMobileSidebar }) => {
           </button>
         </div>
 
-        {/* Content Options Area */}
         <div className="space-y-8">
-          
           {/* CATEGORIES SECTION */}
           <div>
             <h3 className="text-[10px] font-bold tracking-[0.25em] text-[#1A1A1A] uppercase mb-3">Categories</h3>
             <div className="flex flex-col gap-1">
               {categories.map((cat) => {
-                const isSelected = filters.category === cat.name;
+                const isSelected = filters.category.toLowerCase() === cat.name.toLowerCase();
                 return (
                   <button
                     key={cat._id}
+                    type="button"
                     onClick={() => handleCategoryChange(cat.name)}
                     className={`w-full flex items-center gap-3 px-3 py-2 text-xs tracking-wider font-medium transition-all duration-300 ${
                       isSelected 
@@ -139,6 +165,7 @@ const FilterSidebar = ({ closeMobileSidebar }) => {
                 return (
                   <button
                     key={mat.name}
+                    type="button"
                     onClick={() => handleMaterialToggle(mat.name)}
                     className={`w-full flex items-center gap-3 px-3 py-2 text-xs tracking-wider font-medium transition-all duration-300 ${
                       isSelected 
@@ -161,13 +188,15 @@ const FilterSidebar = ({ closeMobileSidebar }) => {
                 type="range"
                 min={0}
                 max={5000}
-                value={priceRange[1]}
+                value={maxPriceValue}
                 onChange={handlePriceChange}
+                onMouseUp={handleApplyFilters}
+                onTouchEnd={handleApplyFilters}
                 className="w-full accent-[#1A1A1A] h-1 bg-[#A8A29E]/30 rounded-lg cursor-pointer"
               />
               <div className="flex justify-between text-[10px] font-medium tracking-widest text-[#A8A29E] mt-3">
                 <span>$0</span>
-                <span className="text-[#1A1A1A] font-bold">${priceRange[1].toLocaleString()}</span>
+                <span className="text-[#1A1A1A] font-bold">${maxPriceValue.toLocaleString()}</span>
                 <span>$5000</span>
               </div>
             </div>
