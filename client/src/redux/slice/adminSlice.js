@@ -76,7 +76,7 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
-const adminSlice  = createSlice({
+const adminSlice = createSlice({
   name: "admin",
   initialState: {
     users: [],
@@ -86,62 +86,62 @@ const adminSlice  = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder 
-    .addCase(fetchUsers.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(fetchUsers.fulfilled, (state, action) => {
-      state.loading = false;
-      state.users = action.payload;
-    })
-    .addCase(fetchUsers.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload || action.error.message;
-    })
-    .addCase(updateUser.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(updateUser.fulfilled, (state, action) => {
-      state.loading = false;
-      const updatedUser = action.payload?.user;
-      if (updatedUser) {
-        const userIndex = state.users.findIndex(
-          (user) => user._id === updatedUser._id
-        );
-        if (userIndex !== -1) {
-          state.users[userIndex] = updatedUser;
+      .addCase(fetchUsers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+      .addCase(fetchUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedUser = action.payload?.user;
+        if (updatedUser) {
+          const userIndex = state.users.findIndex(
+            (user) => user._id === updatedUser._id
+          );
+          if (userIndex !== -1) {
+            state.users[userIndex] = updatedUser;
+          }
         }
-      }
-    })
-    .addCase(updateUser.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload || action.error.message;
-    })
-    .addCase(deleteUser.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(deleteUser.fulfilled, (state, action) => {
-      state.loading = false;
-      state.users = state.users.filter((user) => user._id !== action.payload);
-    })
-    .addCase(deleteUser.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload || action.error.message;
-    })
-    .addCase(addUser.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(addUser.fulfilled, (state, action) => {
-      state.loading = false;
-      state.users.push(action.payload.user); 
-    })
-    .addCase(addUser.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload || action.error.message;
-    });
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(deleteUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = state.users.filter((user) => user._id !== action.payload);
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(addUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addUser.fulfilled, (state, action) => {
+        state.loading = false;
+          state.users.push(action.payload.user); 
+      })
+      .addCase(addUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      });
   },
 });
 

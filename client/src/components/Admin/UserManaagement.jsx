@@ -1,10 +1,19 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { fetchUsers, addUser, updateUser, deleteUser } from "../../redux/slice/adminSlice";
 
 const UserManaagement = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user} = useSelector((state) => state.auth);
   const { users, loading, error } = useSelector((state) => state.admin);
+
+  useEffect(() => {
+    if (user && user.role !== "admin") {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   const [formData, setFormData] = React.useState({
     name: "",
@@ -14,8 +23,10 @@ const UserManaagement = () => {
   });
 
   useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
+    if (user && user.role === "admin") {
+      dispatch(fetchUsers());
+    }
+  }, [dispatch, user]);
 
   const handleChange = (e) => {
     setFormData({
@@ -70,14 +81,12 @@ const UserManaagement = () => {
         User Management
       </h2>
 
-      {/* Error banner */}
       {error && (
         <div className="mb-6 p-4 text-xs text-red-500 bg-red-50 border border-red-200 rounded">
           Error processing user request: {error}
         </div>
       )}
 
-      {/* Add User Section */}
       <div className="p-6 rounded-xl border border-gray-100 bg-white shadow-sm mb-8">
         <h3 className="text-md font-bold mb-4 text-gray-900">
           Add New User
@@ -155,9 +164,8 @@ const UserManaagement = () => {
         </form>
       </div>
 
-      {/* User Records Table */}
       <div className="overflow-x-auto shadow-sm border border-gray-100 sm:rounded-lg">
-        <table className="min-w-full text-left text-xs uppercase text-gray-700 bg-white">
+        <table className="min-w-full text-left text-xs text-gray-700 bg-white">
           <thead className="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider">
             <tr>
               <th className="py-3.5 px-6">Name</th>
@@ -166,14 +174,16 @@ const UserManaagement = () => {
               <th className="py-3.5 px-6 text-center">Action</th>
             </tr>
           </thead> 
-          <tbody className="divide-y divide-gray-100 text-xs lowercase">
+        
+          <tbody className="divide-y divide-gray-100 text-xs">
             {users.length > 0 ? (
               users.map((user) => (
                 <tr key={user._id} className="hover:bg-gray-50 transition-colors">
                   <td className="p-6 font-medium text-gray-900 capitalize whitespace-nowrap">
                     {user.name}
                   </td>
-                  <td className="p-6 text-gray-500">
+                 
+                  <td className="p-6 text-gray-500 lowercase">
                     {user.email}
                   </td>
                   <td className="p-6">
@@ -197,8 +207,8 @@ const UserManaagement = () => {
                 </tr>
               ))
             ) : (
-              <tr>
-                <td colSpan="4" className="p-6 text-center text-gray-400 normal-case">
+              <tr key="empty-table-fallback">
+                <td colSpan="4" className="p-6 text-center text-gray-400 text-sm">
                   No users found in database.
                 </td>
               </tr>

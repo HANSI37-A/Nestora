@@ -44,19 +44,24 @@ router.post("/users", protect, admin, async (req, res)=>{
 // @route PUT /api/admin/users/:id
 // @desc Update user info (admin only) - Name, emali and role
 // @access Private/Admin
-router.put("/users/:id", protect, admin, async (req, res) =>{
-  try{
+// @route PUT /api/admin/users/:id
+router.put("/users/:id", protect, admin, async (req, res) => {
+  try {
     const user = await User.findById(req.params.id);
-    if(user){
-      user.name = req.body.name || user.name;
-      user.email = req.body.email || user.email;
-      user.role = req.body.role || user.role;
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
+
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.role = req.body.role || user.role;
+
     const updatedUser = await user.save();
-    res.json({message: "Updated successfully", user: updatedUser});
-  } catch (error){
+    return res.json({ message: "Updated successfully", user: updatedUser });
+  } catch (error) {
     console.error(error);
-    res.status(500).json({message: "Server error"});
+    return res.status(500).json({ message: "Server error" });
   }
 });
 

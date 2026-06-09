@@ -1,10 +1,16 @@
 import { Link, NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { FaUser, FaBox, FaShoppingCart, FaHome, FaBoxOpen, FaClipboardList, FaStore, FaSign, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
+import { logout } from "../../redux/slice/authSlice";
+
 const AdminSidebar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleLogout = () => {
+    dispatch(logout());
+    dispatch(clearCart());
     navigate("/");
   };
   return (

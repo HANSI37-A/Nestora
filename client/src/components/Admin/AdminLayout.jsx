@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaBars } from "react-icons/fa";
 import { Outlet, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -6,7 +6,25 @@ import AdminSidebar from "./AdminSidebar";
 
 const AdminLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { user } = useSelector((state) => state.auth);
+  const { user, loading } = useSelector((state) => state.auth);
+  const [isChecking, setIsChecking] = useState(true);
+
+  useEffect(() => {
+    if (!loading) {
+      setIsChecking(false);
+    }
+  }, [loading]);
+
+  if (isChecking || loading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+        <div className="w-8 h-8 border-4 border-gray-900 border-t-transparent rounded-full animate-spin mb-3"></div>
+        <p className="text-xs uppercase tracking-widest font-semibold text-gray-500">
+          Verifying Session...
+        </p>
+      </div>
+    );
+  }
 
   if (!user || user.role !== "admin") {
     return <Navigate to="/" replace />;

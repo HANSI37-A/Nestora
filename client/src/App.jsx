@@ -28,9 +28,8 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           
-          {/* 1. Main E-Commerce Client Layout Wrapper */}
           <Route path="/" element={<UserLayout />}>
-            {/* 'index' means this page renders when the user hits exactly "/" */}
+          
             <Route index element={<Home />} />
             
             {/* All nested pages here will cleanly share the sticky Navbar */}
