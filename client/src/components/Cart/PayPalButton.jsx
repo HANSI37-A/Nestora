@@ -1,9 +1,11 @@
 import React from 'react';
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import axios from 'axios';
+import { useNavigate } from "react-router-dom"; 
 
 const PayPalButton = ({ amount, checkoutId, onSuccess, onError }) => {
-  
+  const navigate = useNavigate(); 
+
   const handleCreateOrder = (data, actions) => {
     return actions.order.create({
       purchase_units: [
@@ -18,7 +20,6 @@ const PayPalButton = ({ amount, checkoutId, onSuccess, onError }) => {
 
   const handleOnApprove = async (data, actions) => {
     try {
-     
       const details = await actions.order.capture();
       
       const token = localStorage.getItem("userToken");
@@ -52,9 +53,12 @@ const PayPalButton = ({ amount, checkoutId, onSuccess, onError }) => {
         }
       );
 
-    
-      if (finalizeResponse.status === 201) {
-        onSuccess(finalizeResponse.data);
+      if (finalizeResponse.status === 201 || finalizeResponse.status === 200) {
+     
+        if (onSuccess) onSuccess(finalizeResponse.data);
+        
+       
+        navigate("/profile"); 
       }
     } catch (error) {
       console.error("Payment pipeline sync failure:", error);
