@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react'; 
 import { useNavigate } from 'react-router-dom';
-import PayPalButton from './PayPalButton';
 import { createCheckout } from '../../redux/slice/checkoutSlice';
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
 const Checkout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
   
   const { cart } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.auth);
   const { loading: checkoutLoading } = useSelector((state) => state.checkout);
 
   const [checkoutId, setCheckoutId] = useState(null);
+  const [stripeRedirecting, setStripeRedirecting] = useState(false);
   const [shippingAddress, setShippingAddress] = useState({
     firstName: "",
     lastName: "",
@@ -25,22 +25,17 @@ const Checkout = () => {
     phone: "",
   });
 
-  
   const cartItems = cart?.products || [];
-  
-  
   const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
   const shippingFee = 0; 
   const grandTotal = subtotal + shippingFee;
 
-  
   useEffect(() => {
     if (!checkoutLoading && cartItems.length === 0) {
       alert("Your cart is empty. Redirecting to collections.");
       navigate("/");
     }
   }, [cartItems, navigate, checkoutLoading]);
-
 
   useEffect(() => {
     if (user) {
@@ -60,7 +55,6 @@ const Checkout = () => {
 
   const handleCreateCheckout = (e) => {
     e.preventDefault();
-
     const token = localStorage.getItem("userToken");
 
     if (!token) {
@@ -68,7 +62,6 @@ const Checkout = () => {
       navigate("/login");
       return;
     }
-    
     
     const checkoutData = {
       checkoutItems: cartItems.map(item => ({
@@ -81,7 +74,7 @@ const Checkout = () => {
         size: item.size || "Standard"
       })),
       shippingAddress,
-      paymentMethod: "PayPal",
+      paymentMethod: "Stripe",
       totalPrice: grandTotal,
     };
 
@@ -93,13 +86,31 @@ const Checkout = () => {
         }
       })
       .catch((err) => {
-        alert(err?.message || "Failed to initiate checkout session. Please check details.");
+        alert(err?.message || "Failed to initiate checkout session.");
       });
   };
 
-  const handlePaymentSuccess = (finalOrder) => {
-    console.log("Order finalized in database:", finalOrder);
-    navigate("/order-confirmation", { state: { order: finalOrder } });
+  // Triggers backend stripe checkout configuration endpoint redirection loops
+  const handleStripePaymentRedirect = async () => {
+    setStripeRedirecting(true);
+    try {
+      const token = localStorage.getItem("userToken");
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/create-stripe-session`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (response.data?.url) {
+        window.location.href = response.data.url; 
+      } else {
+        throw new Error("Invalid session link parsed by payment gateway.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.response?.data?.message || "Stripe routing gateway configuration error.");
+      setStripeRedirecting(false);
+    }
   };
 
   const inputFieldsStyle = "w-full bg-transparent border-b border-[#1A1A1A]/20 p-2 text-sm font-light tracking-wide focus:outline-none focus:border-[#1A1A1A] transition-colors placeholder-[#A8A29E]/50";
@@ -108,7 +119,6 @@ const Checkout = () => {
     <div className="w-full bg-[#F9F7F2] min-h-screen text-[#1A1A1A] font-sans antialiased select-none">
       <div className="max-w-7xl mx-auto py-16 px-4 sm:px-8 lg:px-12">
         
-        {/* Main Section Header */}
         <div className="border-b border-[#A8A29E]/20 pb-6 mb-12">
           <span className="text-[10px] font-bold tracking-[0.25em] text-[#A8A29E] uppercase block mb-1">Secure Transaction</span>
           <h1 className="text-4xl font-serif tracking-wide text-[#1A1A1A]">Checkout</h1>
@@ -116,7 +126,6 @@ const Checkout = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 xl:gap-20 items-start">
           
-          {/* LEFT SIDE — MINIMALIST FORM SYSTEM */}
           <div className="lg:col-span-7">
             <form onSubmit={handleCreateCheckout} className="space-y-10">
               
@@ -138,7 +147,7 @@ const Checkout = () => {
                 </div>
               </div>
 
-              {/* Delivery Destination Coordinates */}
+              {/* Delivery Destination */}
               <div className="space-y-6">
                 <h3 className="text-xs font-bold tracking-[0.2em] text-[#A8A29E] uppercase mb-5 pb-2 border-b border-[#A8A29E]/10">
                   Delivery Destination
@@ -236,27 +245,33 @@ const Checkout = () => {
                     <h3 className="text-xs font-bold tracking-[0.2em] text-[#A8A29E] uppercase mb-4">
                       Gateway Authorization
                     </h3>
-                    <div className="bg-transparent p-1 rounded-none">
-                      <PayPalButton 
-                        amount={grandTotal} 
-                        checkoutId={checkoutId}
-                        onSuccess={handlePaymentSuccess} 
-                        onError={(err) => alert(err || "Payment processing failed. Try again")} 
-                      />
-                    </div>
+                    <button
+                      type="button"
+                      onClick={handleStripePaymentRedirect}
+                      disabled={stripeRedirecting}
+                      className="w-full bg-[#6B543D] text-white py-4 text-xs font-semibold tracking-[0.25em] uppercase hover:bg-[#1A1A1A] transition-colors duration-300 shadow-sm flex items-center justify-center gap-3 disabled:opacity-50"
+                    >
+                      {stripeRedirecting ? (
+                        <>
+                          <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                          Connecting Stripe Portal...
+                        </>
+                      ) : (
+                        `Pay With Credit Card — $${grandTotal.toFixed(2)}`
+                      )}
+                    </button>
                   </div>  
                 )}
               </div>
             </form>
           </div>
 
-          {/* RIGHT SIDE — LINE ITEM ORDER RECAP UTILITY */}
+          {/* Right Side Order Summary Summary */}
           <div className="lg:col-span-5 bg-transparent border border-[#A8A29E]/20 p-6 sm:p-8 sticky top-28">
             <h3 className="text-xs font-bold tracking-[0.2em] text-[#A8A29E] uppercase mb-6 pb-2 border-b border-[#A8A29E]/10">
               Order Summary
             </h3>
             
-            {/* Scrollable products list view */}
             <div className="max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar space-y-4">
               {cartItems.map((product, index) => (
                 <div key={index} className="flex items-start justify-between py-2 border-b border-[#A8A29E]/10 pb-4 last:border-0 last:pb-0">
@@ -281,7 +296,6 @@ const Checkout = () => {
               ))}          
             </div>
 
-            {/* Price Ledger Calculations Stack */}
             <div className="mt-6 border-t border-[#A8A29E]/20 pt-6 space-y-3">
               <div className="flex justify-between items-center text-xs tracking-wide text-[#A8A29E]">
                 <p>Subtotal</p>

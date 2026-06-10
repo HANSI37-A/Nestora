@@ -1,35 +1,49 @@
-import { useNavigate } from "react-router-dom";
-
-const checkout = {
-  _id: "NE-82910",
-  createdAt: new Date(),
-  checkoutItems: [
-    {
-      productId: "1",
-      name: "Solid Walnut Trestle Table",
-      color: "Natural Walnut", 
-      price: 3450,
-      quantity: 1,
-      image: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&q=80&w=800",
-    },
-    {
-      productId: "2",
-      name: "Ether Lounge Chair",
-      color: "Ivory Bouclé", 
-      price: 1850,
-      quantity: 1,
-      image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800",
-    },
-  ],
-  shippingAddress: {
-    adress: "420 Artisan Row, Suite 12",
-    city: "Tribeca, New York",
-    country: "NY 10013, USA"
-  }
-};
+import React, { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom"; 
+import axios from "axios";
 
 const OrderConfirmation = () => {
   const navigate = useNavigate();
+  
+  const [searchParams] = useSearchParams();
+  const checkoutId = searchParams.get("checkout_id");
+
+  const [checkoutData, setCheckoutData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchOrderDetails = async () => {
+      if (!checkoutId) {
+        setError("Missing valid order confirmation tracking context references.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const token = localStorage.getItem("userInfo") 
+          ? JSON.parse(localStorage.getItem("userInfo")).token 
+          : null;
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        const { data } = await axios.get(`http://localhost:5000/api/checkout/${checkoutId}`, config);
+        setCheckoutData(data);
+      } catch (err) {
+        console.error("Order details mapping resolution crash:", err);
+        setError(err.response?.data?.message || "Failed to retrieve order confirmation details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrderDetails();
+  }, [checkoutId]);
 
   const calculateEstimatedDelivery = (createdAt) => {
     const orderDate = new Date(createdAt);
@@ -47,6 +61,34 @@ const OrderConfirmation = () => {
     window.print();
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center font-sans">
+        <div className="text-center space-y-3">
+          <div className="w-10 h-10 border-4 border-stone-800 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="text-sm uppercase tracking-widest text-stone-500 font-medium">Verifying Acquisition Clearance...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !checkoutData) {
+    return (
+      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center font-sans px-4">
+        <div className="max-w-md w-full bg-[#FAF7F2] border border-[#EFEAE2] p-8 text-center space-y-6">
+          <h2 className="text-2xl font-serif text-gray-900">Verification Postponed</h2>
+          <p className="text-sm text-gray-500 font-light leading-relaxed">{error || "The requested order verification footprint could not be parsed."}</p>
+          <button 
+            onClick={() => navigate("/")}
+            className="w-full bg-black text-white text-xs font-medium uppercase tracking-widest py-4 hover:bg-stone-800 transition-colors"
+          >
+            Return to Collections
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#FDFBF7] print:bg-white py-16 px-4 font-sans select-none antialiased">
       <div className="max-w-5xl mx-auto">
@@ -61,160 +103,157 @@ const OrderConfirmation = () => {
           </p>
         </div>
 
-        {checkout && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          
+          {/* Left Content Column */}
+          <div className="lg:col-span-2 space-y-8">
             
-            {/* Left Content Column */}
-            <div className="lg:col-span-2 space-y-8">
+            {/* Primary Content Container */}
+            <div className="p-8 md:p-10 bg-[#FAF7F2] print:bg-white border border-[#EFEAE2] print:border-0 rounded-none pb-12">
               
-              {/* Primary Content Container */}
-              <div className="p-8 md:p-10 bg-[#FAF7F2] print:bg-white border border-[#EFEAE2] print:border-0 rounded-none pb-12">
-                
-                {/* Meta details segment */}
-                <div className="flex flex-col sm:flex-row justify-between items-baseline gap-4 border-b border-[#EFEAE2] pb-6 mb-8">
-                  <div>
-                    <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 block mb-1">
-                      Order Identifier
-                    </span>
-                    <h2 className="text-2xl font-serif font-semibold text-gray-900">
-                      #{checkout._id}
-                    </h2>
-                  </div>
-                  <div className="sm:text-right">
-                    <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 block mb-1">
-                      Acquisition Date
-                    </span>
-                    <p className="text-sm font-medium text-gray-800">
-                      {new Date(checkout.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                    </p>
-                  </div>
+              {/* Meta details segment */}
+              <div className="flex flex-col sm:flex-row justify-between items-baseline gap-4 border-b border-[#EFEAE2] pb-6 mb-8">
+                <div>
+                  <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 block mb-1">
+                    Order Identifier
+                  </span>
+                  <h2 className="text-2xl font-serif font-semibold text-gray-900">
+                    #{checkoutData._id}
+                  </h2>
                 </div>
-
-                {/* Checkout Line Items Segment */}
-                <div className="space-y-8 mb-8">
-                  {checkout.checkoutItems.map((item) => (
-                    <div key={item.productId} className="flex items-start gap-5 pb-6 border-b border-[#EFEAE2] last:border-0 last:pb-0">
-                      <img 
-                        src={item.image} 
-                        alt={item.name} 
-                        className="w-24 h-24 object-cover rounded-none bg-stone-100 filter brightness-95" 
-                      />
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-base font-medium text-gray-900 truncate">
-                          {item.name}
-                        </h4>
-                        <p className="text-xs text-gray-400 mt-1 uppercase tracking-wider">
-                          Finish: {item.color}
-                        </p>
-                        <p className="text-xs font-semibold text-gray-400 mt-3 tracking-widest uppercase">
-                          Quantity: {String(item.quantity).padStart(2, '0')}
-                        </p>
-                      </div>
-                      <div className="text-right shrink-0">
-                        <p className="text-sm font-medium text-gray-900">
-                          ${item.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                        </p>
-                        <p className="text-[10px] font-bold tracking-widest uppercase text-emerald-700 mt-2 bg-emerald-50 px-2 py-0.5 inline-block">
-                          Status: Curating
-                        </p>
-                      </div>
-                    </div>            
-                  ))}
+                <div className="sm:text-right">
+                  <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 block mb-1">
+                    Acquisition Date
+                  </span>
+                  <p className="text-sm font-medium text-gray-800">
+                    {new Date(checkoutData.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </p>
                 </div>
-
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-t border-[#EFEAE2] pt-6 pb-2 mb-10 text-[11px] uppercase tracking-widest font-medium text-stone-700">
-                  <div className="flex items-center gap-2">
-                    {/* Soft gray logistics status indicator point */}
-                    <span className="w-2 h-2 rounded-full bg-stone-400 inline-block"></span>
-                    <span className="font-semibold text-stone-500">Awaiting Logistics</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {/* Standardized SVG Delivery Box Icon */}
-                    <svg className="w-4 h-4 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
-                    </svg>
-                    <span>Estimated Arrival: <span className="font-bold text-stone-900">{calculateEstimatedDelivery(checkout.createdAt)}</span></span>
-                  </div>
-                </div>
-
-                {/* Shipping Metadata Subgrid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-6 border-t border-[#EFEAE2]">
-                  <div>
-                    <h4 className="text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-3">
-                      Payment Architecture
-                    </h4>
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-5 bg-gray-900 rounded-sm flex items-center justify-center text-[9px] font-bold text-white tracking-wider">
-                        CARD
-                      </div>
-                      <div>
-                        <p className="text-xs font-medium text-gray-900">Visa ending in 4242</p>
-                        <p className="text-[10px] text-gray-400">Encrypted Transaction</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-3">
-                      Delivery Recipient
-                    </h4>
-                    <p className="text-sm font-serif font-semibold text-gray-900 mb-1">Julian Vane</p>
-                    <p className="text-xs text-gray-500 font-light leading-relaxed">
-                      {checkout.shippingAddress.adress},<br />
-                      {checkout.shippingAddress.city}, {checkout.shippingAddress.country}
-                    </p>
-                  </div>
-                </div>
-
               </div>
 
-            
-              <div className="flex flex-wrap items-center gap-x-8 gap-y-2 px-2 pt-2 print:hidden text-xs font-medium tracking-wide">
-              
-                <button 
-                  onClick={handleDownloadReceipt}
-                  className="text-gray-900 underline underline-offset-4 hover:text-stone-500 transition-colors"
-                >
-                  Download Invoice
-                </button>
-                
+              {/* Checkout Line Items Segment */}
+              <div className="space-y-8 mb-8">
+                {checkoutData.checkoutItems.map((item) => (
+                  <div key={item.productId || item._id} className="flex items-start gap-5 pb-6 border-b border-[#EFEAE2] last:border-0 last:pb-0">
+                    <img 
+                      src={item.image} 
+                      alt={item.name} 
+                      className="w-24 h-24 object-cover rounded-none bg-stone-100 filter brightness-95" 
+                    />
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-base font-medium text-gray-900 truncate">
+                        {item.name}
+                      </h4>
+                      <p className="text-xs text-gray-400 mt-1 uppercase tracking-wider">
+                        Finish: {item.color || "Standard Choice"}
+                      </p>
+                      <p className="text-xs font-semibold text-gray-400 mt-3 tracking-widest uppercase">
+                        Quantity: {String(item.quantity).padStart(2, '0')}
+                      </p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="text-sm font-medium text-gray-900">
+                        ${item.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                      </p>
+                      <p className="text-[10px] font-bold tracking-widest uppercase text-emerald-700 mt-2 bg-emerald-50 px-2 py-0.5 inline-block">
+                        Status: Curating
+                      </p>
+                    </div>
+                  </div>            
+                ))}
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-t border-[#EFEAE2] pt-6 pb-2 mb-10 text-[11px] uppercase tracking-widest font-medium text-stone-700">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-stone-400 inline-block"></span>
+                  <span className="font-semibold text-stone-500">Awaiting Logistics</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                  </svg>
+                  <span>Estimated Arrival: <span className="font-bold text-stone-900">{calculateEstimatedDelivery(checkoutData.createdAt)}</span></span>
+                </div>
+              </div>
+
+              {/* Shipping Metadata Subgrid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-6 border-t border-[#EFEAE2]">
+                <div>
+                  <h4 className="text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-3">
+                    Payment Architecture
+                  </h4>
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-5 bg-gray-900 rounded-sm flex items-center justify-center text-[9px] font-bold text-white tracking-wider">
+                      CARD
+                    </div>
+                    <div>
+                      <p className="text-xs font-medium text-gray-900">Visa ending in 4242</p>
+                      <p className="text-[10px] text-gray-400">Encrypted Transaction</p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-3">
+                    Delivery Recipient
+                  </h4>
+                  <p className="text-sm font-serif font-semibold text-gray-900 mb-1">
+                    {checkoutData.shippingAddress?.firstName || "Customer"} {checkoutData.shippingAddress?.lastName || ""}
+                  </p>
+                  <p className="text-xs text-gray-500 font-light leading-relaxed">
+                    {checkoutData.shippingAddress?.streetAddress || checkoutData.shippingAddress?.address},<br />
+                    {checkoutData.shippingAddress?.city}, {checkoutData.shippingAddress?.postalCode || ""} {checkoutData.shippingAddress?.country}
+                  </p>
+                </div>
               </div>
 
             </div>
 
-            {/* Right Financial Sticky Summary Card */}
-            <div className="space-y-4 lg:sticky lg:top-8 print:w-full">
-              <div className="bg-black text-white p-8 rounded-none shadow-xl print:shadow-none print:border print:border-gray-200 print:text-black print:bg-white">
-                <h3 className="text-[10px] uppercase tracking-widest font-bold text-stone-400 mb-6 pb-2 border-b border-stone-800 print:border-gray-200">
-                  Financial Summary
-                </h3>
-                
-                <div className="space-y-4 text-xs font-light text-stone-300 print:text-gray-600">
-                  <div className="flex justify-between">
-                    <span>Subtotal</span>
-                    <span className="font-mono text-white print:text-black">$5,300.00</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Shipping (White Glove)</span>
-                    <span className="font-mono text-white print:text-black">$245.00</span>
-                  </div>
-                  <div className="flex justify-between pb-4 border-b border-stone-800 print:border-gray-200">
-                    <span>Tax</span>
-                    <span className="font-mono text-white print:text-black">$465.10</span>
-                  </div>
-                  
-                  <div className="flex justify-between items-baseline pt-4 text-white print:text-black">
-                    <span className="text-sm font-medium">Total</span>
-                    <span className="text-3xl font-serif font-semibold font-mono tracking-tight">
-                      $6,010.10
-                    </span>
-                  </div>
-                </div>
-              </div>
+            <div className="flex flex-wrap items-center gap-x-8 gap-y-2 px-2 pt-2 print:hidden text-xs font-medium tracking-wide">
+              <button 
+                onClick={handleDownloadReceipt}
+                className="text-gray-900 underline underline-offset-4 hover:text-stone-500 transition-colors"
+              >
+                Download Invoice
+              </button>
             </div>
 
           </div>
-        )}
+
+          {/* Right Financial Sticky Summary Card */}
+          <div className="space-y-4 lg:sticky lg:top-8 print:w-full">
+            <div className="bg-black text-white p-8 rounded-none shadow-xl print:shadow-none print:border print:border-gray-200 print:text-black print:bg-white">
+              <h3 className="text-[10px] uppercase tracking-widest font-bold text-stone-400 mb-6 pb-2 border-b border-stone-800 print:border-gray-200">
+                Financial Summary
+              </h3>
+              
+              <div className="space-y-4 text-xs font-light text-stone-300 print:text-gray-600">
+                <div className="flex justify-between">
+                  <span>Subtotal</span>
+                  <span className="font-mono text-white print:text-black">
+                    ${(checkoutData.totalPrice - 245 - 465.10 > 0 ? (checkoutData.totalPrice - 245 - 465.10).toFixed(2) : (checkoutData.totalPrice * 0.85).toFixed(2))}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Shipping (White Glove)</span>
+                  <span className="font-mono text-white print:text-black">$245.00</span>
+                </div>
+                <div className="flex justify-between pb-4 border-b border-stone-800 print:border-gray-200">
+                  <span>Tax</span>
+                  <span className="font-mono text-white print:text-black">$465.10</span>
+                </div>
+                
+                <div className="flex justify-between items-baseline pt-4 text-white print:text-black">
+                  <span className="text-sm font-medium">Total</span>
+                  <span className="text-3xl font-serif font-semibold font-mono tracking-tight">
+                    ${checkoutData.totalPrice?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   );
