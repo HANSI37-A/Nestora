@@ -5,15 +5,16 @@ const userFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
 
-const initialGuestId =
-  localStorage.getItem("guestId") || `guest_${new Date().getTime()}`;
-localStorage.setItem("guestId", initialGuestId);
+if (localStorage.getItem("userToken")) {
+  localStorage.removeItem("userToken");
+}
 
-const tokenFromStorage = localStorage.getItem("userToken") || (userFromStorage && userFromStorage.token) || null;
+const initialGuestId = localStorage.getItem("guestId") || `guest_${new Date().getTime()}`;
+localStorage.setItem("guestId", initialGuestId);
 
 const initialState = {
   user: userFromStorage,
-  token: tokenFromStorage,
+  token: userFromStorage?.token || null, 
   guestId: initialGuestId,
   loading: false,
   error: null,
@@ -30,23 +31,21 @@ export const loginUser = createAsyncThunk(
       );
 
       const data = response.data;
-    const userPayload = data.user || data;
-    const tokenPayload = data.token || data.user?.token;
+  
+      const userPayload = data.user ? { ...data.user } : { ...data };
+      const tokenPayload = data.token || data.user?.token;
 
-    if (!tokenPayload) {
-      throw new Error("Authentication token missing from server response");
-    }
+      if (!tokenPayload) {
+        throw new Error("Authentication token missing from server response");
+      }
 
+      userPayload.token = tokenPayload;
+      
+      localStorage.setItem("userInfo", JSON.stringify(userPayload));
+      return userPayload;
 
-    const userWithToken = { ...userPayload, token: tokenPayload };
-
-    localStorage.setItem("userInfo", JSON.stringify(userWithToken));
-    localStorage.setItem("userToken", tokenPayload || data.token);
-
-    return userWithToken;
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || error.message || "Login failed";
+      const errorMessage = error.response?.data?.message || error.message || "Login failed";
       return rejectWithValue({ message: errorMessage });
     }
   }
@@ -62,22 +61,21 @@ export const registerUser = createAsyncThunk(
         userData
       );
 
-    const data = response.data;
-    const userPayload = data.user || data;
-    const tokenPayload = data.token || data.user?.token;
+      const data = response.data;
+      const userPayload = data.user ? { ...data.user } : { ...data };
+      const tokenPayload = data.token || data.user?.token;
 
-    if (!tokenPayload) {
-      throw new Error("Registration completed, but token missing from server response");
-    }
+      if (!tokenPayload) {
+        throw new Error("Registration completed, but token missing from server response");
+      }
 
-    const userWithToken = { ...userPayload, token: tokenPayload };
-    localStorage.setItem("userInfo", JSON.stringify(userWithToken));
-    localStorage.setItem("userToken", tokenPayload || data.token);
+      userPayload.token = tokenPayload;
 
-    return userWithToken;
+      localStorage.setItem("userInfo", JSON.stringify(userPayload));
+      return userPayload;
+
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || error.message || "An error occurred";
+      const errorMessage = error.response?.data?.message || error.message || "An error occurred";
       return rejectWithValue({ message: errorMessage });
     }
   }
@@ -90,10 +88,10 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.user = null;
+      state.token = null; 
       state.guestId = `guest_${new Date().getTime()}`;
       state.error = null;
       localStorage.removeItem("userInfo");
-      localStorage.removeItem("userToken");
       localStorage.setItem("guestId", state.guestId);
     },
     generateNewGuestId: (state) => {
@@ -101,19 +99,16 @@ const authSlice = createSlice({
       localStorage.setItem("guestId", state.guestId);
     },
     updateAuthUser: (state, action) => {
-      const currentToken = state.user?.token || state.token || localStorage.getItem("userToken");
+      const currentToken = state.user?.token || state.token;
+      
       state.user = {
         ...state.user,
         ...action.payload,
         token: action.payload?.token || currentToken,
       };
-      if (!state.token && state.user?.token) {
-        state.token = state.user.token;
-      }
+      
+      state.token = state.user.token;
       localStorage.setItem("userInfo", JSON.stringify(state.user));
-      if (state.user?.token) {
-        localStorage.setItem("userToken", state.user.token);
-      }
     },
   },
   extraReducers: (builder) => {
@@ -125,12 +120,14 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
-        state.token = action.payload?.token || localStorage.getItem("userToken");
+        state.token = action.payload?.token || null;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload?.message || "Login failed";
       })
+      
+      // Register Cases
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -138,7 +135,7 @@ const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
-        state.token = action.payload?.token || localStorage.getItem("userToken");
+        state.token = action.payload?.token || null;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;

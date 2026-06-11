@@ -21,10 +21,7 @@ const Login = () => {
 
       console.log("LOGIN SUCCESS:", result);
 
-      console.log(
-        "TOKEN AFTER LOGIN:",
-        localStorage.getItem("userToken")
-      );
+      console.log("TOKEN AFTER LOGIN:", result?.token);
 
       navigate("/");
 

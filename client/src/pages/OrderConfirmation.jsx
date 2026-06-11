@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom"; 
+import { useNavigate, useParams } from "react-router-dom"; 
 import axios from "axios";
 
 const OrderConfirmation = () => {
   const navigate = useNavigate();
   
-  const [searchParams] = useSearchParams();
-  const checkoutId = searchParams.get("checkout_id");
+  const { id: checkoutId } = useParams();
 
   const [checkoutData, setCheckoutData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -22,9 +21,9 @@ const OrderConfirmation = () => {
 
       try {
         setLoading(true);
-        const token = localStorage.getItem("userInfo") 
-          ? JSON.parse(localStorage.getItem("userInfo")).token 
-          : null;
+        
+        const localUserInfo = localStorage.getItem("userInfo");
+        const token = localUserInfo ? JSON.parse(localUserInfo).token : null;
 
         const config = {
           headers: {
@@ -133,7 +132,7 @@ const OrderConfirmation = () => {
 
               {/* Checkout Line Items Segment */}
               <div className="space-y-8 mb-8">
-                {checkoutData.checkoutItems.map((item) => (
+                {checkoutData.checkoutItems?.map((item) => (
                   <div key={item.productId || item._id} className="flex items-start gap-5 pb-6 border-b border-[#EFEAE2] last:border-0 last:pb-0">
                     <img 
                       src={item.image} 
@@ -153,7 +152,7 @@ const OrderConfirmation = () => {
                     </div>
                     <div className="text-right shrink-0">
                       <p className="text-sm font-medium text-gray-900">
-                        ${item.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                        ${item.price?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                       </p>
                       <p className="text-[10px] font-bold tracking-widest uppercase text-emerald-700 mt-2 bg-emerald-50 px-2 py-0.5 inline-block">
                         Status: Curating
@@ -245,7 +244,7 @@ const OrderConfirmation = () => {
                 
                 <div className="flex justify-between items-baseline pt-4 text-white print:text-black">
                   <span className="text-sm font-medium">Total</span>
-                  <span className="text-3xl font-serif font-semibold font-mono tracking-tight">
+                  <span className="text-3xl font-serif font-semibold tracking-tight">
                     ${checkoutData.totalPrice?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </span>
                 </div>

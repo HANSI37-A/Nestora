@@ -9,7 +9,7 @@ const Checkout = () => {
   const dispatch = useDispatch();
   
   const { cart } = useSelector((state) => state.cart);
-  const { user } = useSelector((state) => state.auth);
+  const { user, token } = useSelector((state) => state.auth);
   const { loading: checkoutLoading } = useSelector((state) => state.checkout);
 
   const [checkoutId, setCheckoutId] = useState(null);
@@ -55,7 +55,6 @@ const Checkout = () => {
 
   const handleCreateCheckout = (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("userToken");
 
     if (!token) {
       alert("Please login first");
@@ -73,7 +72,10 @@ const Checkout = () => {
         color: item.color || "Default",
         size: item.size || "Standard"
       })),
-      shippingAddress,
+      shippingAddress: {
+        ...shippingAddress,
+        streetAddress: shippingAddress.address,
+      },
       paymentMethod: "Stripe",
       totalPrice: grandTotal,
     };
@@ -90,11 +92,10 @@ const Checkout = () => {
       });
   };
 
-  // Triggers backend stripe checkout configuration endpoint redirection loops
   const handleStripePaymentRedirect = async () => {
     setStripeRedirecting(true);
     try {
-      const token = localStorage.getItem("userToken");
+
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/create-stripe-session`,
         {},
@@ -102,13 +103,14 @@ const Checkout = () => {
       );
 
       if (response.data?.url) {
+
         window.location.href = response.data.url; 
       } else {
-        throw new Error("Invalid session link parsed by payment gateway.");
+        throw new Error("Invalid redirect link payload formatting configuration returned from sandbox.");
       }
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || "Stripe routing gateway configuration error.");
+      alert(error.response?.data?.message || "Payment processing routing execution error.");
       setStripeRedirecting(false);
     }
   };
@@ -125,17 +127,15 @@ const Checkout = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 xl:gap-20 items-start">
-          
           <div className="lg:col-span-7">
             <form onSubmit={handleCreateCheckout} className="space-y-10">
-              
-              {/* Contact Information */}
+              {/* Contact Details */}
               <div>
                 <h3 className="text-xs font-bold tracking-[0.2em] text-[#A8A29E] uppercase mb-5 pb-2 border-b border-[#A8A29E]/10">
                   Contact Details
                 </h3>
                 <div className="relative">
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#A8A29E] mb-1">Email Address</label>
+                  <label htmlFor='email' className="block text-[10px] font-bold uppercase tracking-wider text-[#A8A29E] mb-1">Email Address</label>
                   <input 
                     type="email" 
                     placeholder="name@domain.com"
@@ -243,7 +243,7 @@ const Checkout = () => {
                 ) : (
                   <div className="border-t border-[#A8A29E]/20 pt-6">
                     <h3 className="text-xs font-bold tracking-[0.2em] text-[#A8A29E] uppercase mb-4">
-                      Gateway Authorization
+                      Simulated Testing Gateway Authorization
                     </h3>
                     <button
                       type="button"
@@ -254,10 +254,10 @@ const Checkout = () => {
                       {stripeRedirecting ? (
                         <>
                           <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                          Connecting Stripe Portal...
+                          Authorizing Simulated Settlement Loop...
                         </>
                       ) : (
-                        `Pay With Credit Card — $${grandTotal.toFixed(2)}`
+                        `Instant Demo Checkout Payment — $${grandTotal.toFixed(2)}`
                       )}
                     </button>
                   </div>  
@@ -266,7 +266,7 @@ const Checkout = () => {
             </form>
           </div>
 
-          {/* Right Side Order Summary Summary */}
+          {/* Right Side Summary Panel */}
           <div className="lg:col-span-5 bg-transparent border border-[#A8A29E]/20 p-6 sm:p-8 sticky top-28">
             <h3 className="text-xs font-bold tracking-[0.2em] text-[#A8A29E] uppercase mb-6 pb-2 border-b border-[#A8A29E]/10">
               Order Summary

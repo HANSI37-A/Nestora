@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchUsers, addUser, updateUser, deleteUser } from "../../redux/slice/adminSlice";
@@ -6,14 +6,14 @@ import { fetchUsers, addUser, updateUser, deleteUser } from "../../redux/slice/a
 const UserManaagement = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user} = useSelector((state) => state.auth);
+  const {user: currentUser} = useSelector((state) => state.auth);
   const { users, loading, error } = useSelector((state) => state.admin);
 
   useEffect(() => {
-    if (user && user.role !== "admin") {
-      navigate("/");
+    if (currentUser && currentUser.role !== "admin") {
+      navigate("/login");
     }
-  }, [user, navigate]);
+  }, [currentUser, navigate]);
 
   const [formData, setFormData] = React.useState({
     name: "",
@@ -23,10 +23,10 @@ const UserManaagement = () => {
   });
 
   useEffect(() => {
-    if (user && user.role === "admin") {
+    if (currentUser && currentUser.role === "admin") {
       dispatch(fetchUsers());
     }
-  }, [dispatch, user]);
+  }, [dispatch, currentUser]);
 
   const handleChange = (e) => {
     setFormData({

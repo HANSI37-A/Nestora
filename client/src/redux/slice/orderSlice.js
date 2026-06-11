@@ -1,34 +1,50 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Async Thunk to fetch user orders
+const getAuthToken = (state) => {
+  if (state.auth?.token) return state.auth.token;
+  if (state.auth?.user?.token) return state.auth.user.token;
+
+  try {
+    const userInfo = localStorage.getItem("userInfo");
+    if (userInfo) {
+      const parsedInfo = JSON.parse(userInfo);
+      return parsedInfo.token || parsedInfo.user?.token || parsedInfo._id ? parsedInfo.token : null;
+    }
+  } catch (error) {
+    console.error("Failed to parse userInfo from localStorage:", error);
+  }
+  return null;
+};
+
+// Async Thunk to fetch user orders history
 export const fetchUserOrders = createAsyncThunk(
   "orders/fetchUserOrders",
   async (_, { rejectWithValue, getState }) => {
     try {
-      const token = getState().auth?.token || localStorage.getItem("userToken");
+      const token = getAuthToken(getState()); 
 
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/orders/my-orders`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, 
           },
         }
       );
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || { message: "Something went wrong" });
+      const msg = error.response?.data?.message || error.message || "Failed to load orders history array.";
+      return rejectWithValue(msg);
     }
   }
 );
 
-// Async thunk to fetch order details by ID
 export const fetchOrderDetails = createAsyncThunk(
   "orders/fetchOrderDetails",
   async (orderId, { rejectWithValue, getState }) => {
     try {
-      const token = getState().auth?.token || localStorage.getItem("userToken");
+      const token = getAuthToken(getState());
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/orders/${orderId}`,
         {
@@ -39,7 +55,8 @@ export const fetchOrderDetails = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || { message: "Something went wrong" });
+      const msg = error.response?.data?.message || error.message || "Failed to load specific target order data.";
+      return rejectWithValue(msg);
     }
   }
 );
@@ -55,7 +72,6 @@ const orderSlice = createSlice({
   reducers: {}, 
   extraReducers: (builder) => {
     builder
-      // Fetch user orders history timeline cases
       .addCase(fetchUserOrders.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -66,10 +82,8 @@ const orderSlice = createSlice({
       })
       .addCase(fetchUserOrders.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.message || "Failed to load orders";
+        state.error = action.payload;
       })
-      
-      // Fetch dynamic order target identification details cases
       .addCase(fetchOrderDetails.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -80,7 +94,7 @@ const orderSlice = createSlice({
       })
       .addCase(fetchOrderDetails.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.message || "Failed to load order details";
+        state.error = action.payload;
       });
   },
 });

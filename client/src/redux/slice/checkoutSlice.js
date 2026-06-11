@@ -3,14 +3,20 @@ import axios from "axios";
 
 export const createCheckout = createAsyncThunk(
   "checkout/createCheckout",
-  async (checkoutdata, { rejectWithValue }) => {
+  async (checkoutData, { rejectWithValue }) => {
     try {
+
+      const userInfo = localStorage.getItem("userInfo")
+        ? JSON.parse(localStorage.getItem("userInfo"))
+        : null;
+      const token = userInfo?.token;
+      
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/checkout`,
-        checkoutdata,
+        checkoutData,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );

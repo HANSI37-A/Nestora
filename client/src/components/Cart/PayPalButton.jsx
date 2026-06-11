@@ -22,7 +22,10 @@ const PayPalButton = ({ amount, checkoutId, onSuccess, onError }) => {
     try {
       const details = await actions.order.capture();
       
-      const token = localStorage.getItem("userToken");
+      const userInfo = localStorage.getItem("userInfo") 
+        ? JSON.parse(localStorage.getItem("userInfo")) 
+        : null;
+      const token = userInfo?.token;
       if (!token) throw new Error("Authentication token missing. Please sign back in.");
 
       const paymentData = {

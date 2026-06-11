@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'; 
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate, useSearchParams } from 'react-router-dom'; 
 import { logout } from '../redux/slice/authSlice'; 
 import MyOrdersPage from './MyOrdersPage';
 import AccountSettings from './AccountSettings';
@@ -8,16 +8,25 @@ import AccountSettings from './AccountSettings';
 const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState('overview');
 
-  const { user } = useSelector((state) => state.auth);
+  const { user, token } = useSelector((state) => state.auth);
   
   useEffect(() => {
     if (!user) {
       navigate('/login');
     }
   }, [user, navigate]);
+
+  useEffect(() => {
+    const checkoutId = searchParams.get('checkout_id');
+    const sessionId = searchParams.get('session_id');
+
+    if (checkoutId && sessionId) {
+      navigate(`/order-confirmation/${checkoutId}`, { replace: true });
+    }
+  }, [searchParams, navigate]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -112,12 +121,12 @@ const Profile = () => {
               01. Latest Acquisitions
             </span>
             <div className="bg-[#F4F1EA]/50 border border-[#1A1A1A]/5 rounded p-2 sm:p-4 w-full">
-              <MyOrdersPage />
+              {token ? <MyOrdersPage token={token} /> : <p className="text-xs text-gray-400">Verifying session token context...</p>}
             </div>
           </div>
         ) : (
           <div className="w-full animate-fadeIn">
-            {/* Passes the Redux user context payload directly down into settings inputs */}
+
             <AccountSettings user={user} />
           </div>
         )}
