@@ -10,6 +10,8 @@ import OrderConfirmation from './pages/OrderConfirmation';
 import OrderDetailsPage from './pages/OrderDetailsPage';
 import MyOrdersPage from './pages/MyOrdersPage';
 import Home from './pages/Home';
+import Designers from './pages/Designers';
+import Showrooms from './pages/Showrooms';
 import AdminLayout from './components/Admin/AdminLayout';
 import AdminHomePage from './pages/AdminHomePage';
 import UserManaagement from './components/Admin/UserManaagement';
@@ -43,6 +45,8 @@ const App = () => {
             <Route path="order-confirmation/:id" element={<OrderConfirmation />} />
             <Route path="my-orders" element={<MyOrdersPage />} />
             <Route path="order/:id" element={<OrderDetailsPage />} />
+            <Route path="showrooms" element={<Showrooms />} />
+            <Route path="designers" element={<Designers />} />
           </Route>
 
           <Route path="/admin" element={<AdminLayout />}>
