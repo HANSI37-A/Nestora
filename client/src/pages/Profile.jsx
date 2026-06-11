@@ -4,6 +4,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { logout } from '../redux/slice/authSlice'; 
 import MyOrdersPage from './MyOrdersPage';
 import AccountSettings from './AccountSettings';
+import { clearCart } from '../redux/slice/cartSlice'; 
+import axios from 'axios';
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -23,10 +25,35 @@ const Profile = () => {
     const checkoutId = searchParams.get('checkout_id');
     const sessionId = searchParams.get('session_id');
 
-    if (checkoutId && sessionId) {
-      navigate(`/order-confirmation/${checkoutId}`, { replace: true });
+    if (checkoutId && sessionId && token) {
+      const finalizeOrderProcess = async () => {
+        try {
+          const config = {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          };
+
+          await axios.put(
+            `http://localhost:5000/api/checkout/${checkoutId}/pay`,
+            { sessionId },
+            config
+          );
+
+          dispatch(clearCart());
+
+          localStorage.removeItem('cartItems');
+
+          navigate(`/order-confirmation/${checkoutId}`, { replace: true });
+        } catch (error) {
+          console.error("Failed to securely process order fulfillment context:", error);
+          navigate('/profile', { replace: true });
+        }
+      };
+
+      finalizeOrderProcess();
     }
-  }, [searchParams, navigate]);
+  }, [searchParams, navigate, token, dispatch]);
 
   const handleLogout = () => {
     dispatch(logout());
