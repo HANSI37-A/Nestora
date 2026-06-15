@@ -18,7 +18,7 @@ const adminRoutes = require('./routes/adminRoutes');
 const productAdminRoutes = require('./routes/productAdminRoutes');
 const adminOrderRoutes = require('./routes/adminOrderRoutes');
 const designerRoutes = require("./routes/designerRoutes");
-
+const contactRoutes = require("./routes/contactRoutes");
 
 const path = require('path');
 const app = express();
@@ -46,6 +46,7 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/subscribe', subscriberRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/designers', designerRoutes); 
+app.use('/api/contact', contactRoutes);
 
 // Admin
 app.use('/api/admin', adminRoutes);
