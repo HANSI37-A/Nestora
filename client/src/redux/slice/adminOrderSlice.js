@@ -6,12 +6,12 @@ export const fetchAllOrders = createAsyncThunk(
   "adminOrders/fetchAllOrders",
   async (_, { rejectWithValue }) => {
     try {
+      const userInfoStr = localStorage.getItem("userInfo");
+      const token = userInfoStr ? JSON.parse(userInfoStr).token : "";
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/admin/orders`,
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("userToken")}`
-          }
+          headers: { Authorization: `Bearer ${token}` }
         }
       );
       return response.data;
@@ -27,13 +27,13 @@ export const updateOrderStatus = createAsyncThunk(
   "adminOrders/updateOrderStatus",
   async ({id, status}, { rejectWithValue }) => {
     try {
+      const userInfoStr = localStorage.getItem("userInfo");
+      const token = userInfoStr ? JSON.parse(userInfoStr).token : "";
       const response = await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/api/admin/orders/${id}`,
         { status },
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("userToken")}`
-          }
+          headers: { Authorization: `Bearer ${token}` }
         }
       );
       return response.data;
@@ -48,12 +48,12 @@ export const deleteOrder = createAsyncThunk(
   "adminOrders/deleteOrder",
   async ({id}, { rejectWithValue }) => {
     try {
+      const userInfoStr = localStorage.getItem("userInfo");
+      const token = userInfoStr ? JSON.parse(userInfoStr).token : "";
       await axios.delete(
         `${import.meta.env.VITE_BACKEND_URL}/api/admin/orders/${id}`,
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("userToken")}`
-          }
+          headers: { Authorization: `Bearer ${token}` }
         }
       );
       return id;

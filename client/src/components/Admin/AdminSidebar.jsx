@@ -4,6 +4,7 @@ import { FaUser, FaBox, FaShoppingCart, FaHome, FaBoxOpen, FaClipboardList, FaSt
 import { useNavigate } from "react-router-dom";
 
 import { logout } from "../../redux/slice/authSlice";
+import { clearCart } from "../../redux/slice/cartSlice";
 
 const AdminSidebar = () => {
   const navigate = useNavigate();

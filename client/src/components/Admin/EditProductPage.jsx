@@ -9,6 +9,7 @@ const EditProductPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
 
   const [productData, setProductData] = useState({
     name: "",
@@ -22,9 +23,11 @@ const EditProductPage = () => {
     collections: "",
     material: "",
     images: [],
+    modelUrl: "",
   });
 
   const [uploading, setUploading] = useState(false);
+  const [uploadingModel, setUploadingModel] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
 
   useEffect(() => {
@@ -45,6 +48,7 @@ const EditProductPage = () => {
               collections: product.productCollection || "",
               material: product.material || "",
               images: product.images || [],
+              modelUrl: product.modelUrl || "",
             });
           }
         })
@@ -86,6 +90,38 @@ const EditProductPage = () => {
       alert("Failed to upload image. Please try again.");
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleModelUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("model", file);
+    setUploadingModel(true);
+
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/products/${id}/upload-model`,
+        formData,
+        {
+          headers: { 
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${user?.token}`
+          },
+        }
+      );
+      setProductData((prev) => ({
+        ...prev,
+        modelUrl: res.data.modelUrl,
+      }));
+      alert("3D Model uploaded successfully.");
+    } catch (err) {
+      console.error("Model upload failure:", err);
+      alert("Failed to upload 3D model. Please try again.");
+    } finally {
+      setUploadingModel(false);
     }
   };
 
@@ -286,6 +322,25 @@ const EditProductPage = () => {
               </div>  
             ))}
           </div>
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold text-gray-600 mb-2">Upload 3D Model (.glb/.gltf)</label>
+          <input 
+            type="file" 
+            accept=".glb,.gltf"
+            onChange={handleModelUpload} 
+            disabled={uploadingModel} 
+            className="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer"
+          />
+          {uploadingModel && <p className="text-[10px] text-[#A8A29E] mt-2 animate-pulse">Uploading 3D model asset...</p>}
+          {productData.modelUrl && (
+            <p className="text-xs text-green-600 mt-2">
+              Model uploaded successfully: <a href={`http://localhost:5000${productData.modelUrl}`} target="_blank" rel="noopener noreferrer" className="underline font-medium">View Model</a>
+              <br />
+              <a href={productData.modelUrl} target="_blank" rel="noopener noreferrer" className="underline font-medium">View Model</a>
+            </p>
+          )}
         </div>
 
         <button 

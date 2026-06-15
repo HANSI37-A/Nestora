@@ -17,6 +17,7 @@ const ProductDetails = ({ productId }) => {
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [show3DViewer, setShow3DViewer] = useState(false);
 
   const productFetchId = productId || id;
 
@@ -103,8 +104,20 @@ const ProductDetails = ({ productId }) => {
           {/* LEFT COLUMN — ASYMMETRIC SCROLLING GALLERY LAYOUT */}
           <div className="w-full lg:w-[60%] flex flex-col gap-6">
             {/* Featured Hero Display */}
-            <div className="w-full aspect-[4/3] bg-[#1A1A1A]/5 overflow-hidden">
-              {mainImage && (
+            <div className="w-full aspect-[4/3] bg-[#1A1A1A]/5 overflow-hidden relative">
+              {show3DViewer && selectedProduct.modelUrl ? (
+              <model-viewer
+                src={selectedProduct.modelUrl}
+                alt="A 3D model of the product"
+                auto-rotate
+                camera-controls
+                style={{ width: "100%", height: "100%", backgroundColor: "#F9F7F2" }}
+              >
+                <div slot="poster" className="absolute inset-0 flex items-center justify-center bg-[#F9F7F2]">
+                  <span className="text-xs tracking-widest text-[#A8A29E] uppercase animate-pulse">Loading 3D Model...</span>
+                </div>
+              </model-viewer>
+              ) : mainImage && (
                 <img
                   src={mainImage}
                   alt={selectedProduct?.name || "Featured Display"}
@@ -120,15 +133,24 @@ const ProductDetails = ({ productId }) => {
                 {selectedProduct.images.map((img, index) => (
                   <button
                     key={index}
-                    onClick={() => setMainImage(img.url)}
+                    onClick={() => { setMainImage(img.url); setShow3DViewer(false); }}
                     className={`aspect-[4/3] bg-[#1A1A1A]/5 overflow-hidden border transition-all duration-300 ${
-                      mainImage === img.url ? "border-[#1A1A1A]" : "border-transparent opacity-70 hover:opacity-100"
+                      mainImage === img.url && !show3DViewer ? "border-[#1A1A1A]" : "border-transparent opacity-70 hover:opacity-100"
                     }`}
                   >
                     <img src={img.url} alt="" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
+            )}
+            
+            {selectedProduct.modelUrl && (
+              <button
+                onClick={() => setShow3DViewer(true)}
+                className="w-full mt-2 py-3 border border-[#1A1A1A] text-[#1A1A1A] text-xs font-semibold tracking-widest uppercase hover:bg-[#1A1A1A] hover:text-[#F9F7F2] transition-colors duration-300"
+              >
+                View in 3D
+              </button>
             )}
           </div>
 

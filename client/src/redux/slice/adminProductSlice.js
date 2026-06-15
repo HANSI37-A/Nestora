@@ -4,7 +4,8 @@ import axios from "axios";
 const API_URL = `${import.meta.env.VITE_BACKEND_URL}`;
 
 const getAuthHeaders = () => {
-  const token = localStorage.getItem("userToken");
+  const userInfoStr = localStorage.getItem("userInfo");
+  const token = userInfoStr ? JSON.parse(userInfoStr).token : null;
   return {
     headers: {
       Authorization: token ? `Bearer ${token}` : "",
