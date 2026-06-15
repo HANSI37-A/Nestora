@@ -95,6 +95,9 @@ const productSchema = new mongoose.Schema({
       height: Number,
     },
     weight: Number, 
+    modelUrl: {
+      type: String,
+    },
 }, { timestamps: true });
 
 module.exports = mongoose.model('Product', productSchema);

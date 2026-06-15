@@ -1,12 +1,28 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const { Readable } = require('stream');
 const Product = require('../models/Product');
 const { protect, admin } = require('../middleware/authMiddleware');
+const cloudinary = require('../config/cloudinary');
 
 const router = express.Router();
 
-// @route   GET /api/products/type/best-seller
-// @desc    Retrieve the product with highest rating
-// @access  Public
+const uploadModel = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 50 * 1024 * 1024,
+  },
+  fileFilter(req, file, cb) {
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (ext === '.glb' || ext === '.gltf') {
+      cb(null, true);
+    } else {
+      cb(new Error('Only .glb or .gltf files allowed'));
+    }
+  },
+});
+
 router.get("/best-seller", async (req, res) => {
   try {
     const bestSeller = await Product.findOne().sort({ rating: -1 });
@@ -21,14 +37,9 @@ router.get("/best-seller", async (req, res) => {
   }
 });
 
-// @route   GET /api/products/new-arrivals
-// @desc    Retrieve latest 8 products - Creation data
-// @access  Public
 router.get("/new-arrivals", async (req, res) => {
   try {
-    const newArrivals = await Product.find()
-      .sort({ createdAt: -1 })
-      .limit(8);
+    const newArrivals = await Product.find().sort({ createdAt: -1 }).limit(8);
     return res.json(newArrivals);
   } catch (error) {
     console.error("Error in /new-arrivals:", error);
@@ -36,27 +47,20 @@ router.get("/new-arrivals", async (req, res) => {
   }
 });
 
-// @route   GET /api/products
-// @desc    Get all products (Filtered, Sorted, and Paginated)
-// @access  Public
 router.get("/", async (req, res) => {
   try {
     const {
-      collection, color, minPrice, maxPrice, sortBy, search, category, material, brand, size, sizes, limit,
+      collection, color, minPrice, maxPrice, sortBy, search,
+      category, material, brand, size, sizes, limit,
     } = req.query;
 
     const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    
+
     const buildRegex = (value) => {
       const stringValue = Array.isArray(value) ? value.join(',') : String(value || '');
-      const tokens = stringValue
-        .split(',')
-        .map((item) => item.trim())
-        .filter(Boolean)
-        .map(escapeRegex);
-
+      const tokens = stringValue.split(',').map((item) => item.trim()).filter(Boolean).map(escapeRegex);
       if (!tokens.length) return null;
-      return new RegExp(tokens.join('|'), 'i'); 
+      return new RegExp(tokens.join('|'), 'i');
     };
 
     let query = {};
@@ -81,7 +85,7 @@ router.get("/", async (req, res) => {
       const regex = buildRegex(color);
       if (regex) query.color = regex;
     }
-    
+
     const targetSize = size || sizes;
     if (targetSize && String(targetSize).toLowerCase() !== "all") {
       const regex = buildRegex(targetSize);
@@ -98,7 +102,7 @@ router.get("/", async (req, res) => {
       query.$or = [
         { name: { $regex: search, $options: "i" } },
         { description: { $regex: search, $options: "i" } },
-      ];   
+      ];
     }
 
     let sort = {};
@@ -120,7 +124,7 @@ router.get("/", async (req, res) => {
       }
     }
 
-    let products = await Product.find(query).sort(sort).limit(Number(limit) || 0);
+    const products = await Product.find(query).sort(sort).limit(Number(limit) || 0);
     return res.json(products);
   } catch (error) {
     console.error("Error in / main filter route:", error);
@@ -128,22 +132,18 @@ router.get("/", async (req, res) => {
   }
 });
 
-// @route   POST /api/products
-// @desc    Create a new product
-// @access  Private (Admin only)
 router.post('/', protect, admin, async (req, res) => {
   try {
     if (!req.user) {
       return res.status(401).json({ message: 'Not authorized, user data missing' });
     }
-
     const {
       name, description, price, discountPrice, countInStock, sku,
       category, brand, color, colors, sizes, size, collection,
       collections, material, images, isFeatured, isPublished,
       tags, dimensions, weight, rating, numReviews, metaTitle,
       metaDescription, metaKeywords
-    } = req.body;   
+    } = req.body;
 
     const product = new Product({
       name, description, price, discountPrice, countInStock, sku,
@@ -153,7 +153,7 @@ router.post('/', protect, admin, async (req, res) => {
       productCollection: collection || collections,
       material, images, isFeatured, isPublished, tags, dimensions,
       weight, rating, numReviews, metaTitle, metaDescription, metaKeywords,
-      user: req.user._id, 
+      user: req.user._id,
     });
 
     const createdProduct = await product.save();
@@ -164,9 +164,6 @@ router.post('/', protect, admin, async (req, res) => {
   }
 });
 
-// @route   GET /api/products/similar/:id
-// @desc    Retrieve similar products based on the current product's category
-// @access  Public
 router.get("/similar/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -174,12 +171,10 @@ router.get("/similar/:id", async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: "Product Not Found" });
     }
-
     const similarProducts = await Product.find({
       _id: { $ne: id },
       category: product.category,
     }).limit(4);
-
     return res.json(similarProducts);
   } catch (error) {
     console.error("Error in /similar/:id:", error);
@@ -187,9 +182,6 @@ router.get("/similar/:id", async (req, res) => {
   }
 });
 
-// @route   GET /api/products/:id
-// @desc    Get a single product by ID
-// @access  Public
 router.get("/:id", async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -204,9 +196,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// @route   PUT /api/products/:id
-// @desc    Update an existing product ID
-// @access  Private/Admin
 router.put("/:id", protect, admin, async (req, res) => {
   try {
     const {
@@ -215,7 +204,7 @@ router.put("/:id", protect, admin, async (req, res) => {
       collections, material, images, isFeatured, isPublished,
       tags, dimensions, weight, rating, numReviews, metaTitle,
       metaDescription, metaKeywords
-    } = req.body; 
+    } = req.body;
 
     const product = await Product.findById(req.params.id);
 
@@ -250,22 +239,61 @@ router.put("/:id", protect, admin, async (req, res) => {
   }
 });
 
-// @route   DELETE /api/products/:id
-// @desc    Delete a product by Id
-// @access  Private/Admin
 router.delete("/:id", protect, admin, async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-
     if (product) {
       await product.deleteOne();
-      return res.json({ message: "Product removed" });      
+      return res.json({ message: "Product removed" });
     } else {
       return res.status(404).json({ message: "Product Not Found" });
     }
   } catch (error) {
     console.error("Error in DELETE /:id:", error);
     return res.status(500).json("Server Error");
+  }
+});
+
+router.post("/:id/upload-model", protect, admin, uploadModel.single('model'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No model file provided." });
+    }
+
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found." });
+    }
+
+    const uploadToCloudinary = () => new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        {
+          folder: 'nestora/models',
+          resource_type: 'raw',
+          public_id: `model-${req.params.id}`,
+          overwrite: true,
+          chunk_size: 6000000,
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      Readable.from(req.file.buffer).pipe(stream);
+    });
+
+    const result = await uploadToCloudinary();
+    product.modelUrl = result.secure_url;
+    await product.save();
+
+    return res.json({
+      message: "Model uploaded successfully.",
+      modelUrl: result.secure_url,
+    });
+
+  } catch (error) {
+    console.error("Error uploading model:", error);
+    return res.status(500).json({ message: error.message || "Server Error during upload." });
   }
 });
 
