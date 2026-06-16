@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
 const subscriberSchema = new mongoose.Schema({
-  email:{
+  email: {
     type: String,
     required: true,
     unique: true,
-    trim:  true,
+    trim: true,
     lowercase: true,
   },
   subscribedAt: {

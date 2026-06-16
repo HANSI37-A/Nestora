@@ -2,33 +2,35 @@ const express = require("express");
 const router = express.Router();
 const Subscriber = require("../models/Subscriber");
 
-// @route POST /api/subscribe
-// @desc Hadle newsletter subscription
-// @access Public
-router.post("/", async (req, res) =>{
+// @route   POST /api/subscribe
+// @desc    Handle newsletter subscription database entry
+// @access  Public
+router.post("/", async (req, res) => {
   const { email } = req.body;
 
-  if(!email) {
-    return res.status(400).json({ message: "Email is required"});
+  if (!email) {
+    return res.status(400).json({ message: "Email is required." });
   }
 
-try{
-  // Check if the email is already subscribed
-  let subscriber = await Subscriber.findOne({ email });
+  try {
+    const normalizedEmail = email.trim().toLowerCase();
 
-  if (subscriber){
-    return res.status(400).json({ message: "Email is already suscribed"});
+    // Check if the email is already subscribed
+    let subscriber = await Subscriber.findOne({ email: normalizedEmail });
+
+    if (subscriber) {
+      return res.status(400).json({ message: "Email is already subscribed." });
+    }
+
+    // Create a new subscriber matrix document
+    subscriber = new Subscriber({ email: normalizedEmail });
+    await subscriber.save();
+
+    return res.status(201).json({ message: "Successfully subscribed to the journal!" });
+  } catch (error) {
+    console.error("Subscription Database Error:", error);
+    return res.status(500).json({ message: "Server Error. Failed to store coordinate registration." });
   }
-
-  // Create a new subsciber
-  subscriber = new Subscriber({ email });
-  await subscriber.save();
-
-  res.status(201).json({message: "Successfully subscribed to the newaletter!"});
- } catch(error){
-  console.error(error);
-  res.status(500).json({ message: "Server Error"});
- }
 });
 
 module.exports = router;

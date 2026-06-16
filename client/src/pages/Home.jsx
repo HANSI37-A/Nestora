@@ -1,7 +1,8 @@
-import React from 'react'
-import heroimg from '../assets/heroimg.jpg'
-import FeaturedCollection from '../components/Products/FeaturedCollection'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react';
+import heroimg from '../assets/heroimg.jpg';
+import FeaturedCollection from '../components/Products/FeaturedCollection';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const products = [
   { 
@@ -36,19 +37,46 @@ const products = [
     collection: 'Heritage Comfort',
     image: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&q=80&w=800' 
   },
-]
+];
 
 const materialSwatches = [
   { name: 'TRAVERTINE', colorClass: 'bg-[#FAF6F0] border border-neutral-200' },
   { name: 'WALNUT', colorClass: 'bg-[#4B3621]' },
   { name: 'BOUCLÉ', colorClass: 'bg-[#EAE6DF]' },
   { name: 'MATTE STEEL', colorClass: 'bg-[#2B2B2A]' },
-]
+];
 
 const Home = () => {
+  
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState("idle");
+  const [statusMessage, setStatusMessage] = useState("");
+
+  const handleSubscribeSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("sending");
+    setStatusMessage("");
+
+    try {
+      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+      const response = await axios.post(`${BACKEND_URL}/api/subscribe`, { email });
+      
+      setStatus("success");
+      setStatusMessage(response.data.message || "Successfully subscribed!");
+      setEmail(""); 
+    } catch (err) {
+      console.error("Subscription transmission failure:", err);
+      setStatus("error");
+      setStatusMessage(
+        err.response?.data?.message || "Something went wrong. Please try again."
+      );
+    }
+  };
+
   return (
     <div className="bg-[#F9F7F2] font-sans antialiased text-[#1A1A1A]">
       
+      {/* Hero Visual Presentation Area */}
       <section className="relative h-[90vh] w-full px-4 sm:px-8 lg:px-12 pb-12">
         <div className="relative w-full h-full overflow-hidden">
           <img 
@@ -66,22 +94,11 @@ const Home = () => {
               Architectural <br />
               <span className="italic font-normal text-white">Rigour & Soul.</span>
             </h1>
-            <div className="flex flex-wrap gap-4 items-center">
-              <button className="bg-[#1A1A1A] text-white px-8 py-4 text-xs font-semibold tracking-widest uppercase hover:bg-[#6B543D] transition-all duration-300">
-                Explore Catalogue
-              </button>
-              <button className="border border-white/60 text-white backdrop-blur-sm px-8 py-4 text-xs font-semibold tracking-widest uppercase hover:bg-white hover:text-[#1A1A1A] transition-all duration-300">
-                Our Philosophy
-              </button>
-            </div>
-          </div>
-
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-[0.4em] text-white/60 pointer-events-none">
-            Scroll
           </div>
         </div>
       </section>
 
+      {/* Brand Narrative Section */}
       <section className="py-16 px-4 sm:px-8 lg:px-16 border-t border-[#A8A29E]/20">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-5 flex justify-center">
@@ -124,9 +141,10 @@ const Home = () => {
         </div>
       </section>
 
-
+      {/* Featured Collection Grid Component */}
       <FeaturedCollection />
 
+      {/* Material Matrix Swatch Component Block */}
       <section className="py-16 px-4 border-t border-[#A8A29E]/20">
         <div className="max-w-3xl mx-auto text-center">
           <span className="text-[10px] uppercase tracking-[0.4em] text-[#6B543D] font-bold block mb-10">Our Materials</span>
@@ -151,23 +169,43 @@ const Home = () => {
               Subscribe to receive early access to new collections and architectural insight from our design studio.
             </p>
 
-            <form className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="EMAIL ADDRESS"
-                className="w-full px-5 py-3.5 bg-transparent border border-neutral-700 text-xs tracking-widest text-white outline-none focus:border-[#A8A29E] transition-colors text-center sm:text-left placeholder-neutral-500"
-                required
-              />
-              <button className="w-full sm:w-auto bg-white text-[#1A1A1A] px-8 py-3.5 text-xs font-bold tracking-widest uppercase hover:bg-[#F9F7F2] hover:text-[#6B543D] transition-colors shrink-0">
-                Join
-              </button>
+            <form onSubmit={handleSubscribeSubmit} className="space-y-4 max-w-md mx-auto">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full">
+                <input
+                  type="email"
+                  placeholder="EMAIL ADDRESS"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={status === "sending"}
+                  className="w-full px-5 py-3.5 bg-transparent border border-neutral-700 text-xs tracking-widest text-white outline-none focus:border-[#A8A29E] transition-colors text-center sm:text-left placeholder-neutral-500 disabled:opacity-50"
+                  required
+                />
+                <button 
+                  type="submit"
+                  disabled={status === "sending"}
+                  className="w-full sm:w-auto bg-white text-[#1A1A1A] px-8 py-3.5 text-xs font-bold tracking-widest uppercase hover:bg-[#F9F7F2] hover:text-[#6B543D] transition-colors shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {status === "sending" ? "Joining..." : "Join"}
+                </button>
+              </div>
+
+              {status === "success" && (
+                <p className="text-xs text-emerald-400 font-light tracking-widest uppercase pt-2 animate-fade-in">
+                  ✓ {statusMessage}
+                </p>
+              )}
+              {status === "error" && (
+                <p className="text-xs text-rose-400 font-light tracking-widest uppercase pt-2 animate-fade-in">
+                  {statusMessage}
+                </p>
+              )}
             </form>
           </div>
         </div>
       </section>
 
     </div>
-  )
-}
+  );
+};
 
 export default Home;
