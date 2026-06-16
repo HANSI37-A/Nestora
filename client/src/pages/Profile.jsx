@@ -41,9 +41,7 @@ const Profile = () => {
           );
 
           dispatch(clearCart());
-
           localStorage.removeItem('cartItems');
-
           navigate(`/order-confirmation/${checkoutId}`, { replace: true });
         } catch (error) {
           console.error("Failed to securely process order fulfillment context:", error);
@@ -71,8 +69,8 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen flex bg-[#F9F7F2] text-[#1A1A1A] font-sans antialiased">
-   
-      <aside className="hidden md:flex flex-col w-64 border-r border-[#1A1A1A]/5 bg-[#F4F1EA] p-6 justify-between shrink-0">
+
+      <aside className="hidden md:flex flex-col w-64 border-r border-[#1A1A1A]/5 bg-[#F4F1EA] p-6 pt-28 justify-between shrink-0">
         <div className="space-y-10">
          
           <div className="pt-2">
@@ -131,7 +129,8 @@ const Profile = () => {
         </div>
       </aside>
 
-      <main className="flex-1 overflow-y-auto px-6 py-12 md:px-12 lg:px-16 w-full">
+  
+      <main className="flex-1 overflow-y-auto px-6 pt-36 sm:pt-40 pb-12 md:px-12 lg:px-16 w-full">
   
         <header className="mb-10 w-full border-b border-[#1A1A1A]/10 pb-6">
           <h1 className="text-4xl md:text-5xl font-serif text-[#1A1A1A] tracking-tight mb-4">

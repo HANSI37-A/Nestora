@@ -8,7 +8,6 @@ import ProductDetails from './components/Products/ProductDetails';
 import CheckOut from './components/Cart/CheckOut';
 import OrderConfirmation from './pages/OrderConfirmation';
 import OrderDetailsPage from './pages/OrderDetailsPage';
-import MyOrdersPage from './pages/MyOrdersPage';
 import Home from './pages/Home';
 import Designers from './pages/Designers';
 import Showrooms from './pages/Showrooms';
@@ -47,7 +46,6 @@ const App = () => {
             <Route path="product/:id" element={<ProductDetails />} />
             <Route path="checkout" element={<CheckOut />} />
             <Route path="order-confirmation/:id" element={<OrderConfirmation />} />
-            <Route path="my-orders" element={<MyOrdersPage />} />
             <Route path="order/:id" element={<OrderDetailsPage />} />
             <Route path="showrooms" element={<Showrooms />} />
             <Route path="showrooms/:id" element={<ShowroomDetails />} />

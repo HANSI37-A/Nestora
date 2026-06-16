@@ -89,7 +89,7 @@ const OrderConfirmation = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] print:bg-white py-16 px-4 font-sans select-none antialiased">
+    <div className="min-h-screen bg-[#FDFBF7] print:bg-white pt-36 sm:pt-40 pb-16 px-4 font-sans select-none antialiased">
       <div className="max-w-5xl mx-auto">
         
         {/* Editorial Top Header */}

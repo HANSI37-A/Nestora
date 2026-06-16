@@ -95,7 +95,6 @@ const Checkout = () => {
   const handleStripePaymentRedirect = async () => {
     setStripeRedirecting(true);
     try {
-
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/create-stripe-session`,
         {},
@@ -103,7 +102,6 @@ const Checkout = () => {
       );
 
       if (response.data?.url) {
-
         window.location.href = response.data.url; 
       } else {
         throw new Error("Invalid redirect link payload formatting configuration returned from sandbox.");
@@ -119,7 +117,8 @@ const Checkout = () => {
 
   return (
     <div className="w-full bg-[#F9F7F2] min-h-screen text-[#1A1A1A] font-sans antialiased select-none">
-      <div className="max-w-7xl mx-auto py-16 px-4 sm:px-8 lg:px-12">
+
+      <div className="max-w-7xl mx-auto pt-32 sm:pt-40 pb-16 px-4 sm:px-8 lg:px-12">
         
         <div className="border-b border-[#A8A29E]/20 pb-6 mb-12">
           <span className="text-[10px] font-bold tracking-[0.25em] text-[#A8A29E] uppercase block mb-1">Secure Transaction</span>
@@ -266,8 +265,7 @@ const Checkout = () => {
             </form>
           </div>
 
-          {/* Right Side Summary Panel */}
-          <div className="lg:col-span-5 bg-transparent border border-[#A8A29E]/20 p-6 sm:p-8 sticky top-28">
+          <div className="lg:col-span-5 bg-transparent border border-[#A8A29E]/20 p-6 sm:p-8 sticky top-36 sm:top-40">
             <h3 className="text-xs font-bold tracking-[0.2em] text-[#A8A29E] uppercase mb-6 pb-2 border-b border-[#A8A29E]/10">
               Order Summary
             </h3>
@@ -303,7 +301,9 @@ const Checkout = () => {
               </div>
               <div className="flex justify-between items-center text-xs tracking-wide text-[#A8A29E]">
                 <p>Shipping</p>
-                <p className="font-medium text-[#1A1A1A]">{shippingFee === 0 ? "Complimentary" : `$${shippingFee.toFixed(2)}`}</p>
+                <p className="font-medium text-[#1A1A1A]">
+                  {shippingFee === 0 ? "Complimentary" : `$${shippingFee.toFixed(2)}`}
+                </p>
               </div>
               <div className="flex justify-between items-center text-sm font-semibold mt-4 border-t border-[#A8A29E]/20 pt-4 text-[#1A1A1A]">
                 <p className="uppercase tracking-[0.15em] text-xs text-[#A8A29E]">Total Due</p>

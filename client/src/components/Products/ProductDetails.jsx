@@ -97,7 +97,7 @@ const ProductDetails = ({ productId }) => {
   return (
   
     <div className="w-full bg-[#F9F7F2] min-h-screen text-[#1A1A1A] font-sans antialiased">
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 pt-32 sm:pt-40 pb-16">
         
         <div className="flex flex-col lg:flex-row gap-12 xl:gap-20 items-start">
 
