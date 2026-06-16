@@ -36,14 +36,15 @@ const Designers = () => {
   return (
     <div className="min-h-screen bg-[#F9F7F2] text-[#1A1A1A] font-sans antialiased selection:bg-[#1A1A1A] selection:text-white">
 
-      
-      <section className="px-6 pt-20 pb-12 md:px-12 lg:px-24 max-w-7xl mx-auto">
+
+      <section className="px-6 pt-36 md:pt-40 pb-12 md:px-12 lg:px-24 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-baseline mb-16 gap-4">
           <div className="space-y-3">
             <span className="block text-[10px] font-bold tracking-[0.3em] uppercase text-[#A8A29E]">The Architects</span>
             <h1 className="text-4xl md:text-6xl font-serif tracking-tight max-w-2xl leading-[1.1]">Masters of the Geometric Narrative</h1>
           </div>
         </div>
+        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14">
           {designers.map((designer) => (
             <div key={designer._id} className="group space-y-6">
@@ -62,7 +63,7 @@ const Designers = () => {
         </div>
       </section>
 
-   
+      {/* Quote Section */}
       <section className="py-24 px-6 md:px-12 max-w-5xl mx-auto text-center border-t border-[#1A1A1A]/5">
         <div className="space-y-6">
           <span className="block font-serif text-3xl text-[#A8A29E] leading-none select-none opacity-60">"</span>
@@ -73,7 +74,7 @@ const Designers = () => {
         </div>
       </section>
 
-      
+      {/* Inquiry Form Section */}
       <section className="px-6 py-20 md:px-12 lg:px-24 max-w-7xl mx-auto border-t border-[#1A1A1A]/5 grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-20">
         <div className="md:col-span-5 space-y-10">
           <div className="space-y-3">

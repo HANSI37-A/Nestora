@@ -48,10 +48,11 @@ const Collection = () => {
   }, []); 
 
   return (
-    <div className="w-full bg-[#F9F7F2] min-h-screen text-[#1A1A1A] font-sans antialiased">
-      <div className="w-full px-4 sm:px-6 lg:pl-0 lg:pr-0 flex flex-col lg:flex-row items-stretch lg:h-[calc(100vh-6rem)] lg:overflow-hidden">
 
-        <div className="w-full lg:hidden px-6 py-4 border-b border-[#A8A29E]/20 bg-[#F9F7F2] sticky top-24 z-20 flex justify-between items-center">
+    <div className="w-full bg-[#F9F7F2] min-h-screen text-[#1A1A1A] font-sans antialiased pt-28 sm:pt-32">
+ 
+      <div className="w-full px-4 sm:px-6 lg:pl-0 lg:pr-0 flex flex-col lg:flex-row items-stretch lg:h-[calc(100vh-8rem)] lg:overflow-hidden">
+        <div className="w-full lg:hidden px-6 py-4 border-b border-[#A8A29E]/20 bg-[#F9F7F2] sticky top-[5.5rem] z-20 flex justify-between items-center">
           <button
             onClick={toggleSidebar} 
             className="border border-[#1A1A1A] px-5 py-2.5 flex items-center gap-2 text-xs font-semibold tracking-widest uppercase bg-[#1A1A1A] text-white transition-all"
@@ -68,14 +69,14 @@ const Collection = () => {
           ref={sidebarRef}
           className={`fixed top-0 left-0 h-full w-80 bg-[#F9F7F2] border-r border-[#A8A29E]/20 z-50 transform transition-transform duration-300 
             lg:relative lg:translate-x-0 lg:w-64 lg:shrink-0 lg:z-10 lg:border-t-0
-            lg:sticky lg:top-24 lg:h-full lg:overflow-hidden ${
+            lg:sticky lg:top-0 lg:h-full lg:overflow-hidden ${
             isSidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full lg:shadow-none" 
           }`}
         >
           <FilterSidebar closeMobileSidebar={() => setIsSidebarOpen(false)} />
         </div>
 
-        <div className="grow pt-8 pb-16 px-4 sm:px-6 lg:pl-10 lg:pr-4 lg:h-full lg:overflow-y-auto custom-product-shelf">
+        <div className="grow pt-4 pb-16 px-4 sm:px-6 lg:pl-10 lg:pr-6 lg:h-full lg:overflow-y-auto custom-product-shelf">
           
           <div className="border-b border-[#A8A29E]/20 pb-8 mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div className="max-w-2xl">

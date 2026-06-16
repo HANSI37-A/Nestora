@@ -41,7 +41,7 @@ const Showroom = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F9F7F2] text-[#1A1A1A] font-sans antialiased select-none px-6 py-16 sm:px-12 lg:px-24">
+    <div className="min-h-screen bg-[#F9F7F2] text-[#1A1A1A] font-sans antialiased select-none px-6 pt-36 sm:pt-40 pb-16 sm:px-12 lg:px-24">
       {/* Structural Header Block */}
       <div className="max-w-7xl mx-auto mb-16 border-b border-[#1A1A1A]/10 pb-8">
         <span className="text-[10px] font-bold tracking-[0.3em] text-[#A8A29E] uppercase block mb-3">
