@@ -22,6 +22,7 @@ import AccountSettings from './pages/AccountSettings';
 import DesignerManagement from './components/Admin/DesignerManagement';
 import EditDesigner from './components/Admin/EditDesigner';
 import ShowroomManagement from './components/Admin/showroomManagement';
+import ShowroomDetails from './pages/ShowroomDetails';
 
 import { Provider } from "react-redux";
 import store from "./redux/store";
@@ -49,6 +50,7 @@ const App = () => {
             <Route path="my-orders" element={<MyOrdersPage />} />
             <Route path="order/:id" element={<OrderDetailsPage />} />
             <Route path="showrooms" element={<Showrooms />} />
+            <Route path="showrooms/:id" element={<ShowroomDetails />} />
             <Route path="designers" element={<Designers />} />
           </Route>
 
