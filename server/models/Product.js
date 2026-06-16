@@ -33,7 +33,7 @@ const productSchema = new mongoose.Schema({
     },
     brand: {
       type: String,
-      required: true, 
+      required: false, 
     },
     color: {
       type: [String],
@@ -45,7 +45,7 @@ const productSchema = new mongoose.Schema({
     },
     productCollection: {
       type: String,
-      required: true, 
+      required: false, 
     },
     material: {
       type: String, 

@@ -43,9 +43,6 @@ const Designers = () => {
             <span className="block text-[10px] font-bold tracking-[0.3em] uppercase text-[#A8A29E]">The Architects</span>
             <h1 className="text-4xl md:text-6xl font-serif tracking-tight max-w-2xl leading-[1.1]">Masters of the Geometric Narrative</h1>
           </div>
-          <button className="text-[10px] font-bold tracking-widest uppercase border-b border-[#1A1A1A] pb-1 hover:opacity-60 transition-opacity whitespace-nowrap">
-            View All Designers
-          </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14">
           {designers.map((designer) => (

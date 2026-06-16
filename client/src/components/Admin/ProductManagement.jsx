@@ -1,15 +1,58 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAdminProducts, deleteProduct } from '../../redux/slice/adminProductSlice';
+import { fetchAdminProducts, deleteProduct, addProduct } from '../../redux/slice/adminProductSlice';
 
 const ProductManagement = () => {
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((state) => state.adminProducts);
 
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    price: '',
+    category: '',
+    countInStock: '',
+    image: '',             
+    sku: "",              
+    
+  });
+
   useEffect(() => {
     dispatch(fetchAdminProducts());
   }, [dispatch]);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const payload = {
+      ...formData,
+      price: Number(formData.price),
+      countInStock: Number(formData.countInStock),
+    };
+    dispatch(addProduct(payload))
+      .unwrap()
+      .then(() => {
+        alert('Product created successfully.');
+        setFormData({
+          name: '',
+          description: '',
+          price: '',
+          category: '',
+          countInStock: '',
+          image: '',           
+          sku: "",               
+          
+        });
+      })
+      .catch((err) => alert(err || 'Failed to create product.'));
+  };
 
   const handleDelete = (productId) => {
     if (window.confirm('Are you sure you want to delete this product from Nestora catalog?')) {
@@ -40,9 +83,127 @@ const ProductManagement = () => {
     <div className="max-w-7xl mx-auto p-6 font-sans select-none">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">Product Management</h2>
-        <Link to="/admin/products/new" className="bg-[#1A1A1A] text-white px-4 py-2 text-xs font-semibold uppercase tracking-wider hover:bg-[#6B543D] transition-colors rounded shadow-sm">
-          Add Product
-        </Link>
+      </div>
+
+      <div className="p-6 rounded-xl border border-gray-100 bg-white shadow-sm mb-8">
+        <h3 className="text-md font-bold mb-4 text-gray-900">
+          Add New Product
+        </h3>
+
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+          <div>
+            <label className="block text-gray-600 text-xs font-semibold mb-1">
+              Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full p-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-gray-900"
+              placeholder="e.g. Modern Sofa"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-600 text-xs font-semibold mb-1">
+              Category
+            </label>
+            <input
+              type="text"
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              className="w-full p-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-gray-900"
+              placeholder="e.g. Living Room"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-600 text-xs font-semibold mb-1">
+              Price
+            </label>
+            <input
+              type="number"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              className="w-full p-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-gray-900"
+              placeholder="e.g. 599"
+              min="0"
+              step="any"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-600 text-xs font-semibold mb-1">
+              Count In Stock
+            </label>
+            <input
+              type="number"
+              name="countInStock"
+              value={formData.countInStock}
+              onChange={handleChange}
+              className="w-full p-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-gray-900"
+              placeholder="e.g. 15"
+              min="0"
+              required
+            />
+          </div>
+
+       <div>
+          <label className="block text-gray-600 text-xs font-semibold mb-1">SKU Code</label>
+          <input
+            type="text"
+            name="sku"
+            value={formData.sku}
+            onChange={handleChange}
+            className="w-full p-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-gray-900"
+            placeholder="e.g. NST-CH-001"
+            required
+          />
+        </div>
+
+          <div>
+            <label className="block text-gray-600 text-xs font-semibold mb-1">
+              Image URL
+            </label>
+            <input
+              type="text"
+              name="image"
+              value={formData.image}
+              onChange={handleChange}
+              className="w-full p-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-gray-900"
+              placeholder="e.g. /images/sofa.jpg"
+              required
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-gray-600 text-xs font-semibold mb-1">
+              Description
+            </label>
+            <input
+              type="text"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              className="w-full p-2 text-xs border border-gray-300 rounded focus:outline-none focus:border-gray-900"
+              placeholder="Brief description of the product"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-green-600 text-white text-xs font-semibold uppercase tracking-wider py-2.5 px-4 rounded hover:bg-green-700 transition-colors shadow-sm shrink-0 h-[38px]"
+          >
+            Add Product
+          </button>
+        </form>
       </div>
 
       <div className="overflow-x-auto shadow-sm border border-gray-100 sm:rounded-lg">
