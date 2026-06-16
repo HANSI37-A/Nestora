@@ -242,59 +242,6 @@ const AccountSettingsPage = ({ user }) => {
           </div>
         </section>
 
-        {/* Notifications Preference Toggles Section */}
-        <section className="space-y-8">
-          <div className="border-b border-[#1A1A1A]/10 pb-4">
-            <h2 className="text-2xl sm:text-3xl font-serif tracking-wide text-[#1A1A1A]">
-              Notifications
-            </h2>
-          </div>
-
-          <div className="divide-y divide-[#1A1A1A]/10">
-            <div className="flex items-center justify-between py-6">
-              <div className="space-y-1 pr-6">
-                <h4 className="text-sm font-medium tracking-wide text-[#1A1A1A]">Order Updates</h4>
-                <p className="text-xs text-[#A8A29E] font-light">Receive SMS and Email alerts regarding your delivery status.</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setOrderUpdates(!orderUpdates)}
-                className={`w-11 h-6 rounded-full p-0.5 transition-colors duration-300 shrink-0 focus:outline-none ${orderUpdates ? 'bg-black' : 'bg-gray-300'}`}
-              >
-                <div className={`bg-white w-5 h-5 rounded-full shadow-sm transform duration-300 ${orderUpdates ? 'translate-x-5' : 'translate-x-0'}`} />
-              </button>
-            </div>
-
-            <div className="flex items-center justify-between py-6">
-              <div className="space-y-1 pr-6">
-                <h4 className="text-sm font-medium tracking-wide text-[#1A1A1A]">Newsletter & Curations</h4>
-                <p className="text-xs text-[#A8A29E] font-light">Monthly insights on architectural heritage and new collections.</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setNewsletter(!newsletter)}
-                className={`w-11 h-6 rounded-full p-0.5 transition-colors duration-300 shrink-0 focus:outline-none ${newsletter ? 'bg-black' : 'bg-gray-300'}`}
-              >
-                <div className={`bg-white w-5 h-5 rounded-full shadow-sm transform duration-300 ${newsletter ? 'translate-x-5' : 'translate-x-0'}`} />
-              </button>
-            </div>
-
-            <div className="flex items-center justify-between py-6">
-              <div className="space-y-1 pr-6">
-                <h4 className="text-sm font-medium tracking-wide text-[#1A1A1A]">Designer Invitations</h4>
-                <p className="text-xs text-[#A8A29E] font-light">Exclusive invites to gallery openings and designer talks.</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setInvitations(!invitations)}
-                className={`w-11 h-6 rounded-full p-0.5 transition-colors duration-300 shrink-0 focus:outline-none ${invitations ? 'bg-black' : 'bg-gray-300'}`}
-              >
-                <div className={`bg-white w-5 h-5 rounded-full shadow-sm transform duration-300 ${invitations ? 'translate-x-5' : 'translate-x-0'}`} />
-              </button>
-            </div>
-          </div>
-        </section>
-
         {/* Visual Brand Section — Material Identity */}
         <section className="pt-4">
           <div className="bg-[#F4F1EA] p-8 flex flex-col sm:flex-row gap-6 items-start sm:items-center">

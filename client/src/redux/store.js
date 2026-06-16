@@ -11,6 +11,7 @@ import categoriesReducer from "./slice/categoriesSlice";
 import userReducer from "./slice/userSlice";
 import designerReducer from "./slice/designerSlice"; 
 import adminDesignerReduser from "./slice/adminDesignerSlice";
+import showroomReducer from "./slice/showroomSlice";
 
 const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ const store = configureStore({
     user: userReducer,
     designers: designerReducer, 
     adminDesigners: adminDesignerReduser,
+    showrooms: showroomReducer,
   },
 });
 

@@ -15,11 +15,13 @@ const subscriberRoutes = require('./routes/subscriberRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const designerRoutes = require("./routes/designerRoutes");
 const contactRoutes = require("./routes/contactRoutes");
+const showroomRoutes = require("./routes/showroomRoutes");
 
 const adminRoutes = require('./routes/adminRoutes');
 const productAdminRoutes = require('./routes/productAdminRoutes');
 const adminOrderRoutes = require('./routes/adminOrderRoutes');
 const adminDesignerRoutes = require('./routes/adminDesignerRoutes');
+const showroomAdminRoutes = require('./routes/adminShowroomRoutes');
 
 const app = express();
 
@@ -46,6 +48,7 @@ app.get('/', (req, res) => {
 app.use('/api/admin/products', productAdminRoutes);
 app.use('/api/admin/orders', adminOrderRoutes);
 app.use('/api/admin/designers', adminDesignerRoutes); 
+app.use('/api/admin/showrooms', showroomAdminRoutes);
 app.use('/api/admin', adminRoutes);
 
 
@@ -59,6 +62,8 @@ app.use('/api/subscribe', subscriberRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/designers', designerRoutes); 
 app.use('/api/contact', contactRoutes);
+app.use('/api/showrooms', showroomRoutes);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

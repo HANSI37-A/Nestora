@@ -1,6 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { FaUser, FaBox, FaShoppingCart, FaHome, FaBoxOpen, FaClipboardList, FaStore, FaSign, FaSignOutAlt, FaPalette } from "react-icons/fa";
+import { FaUser, FaBox, FaShoppingCart, FaHome, FaBoxOpen, FaClipboardList, FaStore, FaSign, FaSignOutAlt, FaPalette, } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 import { logout } from "../../redux/slice/authSlice";
@@ -62,6 +62,18 @@ const AdminSidebar = () => {
          >  
           <FaPalette />
           <span>Designers</span>
+        </NavLink>
+
+       <NavLink
+          to="/admin/showrooms"
+          className={({ isActive }) =>
+            isActive
+              ? "bg-gray-700 text-white py-3 px-4 rounded flex items-center space-x-2 transition-colors duration-200"
+              : "text-gray-300 hover:bg-gray-700 hover:text-white py-3 px-4 rounded flex items-center space-x-2 transition-colors duration-200"
+          }
+        >  
+          <FaStore className="text-base flex-shrink-0" />
+          <span className="tracking-wide text-xs uppercase font-semibold">Showrooms</span>
         </NavLink>
 
         <NavLink

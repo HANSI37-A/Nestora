@@ -21,6 +21,7 @@ import OrderManagement from './components/Admin/OrderManagement';
 import AccountSettings from './pages/AccountSettings';
 import DesignerManagement from './components/Admin/DesignerManagement';
 import EditDesigner from './components/Admin/EditDesigner';
+import ShowroomManagement from './components/Admin/showroomManagement';
 
 import { Provider } from "react-redux";
 import store from "./redux/store";
@@ -59,6 +60,7 @@ const App = () => {
             <Route path="orders" element={<OrderManagement />} />
             <Route path="designers" element={<DesignerManagement />} />
             <Route path="designers/:id/edit" element={<EditDesigner />} />
+            <Route path="showrooms" element={<ShowroomManagement />} />
           </Route>
 
         </Routes>
