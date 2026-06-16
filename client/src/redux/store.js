@@ -10,6 +10,7 @@ import adminOrderReducer from "./slice/adminOrderSlice";
 import categoriesReducer from "./slice/categoriesSlice";
 import userReducer from "./slice/userSlice";
 import designerReducer from "./slice/designerSlice"; 
+import adminDesignerReduser from "./slice/adminDesignerSlice";
 
 const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
     categories: categoriesReducer,
     user: userReducer,
     designers: designerReducer, 
+    adminDesigners: adminDesignerReduser,
   },
 });
 

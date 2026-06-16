@@ -1,6 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { FaUser, FaBox, FaShoppingCart, FaHome, FaBoxOpen, FaClipboardList, FaStore, FaSign, FaSignOutAlt } from "react-icons/fa";
+import { FaUser, FaBox, FaShoppingCart, FaHome, FaBoxOpen, FaClipboardList, FaStore, FaSign, FaSignOutAlt, FaPalette } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 import { logout } from "../../redux/slice/authSlice";
@@ -50,6 +50,18 @@ const AdminSidebar = () => {
          >  
           <FaBoxOpen />
           <span>Products</span>
+        </NavLink>
+
+         <NavLink
+          to="/admin/designers"
+          className={({ isActive }) =>
+            isActive
+              ? "bg-gray-700 text-white py-3 px-4 rounded flex items-center space-x-2"
+              : "text-gray-300 hover:bg-gray-700 hover:text-white py-3 px-4 rounded flex items-center space-x-2"
+          }
+         >  
+          <FaPalette />
+          <span>Designers</span>
         </NavLink>
 
         <NavLink
