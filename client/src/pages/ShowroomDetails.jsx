@@ -80,7 +80,7 @@ const ShowroomDetails = () => {
 
   return (
     <div className="bg-[#F9F7F2] min-h-screen">
-      <div className="max-w-7xl mx-auto px-6 py-12 sm:px-12 lg:px-24">
+      <div className="max-w-7xl mx-auto pt-36 sm:pt-40 pb-16 sm:px-12 lg:px-24">
         {/* Back Navigation */}
         <Link to="/showrooms" className="text-xs uppercase tracking-wider font-semibold text-gray-500 hover:text-black mb-12 inline-block transition-colors">
           ← Back to Showrooms
