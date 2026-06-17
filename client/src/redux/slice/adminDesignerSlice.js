@@ -8,6 +8,9 @@ export const fetchAdminDesigners = createAsyncThunk(
     try {
     
       const response = await axiosInstance.get('/api/admin/designers');
+      if (response.data && response.data.data) {
+        return response.data.data;
+      }
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch designers');
@@ -81,7 +84,7 @@ const adminDesignerSlice = createSlice({
       })
       .addCase(fetchAdminDesigners.fulfilled, (state, action) => {
         state.loading = false;
-        state.designers = action.payload;
+        state.designers = Array.isArray(action.payload) ? action.payload : [];
       })
       .addCase(fetchAdminDesigners.rejected, (state, action) => {
         state.loading = false;

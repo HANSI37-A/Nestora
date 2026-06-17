@@ -14,7 +14,7 @@ router.get("/my-orders", protect, async (req, res) => {
       createdAt: -1,
     }); 
     
-    return res.json(orders);
+    return res.json({ data: orders });
   } catch (error) {
     console.error("Order Fetch Pipeline Error Handlers Caught:", error);
     return res.status(500).json({ message: "Server encountered an operational schema tracking breakdown." });

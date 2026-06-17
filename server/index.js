@@ -29,7 +29,7 @@ app.use(cors({
    origin: [
     'http://localhost:5173',
     'http://localhost:5174',
-    'https://your-frontend-name.vercel.app',
+    'https://furniture-nestorafront.vercel.app',
     process.env.FRONTEND_URL
   ],
   credentials: true,               
@@ -70,6 +70,11 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/showrooms', showroomRoutes);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;

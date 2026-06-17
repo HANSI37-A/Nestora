@@ -10,7 +10,7 @@ const router = express.Router();
 router.get("/", protect, admin, async (req, res)=>{
   try{
     const orders = await Order.find({}).populate("user","name email");
-    res.json(orders);
+    res.json({ data: orders });
   } catch(error){
     console.error(error);
     res.status(500).json({message:"Server error"});

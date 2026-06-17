@@ -40,7 +40,7 @@ router.get("/best-seller", async (req, res) => {
 router.get("/new-arrivals", async (req, res) => {
   try {
     const newArrivals = await Product.find().sort({ createdAt: -1 }).limit(8);
-    return res.json(newArrivals);
+    return res.json({ data: newArrivals });
   } catch (error) {
     console.error("Error in /new-arrivals:", error);
     return res.status(500).send("Server Error");
@@ -125,7 +125,7 @@ router.get("/", async (req, res) => {
     }
 
     const products = await Product.find(query).sort(sort).limit(Number(limit) || 0);
-    return res.json(products);
+    return res.json({ data: products });
   } catch (error) {
     console.error("Error in / main filter route:", error);
     return res.status(500).json({ message: "Server Error" });
@@ -175,7 +175,7 @@ router.get("/similar/:id", async (req, res) => {
       _id: { $ne: id },
       category: product.category,
     }).limit(4);
-    return res.json(similarProducts);
+    return res.json({ data: similarProducts });
   } catch (error) {
     console.error("Error in /similar/:id:", error);
     return res.status(500).send("Server Error");

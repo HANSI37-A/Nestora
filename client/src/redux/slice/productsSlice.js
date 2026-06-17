@@ -15,6 +15,9 @@ export const fetchProductsByFilters = createAsyncThunk(
       });
 
       const response = await axiosInstance.get(`/api/products?${query.toString()}`);
+      if (response.data && response.data.data) {
+        return response.data.data;
+      }
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to fetch products");
@@ -55,6 +58,9 @@ export const fetchSimilarProducts = createAsyncThunk(
   async ({ id }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(`/api/products/similar/${id}`);
+      if (response.data && response.data.data) {
+        return response.data.data;
+      }
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to fetch similar products");
@@ -157,7 +163,7 @@ const productsSlice = createSlice({
       })
       .addCase(fetchSimilarProducts.fulfilled, (state, action) => {
         state.similarLoading = false;
-        state.similarProducts = action.payload;
+        state.similarProducts = Array.isArray(action.payload) ? action.payload : [];
       })
       .addCase(fetchSimilarProducts.rejected, (state, action) => {
         state.similarLoading = false;

@@ -10,7 +10,7 @@ const router = express.Router();
 router.get("/", protect, admin, async (req, res) => {
   try{
     const products= await Product.find({});
-    res.json(products);
+    res.json({ data: products });
   } catch (error){
     console.error(error);
     res.status(500).json({message: "Server Error"});

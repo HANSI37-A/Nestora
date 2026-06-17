@@ -6,6 +6,9 @@ export const fetchAdminProducts = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/api/admin/products");
+      if (response.data && response.data.data) {
+        return response.data.data;
+      }
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to fetch products");
@@ -70,9 +73,7 @@ const adminProductSlice = createSlice({
       .addCase(fetchAdminProducts.fulfilled, (state, action) => {
         state.loading = false;
         
-        state.products = Array.isArray(action.payload)
-          ? action.payload
-          : action.payload?.products || [];
+        state.products = Array.isArray(action.payload) ? action.payload : [];
       })
       .addCase(fetchAdminProducts.rejected, (state, action) => {
         state.loading = false;

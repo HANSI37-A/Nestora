@@ -7,6 +7,9 @@ export const fetchAdminShowrooms = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/api/admin/showrooms");
+      if (response.data && response.data.data) {
+        return response.data.data;
+      }
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Failed to fetch showroom database collection");
@@ -84,7 +87,7 @@ const showroomSlice = createSlice({
       })
       .addCase(fetchAdminShowrooms.fulfilled, (state, action) => {
         state.loading = false;
-        state.showrooms = action.payload;
+        state.showrooms = Array.isArray(action.payload) ? action.payload : [];
       })
       .addCase(fetchAdminShowrooms.rejected, (state, action) => {
         state.loading = false;

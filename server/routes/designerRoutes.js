@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Designer = require("../models/designer");
+const Designer = require("../models/Designer");
 
 // @route   GET /api/designers
 // @desc    Get all active designers for the public client-side gallery view
@@ -8,7 +8,12 @@ const Designer = require("../models/designer");
 router.get("/", async (req, res) => {
   try {
     const designers = await Designer.find({}).sort({ createdAt: -1 });
-    res.status(200).json(designers);
+  
+    res.status(200).json({
+      success: true,
+      count: designers.length,
+      data: designers
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error fetching designer profiles", error: error.message });
   }

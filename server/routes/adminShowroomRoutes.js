@@ -29,7 +29,7 @@ const uploadImage = multer({
 router.get("/", protect, admin, async (req, res) => {
   try {
     const showrooms = await Showroom.find({}).sort({ createdAt: -1 });
-    return res.status(200).json(showrooms);
+    return res.status(200).json({ data: showrooms });
   } catch (error) {
     console.error("Error fetching administrative showroom directory:", error);
     return res.status(500).json({ message: "Server error fetching showroom records" });

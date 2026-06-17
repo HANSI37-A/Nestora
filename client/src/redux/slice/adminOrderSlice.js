@@ -7,6 +7,9 @@ export const fetchAllOrders = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/api/admin/orders");
+      if (response.data && response.data.data) {
+        return response.data.data;
+      }
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Failed to fetch orders");
@@ -59,11 +62,12 @@ const adminOrderSlice = createSlice({
       })
       .addCase(fetchAllOrders.fulfilled, (state, action) => {
         state.loading = false;
-        state.orders = action.payload;
-        state.totalOrders = action.payload.length;
+        const orderList = Array.isArray(action.payload) ? action.payload : [];
+        state.orders = orderList;
+        state.totalOrders = orderList.length;
 
         // calculate total sales
-        const totalSales = action.payload.reduce((acc, order) => {
+        const totalSales = orderList.reduce((acc, order) => {
           return acc + (order.totalPrice || 0);
         }, 0);
         state.totalSales = totalSales;

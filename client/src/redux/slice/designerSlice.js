@@ -10,6 +10,7 @@ export const fetchDesigners = createAsyncThunk(
       if (response.data && response.data.data) {
         return response.data.data;
       }
+     
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);

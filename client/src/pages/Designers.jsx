@@ -7,7 +7,7 @@ const Designers = () => {
   const dispatch = useDispatch();
   
   const { list, loading, error } = useSelector((state) => state.designers);
-  const designers = list || []; 
+  const designers = Array.isArray(list) ? list : [];
 
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formStatus, setFormStatus] = useState(null); 
