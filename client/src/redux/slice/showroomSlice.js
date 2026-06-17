@@ -1,25 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "";
-
-// Get auth token helper
-const getAuthConfig = () => {
-  const userInfoStr = localStorage.getItem("userInfo");
-  const token = userInfoStr ? JSON.parse(userInfoStr).token : null;
-  return {
-    headers: {
-      Authorization: token ? `Bearer ${token}` : "",
-    },
-  };
-};
+import axiosInstance from "../../utils/axiosInstance"; 
 
 // Async Thunks
 export const fetchAdminShowrooms = createAsyncThunk(
   "showrooms/fetchAllAdmin",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/api/admin/showrooms`, getAuthConfig());
+      const response = await axiosInstance.get("/api/admin/showrooms");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Failed to fetch showroom database collection");
@@ -31,7 +18,7 @@ export const fetchShowroomById = createAsyncThunk(
   "showrooms/fetchById",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/api/admin/showrooms/${id}`, getAuthConfig());
+      const response = await axiosInstance.get(`/api/admin/showrooms/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Failed to fetch individual spatial parameters");
@@ -43,7 +30,7 @@ export const addShowroom = createAsyncThunk(
   "showrooms/add",
   async (showroomData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${BACKEND_URL}/api/admin/showrooms`, showroomData, getAuthConfig());
+      const response = await axiosInstance.post("/api/admin/showrooms", showroomData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Failed to finalize spatial database instantiation");
@@ -55,7 +42,7 @@ export const updateShowroom = createAsyncThunk(
   "showrooms/update",
   async ({ id, showroomData }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`${BACKEND_URL}/api/admin/showrooms/${id}`, showroomData, getAuthConfig());
+      const response = await axiosInstance.put(`/api/admin/showrooms/${id}`, showroomData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Failed to patch target showroom configuration metrics");
@@ -67,7 +54,7 @@ export const deleteShowroom = createAsyncThunk(
   "showrooms/delete",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(`${BACKEND_URL}/api/admin/showrooms/${id}`, getAuthConfig());
+      await axiosInstance.delete(`/api/admin/showrooms/${id}`);
       return id;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Failed to delete target structural entry");

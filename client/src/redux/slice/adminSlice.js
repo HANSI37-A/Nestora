@@ -1,25 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-
-const getAuthHeaders = () => {
-  const userInfoStr = localStorage.getItem("userInfo");
-  const token = userInfoStr ? JSON.parse(userInfoStr).token : null;
-  return {
-    headers: {
-      Authorization: token ? `Bearer ${token}` : "",
-    },
-  };
-};
+import axiosInstance from "../../utils/axiosInstance"; 
 
 // fetch all users {admin only}
 export const fetchUsers = createAsyncThunk(
   "admin/fetchUsers",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/admin/users`,
-        getAuthHeaders()
-      );
+      const response = await axiosInstance.get("/api/admin/users");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to fetch users");
@@ -32,11 +19,7 @@ export const addUser = createAsyncThunk(
   "admin/addUser",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/admin/users`,
-        userData,
-        getAuthHeaders()
-      );
+      const response = await axiosInstance.post("/api/admin/users", userData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to create user");
@@ -49,11 +32,7 @@ export const updateUser = createAsyncThunk(
   "admin/updateUser",
   async ({ id, name, email, role }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/api/admin/users/${id}`,
-        { name, email, role },
-        getAuthHeaders()
-      );
+      const response = await axiosInstance.put(`/api/admin/users/${id}`, { name, email, role });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to update user");
@@ -66,10 +45,7 @@ export const deleteUser = createAsyncThunk(
   "admin/deleteUser",
   async (id, { rejectWithValue }) => {
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_BACKEND_URL}/api/admin/users/${id}`,
-        getAuthHeaders()
-      );
+      await axiosInstance.delete(`/api/admin/users/${id}`);
       return id;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to delete user");
@@ -137,7 +113,7 @@ const adminSlice = createSlice({
       })
       .addCase(addUser.fulfilled, (state, action) => {
         state.loading = false;
-          state.users.push(action.payload.user); 
+        state.users.push(action.payload.user); 
       })
       .addCase(addUser.rejected, (state, action) => {
         state.loading = false;

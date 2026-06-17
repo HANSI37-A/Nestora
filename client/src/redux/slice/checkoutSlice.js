@@ -1,25 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance"; 
 
 export const createCheckout = createAsyncThunk(
   "checkout/createCheckout",
   async (checkoutData, { rejectWithValue }) => {
     try {
-
-      const userInfo = localStorage.getItem("userInfo")
-        ? JSON.parse(localStorage.getItem("userInfo"))
-        : null;
-      const token = userInfo?.token;
-      
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/checkout`,
-        checkoutData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axiosInstance.post("/api/checkout", checkoutData);
       return response.data;
     } catch (error) {
       const message = error.response?.data?.message || error.message || "Failed to process request";

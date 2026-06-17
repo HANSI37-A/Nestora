@@ -1,27 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axiosInstance from '../../utils/axiosInstance'; 
 
 // Async thunk to handle updating user profile data
 export const updateProfile = createAsyncThunk(
   'user/updateProfile',
-  async (profileData, { rejectWithValue, getState }) => {
+  async (profileData, { rejectWithValue }) => {
     try {
-      const { auth } = getState();
-      const token = auth?.user?.token || localStorage.getItem("userToken"); 
-
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token ? `Bearer ${token}` : '', 
-        },
-      };
-
-      const response = await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/api/users/profile`, 
-        profileData, 
-        config
-      );
-      
+      const response = await axiosInstance.put('/api/users/profile', profileData);
       return response.data;
     } catch (error) {
       return rejectWithValue(

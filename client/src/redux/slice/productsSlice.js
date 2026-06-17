@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance"; 
 
 // Async Thunk to Fetch Products by collection and optional filters
 export const fetchProductsByFilters = createAsyncThunk(
@@ -14,7 +14,7 @@ export const fetchProductsByFilters = createAsyncThunk(
         }
       });
 
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products?${query.toString()}`);
+      const response = await axiosInstance.get(`/api/products?${query.toString()}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to fetch products");
@@ -27,9 +27,7 @@ export const fetchProductDetails = createAsyncThunk(
   "products/fetchProductDetails",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/products/${id}`
-      );
+      const response = await axiosInstance.get(`/api/products/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to fetch product details");
@@ -42,15 +40,8 @@ export const updateProduct = createAsyncThunk(
   "products/updateProduct",
   async ({ id, productData }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/api/products/${id}`, 
-        productData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-          },
-        }
-      );
+      
+      const response = await axiosInstance.put(`/api/products/${id}`, productData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to update product details");
@@ -63,9 +54,7 @@ export const fetchSimilarProducts = createAsyncThunk(
   "products/fetchSimilarProducts",
   async ({ id }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/products/similar/${id}`
-      );
+      const response = await axiosInstance.get(`/api/products/similar/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to fetch similar products");

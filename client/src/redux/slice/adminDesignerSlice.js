@@ -1,25 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-const API_URL = `${import.meta.env.VITE_BACKEND_URL}`;
-
-const getAuthHeaders = () => {
-  const userInfoStr = localStorage.getItem("userInfo");
-  const token = userInfoStr ? JSON.parse(userInfoStr).token : null;
-  return {
-    headers: {
-      Authorization: token ? `Bearer ${token}` : "",
-    },
-    withCredentials: true,
-  };
-};
-
+import axiosInstance from "../../utils/axiosInstance";
+ 
 // Async Thunks
 export const fetchAdminDesigners = createAsyncThunk(
   'adminDesigners/fetchAll',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/api/admin/designers`, getAuthHeaders());
+    
+      const response = await axiosInstance.get('/api/admin/designers');
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch designers');
@@ -31,8 +19,7 @@ export const addDesigner = createAsyncThunk(
   'adminDesigners/add',
   async (designerData, { rejectWithValue }) => {
     try {
-    
-      const response = await axios.post(`${API_URL}/api/admin/designers`, designerData, getAuthHeaders());
+      const response = await axiosInstance.post('/api/admin/designers', designerData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to add designer');
@@ -44,7 +31,7 @@ export const fetchDesignerById = createAsyncThunk(
   'adminDesigners/fetchById',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/api/admin/designers/${id}`, getAuthHeaders());
+      const response = await axiosInstance.get(`/api/admin/designers/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch designer details');
@@ -56,7 +43,7 @@ export const updateDesigner = createAsyncThunk(
   'adminDesigners/update',
   async ({ id, designerData }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`${API_URL}/api/admin/designers/${id}`, designerData, getAuthHeaders());
+      const response = await axiosInstance.put(`/api/admin/designers/${id}`, designerData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to update designer');
@@ -68,7 +55,7 @@ export const deleteDesigner = createAsyncThunk(
   'adminDesigners/delete',
   async (id, { rejectWithValue }) => {
     try {
-      await axios.delete(`${API_URL}/api/admin/designers/${id}`, getAuthHeaders());
+      await axiosInstance.delete(`/api/admin/designers/${id}`);
       return id;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to delete designer');
@@ -101,6 +88,7 @@ const adminDesignerSlice = createSlice({
         state.error = action.payload;
       })
 
+      // Fetch Designer By ID
       .addCase(fetchDesignerById.pending, (state) => {
         state.loading = true;
         state.error = null;

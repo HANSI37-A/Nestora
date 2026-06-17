@@ -1,12 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-
+import axiosInstance from "../../utils/axiosInstance"; 
 
 export const fetchCategories = createAsyncThunk(
   "categories/fetchAll",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/categories`);
+      const response = await axiosInstance.get("/api/categories");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to fetch categories");
@@ -21,6 +20,7 @@ const categoriesSlice = createSlice({
     loading: false,
     error: null,
   },
+  reducers: {}, 
   extraReducers: (builder) => {
     builder
       .addCase(fetchCategories.pending, (state) => {
