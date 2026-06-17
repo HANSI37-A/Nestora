@@ -5,7 +5,9 @@ import axiosInstance from '../utils/axiosInstance';
 
 const Designers = () => {
   const dispatch = useDispatch();
-  const { list: designers, loading, error } = useSelector((state) => state.designers);
+  
+  const { list, loading, error } = useSelector((state) => state.designers);
+  const designers = list || []; 
 
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formStatus, setFormStatus] = useState(null); 
@@ -22,7 +24,6 @@ const Designers = () => {
     e.preventDefault();
     setFormStatus('sending');
     try {
-      
       await axiosInstance.post('/api/contact', formData);
       setFormStatus('success');
       setFormData({ name: '', email: '', message: '' });
@@ -46,20 +47,26 @@ const Designers = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14">
-          {designers.map((designer) => (
-            <div key={designer._id} className="group space-y-6">
-              <div className="aspect-square w-full overflow-hidden bg-[#F4F1EA]">
-                <img src={designer.image} alt={designer.name} className="w-full h-full object-cover grayscale transition-transform duration-700 ease-out group-hover:scale-105" />
+          {Array.isArray(designers) && designers.length > 0 ? (
+            designers.map((designer) => (
+              <div key={designer._id} className="group space-y-6">
+                <div className="aspect-square w-full overflow-hidden bg-[#F4F1EA]">
+                  <img src={designer.image} alt={designer.name} className="w-full h-full object-cover grayscale transition-transform duration-700 ease-out group-hover:scale-105" />
+                </div>
+                <div className="space-y-1">
+                  <span className="block text-[9px] font-bold tracking-[0.2em] uppercase text-[#A8A29E]">{designer.role}</span>
+                  <h3 className="text-2xl font-serif tracking-wide">{designer.name}</h3>
+                </div>
+                <p className="text-xs text-[#555] font-light leading-relaxed tracking-wide group-hover:text-[#1A1A1A] transition-colors duration-300">
+                  {designer.description}
+                </p>
               </div>
-              <div className="space-y-1">
-                <span className="block text-[9px] font-bold tracking-[0.2em] uppercase text-[#A8A29E]">{designer.role}</span>
-                <h3 className="text-2xl font-serif tracking-wide">{designer.name}</h3>
-              </div>
-              <p className="text-xs text-[#555] font-light leading-relaxed tracking-wide group-hover:text-[#1A1A1A] transition-colors duration-300">
-                {designer.description}
-              </p>
+            ))
+          ) : (
+            <div className="col-span-1 md:col-span-3 text-center py-20 text-xs tracking-widest text-gray-400">
+              NO DESIGN ARCHITECTS FOUND IN THIS SANCTUARY
             </div>
-          ))}
+          )}
         </div>
       </section>
 
