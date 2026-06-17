@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"; 
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance"; 
 
 const OrderConfirmation = () => {
   const navigate = useNavigate();
@@ -31,7 +31,8 @@ const OrderConfirmation = () => {
           },
         };
 
-        const { data } = await axios.get(`http://localhost:5000/api/checkout/${checkoutId}`, config);
+        // FIX: Replaced explicit development port injection with global config base routing
+        const { data } = await axiosInstance.get(`/api/checkout/${checkoutId}`, config);
         setCheckoutData(data);
       } catch (err) {
         console.error("Order details mapping resolution crash:", err);
@@ -104,7 +105,7 @@ const OrderConfirmation = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           
-          {/* Left Content Column */}
+          /* Left Content Column */
           <div className="lg:col-span-2 space-y-8">
             
             {/* Primary Content Container */}

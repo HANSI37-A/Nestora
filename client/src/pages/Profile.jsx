@@ -5,13 +5,13 @@ import { logout } from '../redux/slice/authSlice';
 import MyOrdersPage from './MyOrdersPage';
 import AccountSettings from './AccountSettings';
 import { clearCart } from '../redux/slice/cartSlice'; 
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance'; 
 
 const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, useStateActiveTab] = useState('overview');
 
   const { user, token } = useSelector((state) => state.auth);
   
@@ -34,8 +34,8 @@ const Profile = () => {
             },
           };
 
-          await axios.put(
-            `http://localhost:5000/api/checkout/${checkoutId}/pay`,
+          await axiosInstance.put(
+            `/api/checkout/${checkoutId}/pay`,
             { sessionId },
             config
           );
@@ -94,7 +94,7 @@ const Profile = () => {
 
           <nav className="space-y-1">
             <button 
-              onClick={() => setActiveTab('overview')}
+              onClick={() => useStateActiveTab('overview')}
               className={`w-full flex items-center gap-3 px-3 py-2 text-xs font-medium tracking-wide rounded transition-all duration-200 ${
                 activeTab === 'overview' 
                   ? 'bg-[#EAE5DB] text-[#1A1A1A]' 
@@ -106,7 +106,7 @@ const Profile = () => {
             </button>
             
             <button 
-              onClick={() => setActiveTab('settings')}
+              onClick={() => useStateActiveTab('settings')}
               className={`w-full flex items-center gap-3 px-3 py-2 text-xs font-medium tracking-wide rounded transition-all duration-200 ${
                 activeTab === 'settings' 
                   ? 'bg-[#EAE5DB] text-[#1A1A1A]' 
@@ -152,7 +152,6 @@ const Profile = () => {
           </div>
         ) : (
           <div className="w-full animate-fadeIn">
-
             <AccountSettings user={user} />
           </div>
         )}

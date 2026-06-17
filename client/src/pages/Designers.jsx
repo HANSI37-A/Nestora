@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDesigners } from '../redux/slice/designerSlice';
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance'; 
 
 const Designers = () => {
   const dispatch = useDispatch();
@@ -22,7 +22,8 @@ const Designers = () => {
     e.preventDefault();
     setFormStatus('sending');
     try {
-      await axios.post('/api/contact', formData);
+      
+      await axiosInstance.post('/api/contact', formData);
       setFormStatus('success');
       setFormData({ name: '', email: '', message: '' });
     } catch (err) {
@@ -35,7 +36,6 @@ const Designers = () => {
 
   return (
     <div className="min-h-screen bg-[#F9F7F2] text-[#1A1A1A] font-sans antialiased selection:bg-[#1A1A1A] selection:text-white">
-
 
       <section className="px-6 pt-36 md:pt-40 pb-12 md:px-12 lg:px-24 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-baseline mb-16 gap-4">

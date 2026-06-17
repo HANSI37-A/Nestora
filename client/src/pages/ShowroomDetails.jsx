@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance"; 
 
 const ShowroomDetails = () => {
   const { id } = useParams();
@@ -21,8 +21,7 @@ const ShowroomDetails = () => {
   useEffect(() => {
     const fetchShowroomDetails = async () => {
       try {
-        const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
-        const response = await axios.get(`${BACKEND_URL}/api/showrooms/${id}`);
+        const response = await axiosInstance.get(`/api/showrooms/${id}`);
         setShowroom(response.data);
       } catch (err) {
         console.error("Error loading showroom layout details:", err);
@@ -49,15 +48,13 @@ const ShowroomDetails = () => {
     setFormStatus("sending");
 
     try {
-      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
-      
       const payload = {
         name: bookingData.fullName,
         email: bookingData.email,
         message: `Private Viewing Request for ${showroom.name} (${showroom.location}). Scheduled Date: ${bookingData.date} during ${bookingData.timeSlot}. Nature of interest: ${bookingData.interest}.`
       };
 
-      await axios.post(`${BACKEND_URL}/api/contact`, payload);
+      await axiosInstance.post("/api/contact", payload);
       
       setFormStatus("success");
       setBookingData({

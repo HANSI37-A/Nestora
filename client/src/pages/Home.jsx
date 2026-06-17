@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import heroimg from '../assets/heroimg.jpg';
 import FeaturedCollection from '../components/Products/FeaturedCollection';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance'; 
 
 const products = [
   { 
@@ -58,8 +58,8 @@ const Home = () => {
     setStatusMessage("");
 
     try {
-      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
-      const response = await axios.post(`${BACKEND_URL}/api/subscribe`, { email });
+    
+      const response = await axiosInstance.post('/api/subscribe', { email });
       
       setStatus("success");
       setStatusMessage(response.data.message || "Successfully subscribed!");
@@ -162,6 +162,7 @@ const Home = () => {
 
         </div>
       </section>
+      
       <div className="bg-[#FBFBFA]">
         <FeaturedCollection />
       </div>
