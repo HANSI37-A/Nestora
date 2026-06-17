@@ -22,6 +22,8 @@ import DesignerManagement from './components/Admin/DesignerManagement';
 import EditDesigner from './components/Admin/EditDesigner';
 import ShowroomManagement from './components/Admin/showroomManagement';
 import ShowroomDetails from './pages/ShowroomDetails';
+import TermPage from './pages/TermPage';
+import ScrollToTop from './components/Common/ScrollToTop';
 
 import { Provider } from "react-redux";
 import store from "./redux/store";
@@ -31,6 +33,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           
           <Route path="/" element={<UserLayout />}>
@@ -50,6 +53,7 @@ const App = () => {
             <Route path="showrooms" element={<Showrooms />} />
             <Route path="showrooms/:id" element={<ShowroomDetails />} />
             <Route path="designers" element={<Designers />} />
+            <Route path="term" element={<TermPage />} />
           </Route>
 
           <Route path="/admin" element={<AdminLayout />}>

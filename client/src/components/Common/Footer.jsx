@@ -49,10 +49,10 @@ const Footer = () => {
             Legal
           </h4>
           <ul className="space-y-4 text-xs font-light tracking-wide text-[#A8A29E]">
-            <li><Link to="#" className="hover:text-white transition-colors">Terms of Service</Link></li>
-            <li><Link to="#" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-            <li><Link to="#" className="hover:text-white transition-colors">Cookie Configurations</Link></li>
-            <li><Link to="#" className="hover:text-white transition-colors">White-Glove Logistics</Link></li>
+            <li><Link to="/term" className="hover:text-white transition-colors">Terms of Service</Link></li>
+            <li><Link to="/term" className="hover:text-white transition-colors">Shipping & Delivery</Link></li>
+            <li><Link to="/term" className="hover:text-white transition-colors">Liability</Link></li>
+            <li><Link to="/term" className="hover:text-white transition-colors">Governing Law</Link></li>
           </ul>
         </div>
 
