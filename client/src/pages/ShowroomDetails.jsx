@@ -18,21 +18,30 @@ const ShowroomDetails = () => {
   const [formStatus, setFormStatus] = useState("idle"); 
   const [bookingError, setBookingError] = useState(null);
 
-  useEffect(() => {
-    const fetchShowroomDetails = async () => {
-      try {
-        const response = await axiosInstance.get(`/api/showrooms/${id}`);
-        setShowroom(response.data);
-      } catch (err) {
-        console.error("Error loading showroom layout details:", err);
-        setError("Failed to resolve dynamic showroom layout profiling.");
-      } finally {
-        setLoading(false);
+useEffect(() => {
+  const fetchShowroomDetails = async () => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get(`/api/showrooms/${id}`);
+      
+      if (response.data && response.data.data) {
+        setShowroom(response.data.data); 
+      } else {
+        setShowroom(response.data); 
       }
-    };
+      
+    } catch (err) {
+      console.error("Error loading showroom layout details:", err);
+      setError("Failed to resolve dynamic showroom layout profiling.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  if (id) {
     fetchShowroomDetails();
-  }, [id]);
+  }
+}, [id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -51,7 +60,7 @@ const ShowroomDetails = () => {
       const payload = {
         name: bookingData.fullName,
         email: bookingData.email,
-        message: `Private Viewing Request for ${showroom.name} (${showroom.location}). Scheduled Date: ${bookingData.date} during ${bookingData.timeSlot}. Nature of interest: ${bookingData.interest}.`
+        message: `Private Viewing Request for ${showroom?.name} (${showroom?.location}). Scheduled Date: ${bookingData.date} during ${bookingData.timeSlot}. Nature of interest: ${bookingData.interest}.`
       };
 
       await axiosInstance.post("/api/contact", payload);
@@ -71,13 +80,21 @@ const ShowroomDetails = () => {
     }
   };
 
-  if (loading) return <div className="text-center py-20 text-sm tracking-widest text-gray-400">LOADING SPATIAL ENVIRONMENT...</div>;
-  if (error) return <div className="text-center py-20 text-red-500">{error}</div>;
-  if (!showroom) return <div className="text-center py-20">Showroom not found.</div>;
+  if (loading) {
+    return <div className="text-center py-40 text-sm tracking-widest text-gray-400 bg-[#F9F7F2] min-h-screen flex items-center justify-center">LOADING SPATIAL ENVIRONMENT...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-40 text-red-500 bg-[#F9F7F2] min-h-screen flex items-center justify-center">{error}</div>;
+  }
+
+  if (!showroom) {
+    return <div className="text-center py-40 text-gray-500 bg-[#F9F7F2] min-h-screen flex items-center justify-center">Showroom spatial log not found.</div>;
+  }
 
   return (
     <div className="bg-[#F9F7F2] min-h-screen">
-      <div className="max-w-7xl mx-auto pt-36 sm:pt-40 pb-16 sm:px-12 lg:px-24">
+      <div className="max-w-7xl mx-auto pt-36 sm:pt-40 pb-16 px-6 sm:px-12 lg:px-24">
         {/* Back Navigation */}
         <Link to="/showrooms" className="text-xs uppercase tracking-wider font-semibold text-gray-500 hover:text-black mb-12 inline-block transition-colors">
           ← Back to Showrooms
@@ -114,7 +131,7 @@ const ShowroomDetails = () => {
               <span className="text-[#A8A29E] font-bold uppercase tracking-widest block mb-2 text-[10px]">
                 Spatial Footprint
               </span>
-              <p className="text-xl font-mono tracking-tight text-[#1A1A1A]">{showroom.dimensions}</p>
+              <p className="text-xl font-mono tracking-tight text-[#1A1A1A]">{showroom.dimensions || "N/A"}</p>
             </div>
           </div>
 
@@ -158,11 +175,10 @@ const ShowroomDetails = () => {
             </div>
           </div>
 
-          {/* Right Floating Interactivity Form Card */}
+          {/* Right Floating Form Card */}
           <div className="bg-[#FAF9F5] text-[#1A1A1A] p-8 sm:p-12 lg:col-span-5 flex flex-col justify-center">
             <form onSubmit={handleBookingSubmit} className="space-y-6">
               
-              {/* Full Name Input Field */}
               <div className="flex flex-col border-b border-gray-300 pb-2 focus-within:border-black transition-colors">
                 <label className="text-[10px] font-bold tracking-widest text-[#A8A29E] uppercase mb-1">Full Name</label>
                 <input 
@@ -176,7 +192,6 @@ const ShowroomDetails = () => {
                 />
               </div>
 
-              {/* Email Address Input Field */}
               <div className="flex flex-col border-b border-gray-300 pb-2 focus-within:border-black transition-colors">
                 <label className="text-[10px] font-bold tracking-widest text-[#A8A29E] uppercase mb-1">Email Address</label>
                 <input 
@@ -190,9 +205,7 @@ const ShowroomDetails = () => {
                 />
               </div>
 
-              {/* Date & Time Dynamic Flex Box Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {/* Select Date Input */}
                 <div className="flex flex-col border-b border-gray-300 pb-2 focus-within:border-black transition-colors">
                   <label className="text-[10px] font-bold tracking-widest text-[#A8A29E] uppercase mb-1">Select Date</label>
                   <input 
@@ -205,7 +218,6 @@ const ShowroomDetails = () => {
                   />
                 </div>
 
-                {/* Select Time Dropdown */}
                 <div className="flex flex-col border-b border-gray-300 pb-2 focus-within:border-black transition-colors">
                   <label className="text-[10px] font-bold tracking-widest text-[#A8A29E] uppercase mb-1">Time</label>
                   <select
@@ -221,7 +233,6 @@ const ShowroomDetails = () => {
                 </div>
               </div>
 
-              {/* Interest Assessment Dropdown */}
               <div className="flex flex-col border-b border-gray-300 pb-2 focus-within:border-black transition-colors">
                 <label className="text-[10px] font-bold tracking-widest text-[#A8A29E] uppercase mb-1">Interest</label>
                 <select
@@ -237,7 +248,6 @@ const ShowroomDetails = () => {
                 </select>
               </div>
 
-              {/* Server Context State Messaging Indicators */}
               {formStatus === 'success' && (
                 <div className="text-xs text-[#6B8F71] bg-[#6B8F71]/5 p-2.5 rounded border border-[#6B8F71]/20 text-center font-medium tracking-widest uppercase">
                   ✓ Your invitation has been transmitted to our Atelier.
@@ -249,7 +259,6 @@ const ShowroomDetails = () => {
                 </div>
               )}
 
-              {/* Action Invitation Request Button */}
               <button 
                 type="submit"
                 disabled={formStatus === 'sending'}

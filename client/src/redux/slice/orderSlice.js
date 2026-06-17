@@ -7,6 +7,10 @@ export const fetchUserOrders = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get("/api/orders/my-orders");
+     
+      if (response.data && response.data.data) {
+        return response.data.data;
+      }
       return response.data;
     } catch (error) {
       const msg = error.response?.data?.message || error.message || "Failed to load orders history array.";
@@ -21,6 +25,10 @@ export const fetchOrderDetails = createAsyncThunk(
   async (orderId, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get(`/api/orders/${orderId}`);
+     
+      if (response.data && response.data.data) {
+        return response.data.data;
+      }
       return response.data;
     } catch (error) {
       const msg = error.response?.data?.message || error.message || "Failed to load specific target order data.";
@@ -47,7 +55,8 @@ const orderSlice = createSlice({
       })
       .addCase(fetchUserOrders.fulfilled, (state, action) => {
         state.loading = false;
-        state.orders = action.payload;
+        
+        state.orders = Array.isArray(action.payload) ? action.payload : [];
       })
       .addCase(fetchUserOrders.rejected, (state, action) => {
         state.loading = false;

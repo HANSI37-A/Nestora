@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Designer = require("../models/Designer");
+const Designer = require("../models/designer");
 
 // @route   GET /api/designers
 // @desc    Get all active designers for the public client-side gallery view

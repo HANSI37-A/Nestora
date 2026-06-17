@@ -7,7 +7,12 @@ const MyOrdersPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { orders, loading, error } = useSelector((state) => state.orders);
+  const orderState = useSelector((state) => state.orders) || {};
+  const loading = orderState.loading;
+  const error = orderState.error;
+
+  const rawOrders = orderState.orders || orderState.list || orderState;
+  const orders = Array.isArray(rawOrders) ? rawOrders : [];
 
   useEffect(() => {
     dispatch(fetchUserOrders());
@@ -45,7 +50,7 @@ const MyOrdersPage = () => {
           </thead>
 
           <tbody>
-            {orders && orders.length > 0 ? (
+            {Array.isArray(orders) && orders.length > 0 ? (
               orders.map((order) => (
                 <tr
                   key={order._id}
