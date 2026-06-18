@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
+import axiosInstance from "../../utils/axiosInstance";
 import { fetchAdminShowrooms, deleteShowroom, addShowroom } from '../../redux/slice/showroomSlice';
 
 const ShowroomManagement = () => {
@@ -45,7 +45,7 @@ const ShowroomManagement = () => {
         }
       };
 
-      const { data } = await axios.post(
+      const { data } = await axiosInstance.post(
         `${import.meta.env.VITE_BACKEND_URL}/admin/showrooms/upload`, 
         uploadData, 
         config

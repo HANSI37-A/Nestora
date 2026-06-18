@@ -50,24 +50,24 @@ app.get('/', (req, res) => {
   res.json({ message: 'Nestora API is running cleanly...' });
 });
 
-app.use('/admin/products', productAdminRoutes);
-app.use('/admin/orders', adminOrderRoutes);
-app.use('/admin/designers', adminDesignerRoutes); 
-app.use('/admin/showrooms', showroomAdminRoutes);
-app.use('/admin', adminRoutes);
+app.use('/api/admin/products', productAdminRoutes);
+app.use('/api/admin/orders', adminOrderRoutes);
+app.use('/api/admin/designers', adminDesignerRoutes); 
+app.use('/api/admin/showrooms', showroomAdminRoutes);
+app.use('/api/admin', adminRoutes);
 
 
-app.use('/users', userRoutes);
-app.use('/products', productRoutes);
-app.use('/cart', cartRoutes);
-app.use('/checkout', checkoutRoutes);
-app.use('/orders', orderRoutes);
-app.use('/upload', uploadRoutes);
-app.use('/subscribe', subscriberRoutes);
-app.use('/categories', categoryRoutes);
-app.use('/designers', designerRoutes); 
-app.use('/contact', contactRoutes);
-app.use('/showrooms', showroomRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/checkout', checkoutRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/subscribe', subscriberRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/designers', designerRoutes); 
+app.use('/api/contact', contactRoutes);
+app.use('/api/showrooms', showroomRoutes);
 
 const PORT = process.env.PORT || 5000;
 

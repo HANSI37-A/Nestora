@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
+import axiosInstance from "../../utils/axiosInstance";
 import { fetchAdminDesigners, deleteDesigner, addDesigner } from '../../redux/slice/adminDesignerSlice';
 
 const DesignerManagement = () => {
@@ -48,7 +48,7 @@ const DesignerManagement = () => {
         }
       };
 
-      const { data } = await axios.post(
+      const { data } = await axiosInstance.post(
         `${import.meta.env.VITE_BACKEND_URL}/admin/designers/upload`, 
         uploadData, 
         config

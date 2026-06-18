@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductDetails } from "../../redux/slice/productsSlice";
 import { updateProduct } from "../../redux/slice/adminProductSlice";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 
 const EditProductPage = () => {
   const { id } = useParams();
@@ -73,7 +73,7 @@ const EditProductPage = () => {
     setUploading(true);
 
     try {
-      const res = await axios.post(
+      const res = await axiosInstance.post(
         `${import.meta.env.VITE_BACKEND_URL}/upload`,
         formData,
         {
@@ -102,7 +102,7 @@ const EditProductPage = () => {
     setUploadingModel(true);
 
     try {
-      const res = await axios.post(
+      const res = await axiosInstance.post(
         `${import.meta.env.VITE_BACKEND_URL}/products/${id}/upload-model`,
         formData,
         {
