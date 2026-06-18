@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createCheckout } from '../../redux/slice/checkoutSlice';
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+import axiosinstance from '../../utils/axiosInstance';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -95,8 +95,8 @@ const Checkout = () => {
   const handleStripePaymentRedirect = async () => {
     setStripeRedirecting(true);
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/create-stripe-session`,
+      const response = await axiosinstance.post(
+        `${import.meta.env.VITE_BACKEND_URL}/checkout/${checkoutId}/create-stripe-session`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
