@@ -13,7 +13,7 @@ import designerReducer from "./slice/designerSlice";
 import adminDesignerReduser from "./slice/adminDesignerSlice";
 import showroomReducer from "./slice/showroomSlice";
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
     auth: authReducer,
     products: productReducer,
