@@ -10,11 +10,11 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use((config) => {
   try {
-    const persisted = localStorage.getItem("persist:root");
-    if (persisted) {
-      const auth = JSON.parse(JSON.parse(persisted).auth || "{}");
-      if (auth.token) {
-        config.headers.Authorization = `Bearer ${auth.token}`;
+    const userInfo = localStorage.getItem("userInfo");
+    if (userInfo) {
+      const token = JSON.parse(userInfo).token;
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
       }
     }
   } catch (_) {}
