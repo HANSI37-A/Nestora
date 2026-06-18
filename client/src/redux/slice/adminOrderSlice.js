@@ -6,7 +6,7 @@ export const fetchAllOrders = createAsyncThunk(
   "adminOrders/fetchAllOrders",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/api/admin/orders");
+      const response = await axiosInstance.get("/admin/orders");
       if (response.data && response.data.data) {
         return response.data.data;
       }
@@ -22,7 +22,7 @@ export const updateOrderStatus = createAsyncThunk(
   "adminOrders/updateOrderStatus",
   async ({ id, status }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.put(`/api/admin/orders/${id}`, { status });
+      const response = await axiosInstance.put(`/admin/orders/${id}`, { status });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Failed to update order status");
@@ -35,7 +35,7 @@ export const deleteOrder = createAsyncThunk(
   "adminOrders/deleteOrder",
   async ({ id }, { rejectWithValue }) => {
     try {
-      await axiosInstance.delete(`/api/admin/orders/${id}`);
+      await axiosInstance.delete(`/admin/orders/${id}`);
       return id;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Failed to delete order");

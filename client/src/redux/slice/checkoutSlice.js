@@ -5,7 +5,7 @@ export const createCheckout = createAsyncThunk(
   "checkout/createCheckout",
   async (checkoutData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/api/checkout", checkoutData);
+      const response = await axiosInstance.post("/checkout", checkoutData);
       return response.data;
     } catch (error) {
       const message = error.response?.data?.message || error.message || "Failed to process request";

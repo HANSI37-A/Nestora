@@ -7,7 +7,7 @@ export const fetchAdminDesigners = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
     
-      const response = await axiosInstance.get('/api/admin/designers');
+      const response = await axiosInstance.get('/admin/designers');
       if (response.data && response.data.data) {
         return response.data.data;
       }
@@ -22,7 +22,7 @@ export const addDesigner = createAsyncThunk(
   'adminDesigners/add',
   async (designerData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post('/api/admin/designers', designerData);
+      const response = await axiosInstance.post('/admin/designers', designerData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to add designer');
@@ -34,7 +34,7 @@ export const fetchDesignerById = createAsyncThunk(
   'adminDesigners/fetchById',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/api/admin/designers/${id}`);
+      const response = await axiosInstance.get(`/admin/designers/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch designer details');
@@ -46,7 +46,7 @@ export const updateDesigner = createAsyncThunk(
   'adminDesigners/update',
   async ({ id, designerData }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.put(`/api/admin/designers/${id}`, designerData);
+      const response = await axiosInstance.put(`/admin/designers/${id}`, designerData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to update designer');
@@ -58,7 +58,7 @@ export const deleteDesigner = createAsyncThunk(
   'adminDesigners/delete',
   async (id, { rejectWithValue }) => {
     try {
-      await axiosInstance.delete(`/api/admin/designers/${id}`);
+      await axiosInstance.delete(`/admin/designers/${id}`);
       return id;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to delete designer');

@@ -5,7 +5,7 @@ export const fetchAdminProducts = createAsyncThunk(
   "adminProducts/fetchProducts",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/api/admin/products");
+      const response = await axiosInstance.get("/admin/products");
       if (response.data && response.data.data) {
         return response.data.data;
       }
@@ -21,7 +21,7 @@ export const createProduct = createAsyncThunk(
   "adminProducts/createProduct",
   async (productData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/api/products", productData);
+      const response = await axiosInstance.post("/admin/products", productData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to create product");
@@ -34,7 +34,7 @@ export const updateProduct = createAsyncThunk(
   "adminProducts/updateProduct",
   async ({ id, productData }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.put(`/api/products/${id}`, productData);
+      const response = await axiosInstance.put(`/admin/products/${id}`, productData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to update product");
@@ -47,7 +47,7 @@ export const deleteProduct = createAsyncThunk(
   "adminProducts/deleteProduct",
   async (id, { rejectWithValue }) => {
     try {
-      await axiosInstance.delete(`/api/products/${id}`);
+      await axiosInstance.delete(`/admin/products/${id}`);
       return id;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to delete product");

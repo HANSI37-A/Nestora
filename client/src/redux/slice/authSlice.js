@@ -25,7 +25,7 @@ export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/api/users/login", userData);
+      const response = await axiosInstance.post("/users/login", userData);
       const data = response.data;
   
       const userPayload = data.user ? { ...data.user } : { ...data };
@@ -52,7 +52,7 @@ export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/api/users/register", userData);
+      const response = await axiosInstance.post("/users/register", userData);
       const data = response.data;
       
       const userPayload = data.user ? { ...data.user } : { ...data };

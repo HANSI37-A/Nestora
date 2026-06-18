@@ -6,7 +6,7 @@ export const fetchUserOrders = createAsyncThunk(
   "orders/fetchUserOrders",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/api/orders/my-orders");
+      const response = await axiosInstance.get("/orders/my-orders");
      
       if (response.data && response.data.data) {
         return response.data.data;
@@ -24,7 +24,7 @@ export const fetchOrderDetails = createAsyncThunk(
   "orders/fetchOrderDetails",
   async (orderId, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/api/orders/${orderId}`);
+      const response = await axiosInstance.get(`/orders/${orderId}`);
      
       if (response.data && response.data.data) {
         return response.data.data;

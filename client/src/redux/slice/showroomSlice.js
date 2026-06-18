@@ -6,7 +6,7 @@ export const fetchAdminShowrooms = createAsyncThunk(
   "showrooms/fetchAllAdmin",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/api/admin/showrooms");
+      const response = await axiosInstance.get("/admin/showrooms");
       if (response.data && response.data.data) {
         return response.data.data;
       }
@@ -21,7 +21,7 @@ export const fetchShowroomById = createAsyncThunk(
   "showrooms/fetchById",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/api/admin/showrooms/${id}`);
+      const response = await axiosInstance.get(`/admin/showrooms/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Failed to fetch individual spatial parameters");
@@ -33,7 +33,7 @@ export const addShowroom = createAsyncThunk(
   "showrooms/add",
   async (showroomData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/api/admin/showrooms", showroomData);
+      const response = await axiosInstance.post("/admin/showrooms", showroomData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Failed to finalize spatial database instantiation");
@@ -45,7 +45,7 @@ export const updateShowroom = createAsyncThunk(
   "showrooms/update",
   async ({ id, showroomData }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.put(`/api/admin/showrooms/${id}`, showroomData);
+      const response = await axiosInstance.put(`/admin/showrooms/${id}`, showroomData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Failed to patch target showroom configuration metrics");
@@ -57,7 +57,7 @@ export const deleteShowroom = createAsyncThunk(
   "showrooms/delete",
   async (id, { rejectWithValue }) => {
     try {
-      await axiosInstance.delete(`/api/admin/showrooms/${id}`);
+      await axiosInstance.delete(`/admin/showrooms/${id}`);
       return id;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Failed to delete target structural entry");

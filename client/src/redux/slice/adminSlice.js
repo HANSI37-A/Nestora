@@ -6,7 +6,7 @@ export const fetchUsers = createAsyncThunk(
   "admin/fetchUsers",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/api/admin/users");
+      const response = await axiosInstance.get("/admin/users");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to fetch users");
@@ -19,7 +19,7 @@ export const addUser = createAsyncThunk(
   "admin/addUser",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/api/admin/users", userData);
+      const response = await axiosInstance.post("/admin/users", userData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to create user");
@@ -32,7 +32,7 @@ export const updateUser = createAsyncThunk(
   "admin/updateUser",
   async ({ id, name, email, role }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.put(`/api/admin/users/${id}`, { name, email, role });
+      const response = await axiosInstance.put(`/admin/users/${id}`, { name, email, role });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to update user");
@@ -45,7 +45,7 @@ export const deleteUser = createAsyncThunk(
   "admin/deleteUser",
   async (id, { rejectWithValue }) => {
     try {
-      await axiosInstance.delete(`/api/admin/users/${id}`);
+      await axiosInstance.delete(`/admin/users/${id}`);
       return id;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to delete user");
