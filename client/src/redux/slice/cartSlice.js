@@ -17,7 +17,7 @@ export const fetchCart = createAsyncThunk(
   "cart/fetchCart",
   async ({ userId, guestId }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/api/cart", {
+      const response = await axiosInstance.get("/cart", {
         params: { userId, guestId },
       });
       return response.data;
@@ -33,7 +33,7 @@ export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async ({ productId, quantity, size, color, guestId, userId }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/api/cart", {
+      const response = await axiosInstance.post("/cart", {
         productId, quantity, size, color, guestId, userId
       });
       return response.data;
@@ -48,7 +48,7 @@ export const updateCartItemsQuantity = createAsyncThunk(
   "cart/updateCartItemQuantity",
   async ({ productId, quantity, guestId, userId, size, color }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.put("/api/cart", {
+      const response = await axiosInstance.put("/cart", {
         productId, quantity, guestId, userId, size, color,
       });
       return response.data;
@@ -65,7 +65,7 @@ export const removeFromCart = createAsyncThunk(
     try {
       const response = await axiosInstance({
         method: "DELETE",
-        url: "/api/cart",
+        url: "/cart",
         data: { productId, guestId, userId, size, color },
       });
       return response.data;
@@ -81,7 +81,7 @@ export const mergeCart = createAsyncThunk(
   async ({ guestId, user }, { rejectWithValue }) => {
     try {
       // Authorization headers are automatically handled by the interceptor instance
-      const response = await axiosInstance.post("/api/cart/merge", { guestId, user });
+      const response = await axiosInstance.post("/cart/merge", { guestId, user });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || { message: error.message });

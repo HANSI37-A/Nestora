@@ -14,7 +14,7 @@ export const fetchProductsByFilters = createAsyncThunk(
         }
       });
 
-      const response = await axiosInstance.get(`/api/products?${query.toString()}`);
+      const response = await axiosInstance.get(`/products?${query.toString()}`);
       if (response.data && response.data.data) {
         return response.data.data;
       }
@@ -30,7 +30,7 @@ export const fetchProductDetails = createAsyncThunk(
   "products/fetchProductDetails",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/api/products/${id}`);
+      const response = await axiosInstance.get(`/products/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to fetch product details");
@@ -44,7 +44,7 @@ export const updateProduct = createAsyncThunk(
   async ({ id, productData }, { rejectWithValue }) => {
     try {
       
-      const response = await axiosInstance.put(`/api/products/${id}`, productData);
+      const response = await axiosInstance.put(`/products/${id}`, productData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || "Failed to update product details");
@@ -57,7 +57,7 @@ export const fetchSimilarProducts = createAsyncThunk(
   "products/fetchSimilarProducts",
   async ({ id }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/api/products/similar/${id}`);
+      const response = await axiosInstance.get(`/products/similar/${id}`);
       if (response.data && response.data.data) {
         return response.data.data;
       }

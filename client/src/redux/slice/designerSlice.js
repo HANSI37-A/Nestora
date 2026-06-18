@@ -5,7 +5,7 @@ export const fetchDesigners = createAsyncThunk(
   "designers/fetchDesigners",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/api/designers");
+      const response = await axiosInstance.get("/designers");
       
       if (response.data && response.data.data) {
         return response.data.data;
