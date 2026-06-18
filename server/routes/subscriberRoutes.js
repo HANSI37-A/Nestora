@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Subscriber = require("../models/Subscriber");
 
-// @route   POST /api/subscribe
+// @route   POST /subscribe
 // @desc    Handle newsletter subscription database entry
 // @access  Public
 router.post("/", async (req, res) => {

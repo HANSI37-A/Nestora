@@ -46,7 +46,7 @@ const ShowroomManagement = () => {
       };
 
       const { data } = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/admin/showrooms/upload`, 
+        `${import.meta.env.VITE_BACKEND_URL}/admin/showrooms/upload`, 
         uploadData, 
         config
       );

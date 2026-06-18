@@ -59,7 +59,7 @@ const Home = () => {
 
     try {
     
-      const response = await axiosInstance.post('/api/subscribe', { email });
+      const response = await axiosInstance.post('/subscribe', { email });
       
       setStatus("success");
       setStatusMessage(response.data.message || "Successfully subscribed!");

@@ -4,7 +4,7 @@ const User = require('../models/User');
 const { protect } = require('../middleware/authMiddleware'); 
 
 // @desc    Update user profile information
-// @route   PUT /api/users/profile
+// @route   PUT /users/profile
 // @access  Private
 router.put('/profile', protect, async (req, res) => {
   try {

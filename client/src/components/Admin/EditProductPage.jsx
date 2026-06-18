@@ -74,7 +74,7 @@ const EditProductPage = () => {
 
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/upload`,
+        `${import.meta.env.VITE_BACKEND_URL}/upload`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -103,7 +103,7 @@ const EditProductPage = () => {
 
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/products/${id}/upload-model`,
+        `${import.meta.env.VITE_BACKEND_URL}/products/${id}/upload-model`,
         formData,
         {
           headers: { 

@@ -14,7 +14,7 @@ const getCart = async (userId, guestId) =>{
   return null;
 }
 
-// @route GET /api/cart
+// @route GET /cart
 // @desc Get the cart for a user or guest
 // @access Public
 router.get("/", async (req, res) => {
@@ -29,7 +29,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// @route POST / api/cart
+// @route POST /cart
 // @desc add a product to the cart for the guset or logged in user
 // @access Public
 
@@ -99,7 +99,7 @@ router.post("/", async (req, res) =>{
   }
 });
 
-// @route PUT /api/cart
+// @route PUT /cart
 // @desc Update product quantity in the cart for  a guest or logged-in user
 // @access Public
 router.put("/", async (req, res) =>{
@@ -135,7 +135,7 @@ router.put("/", async (req, res) =>{
   }
 });
 
-// @route DELETE /api/cart
+// @route DELETE /cart
 // @desc Remove a product from the cart
 // @access Public
 router.delete("/", async(req, res) =>{
@@ -167,7 +167,7 @@ router.delete("/", async(req, res) =>{
 });
 
 
- // @route POST /api/cart/merge
+ // @route POST /cart/merge
  // @desc Merge guest cart into user cart on login
  // @access Private
 router.post("/merge", protect, async (req, res) => {

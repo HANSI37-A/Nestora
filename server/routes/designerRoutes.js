@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Designer = require("../models/Designer");
 
-// @route   GET /api/designers
+// @route   GET /designers
 // @desc    Get all active designers for the public client-side gallery view
 // @access  Public
 router.get("/", async (req, res) => {

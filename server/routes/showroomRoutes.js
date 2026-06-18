@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Showroom = require("../models/Showroom");
 
-// @route   GET /api/showrooms
+// @route   GET /showrooms
 // @desc    Get all active showrooms for the public grid view
 // @access  Public
 router.get("/", async (req, res) => {
@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// @route   GET /api/showrooms/:id
+// @route   GET /showrooms/:id
 // @desc    Get a single showroom's full profile details
 // @access  Public
 router.get("/:id", async (req, res) => {

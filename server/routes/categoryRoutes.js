@@ -4,7 +4,7 @@ const { protect, admin } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// @route   GET /api/categories
+// @route   GET /categories
 // @desc    Get all categories
 // @access  Public
 router.get('/', async (req, res) => {
@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// @route   GET /api/categories/:id
+// @route   GET /categories/:id
 // @desc    Get a single category by ID
 // @access  Public
 router.get('/:id', async (req, res) => {
@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// @route   POST /api/categories
+// @route   POST /categories
 // @desc    Create a new category
 // @access  Private (Admin only)
 router.post('/', protect, admin, async (req, res) => {
@@ -63,7 +63,7 @@ router.post('/', protect, admin, async (req, res) => {
   }
 });
 
-// @route   PUT /api/categories/:id
+// @route   PUT /categories/:id
 // @desc    Update a category
 // @access  Private (Admin only)
 router.put('/:id', protect, admin, async (req, res) => {
@@ -87,7 +87,7 @@ router.put('/:id', protect, admin, async (req, res) => {
   }
 });
 
-// @route   DELETE /api/categories/:id
+// @route   DELETE /categories/:id
 // @desc    Delete a category
 // @access  Private (Admin only)
 router.delete('/:id', protect, admin, async (req, res) => {

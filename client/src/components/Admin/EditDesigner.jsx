@@ -63,7 +63,7 @@ const EditDesigner = () => {
       };
 
       const { data } = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/admin/designers/upload`, 
+        `${import.meta.env.VITE_BACKEND_URL}/admin/designers/upload`, 
         uploadData, 
         config
       );

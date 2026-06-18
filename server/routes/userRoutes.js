@@ -5,7 +5,7 @@ const { protect } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// @route   POST /api/users/register
+// @route   POST /users/register
 // @desc    Register a new user
 // @access  Public
 router.post('/register', async (req, res) => {
@@ -41,7 +41,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// @route   POST /api/users/login
+// @route   POST /users/login
 // @desc    Authenticate user & get token
 // @access  Public
 router.post('/login', async (req, res) => {
@@ -79,7 +79,7 @@ router.post('/login', async (req, res) => {
 
 });
 
-// @route GET /api/users/profile
+// @route GET /users/profile
 // @desc Get user profile
 // @access Private
 router.get('/profile', protect, async (req, res) => {

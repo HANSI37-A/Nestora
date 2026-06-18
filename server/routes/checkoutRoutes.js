@@ -7,7 +7,7 @@ const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// @route POST /api/checkout/:checkoutId/create-stripe-session
+// @route POST /checkout/:checkoutId/create-stripe-session
 // @desc Create a hosted Stripe Checkout Session
 // @access Private
 router.post("/:checkoutId/create-stripe-session", protect, async (req, res) => {
@@ -76,7 +76,7 @@ router.post("/:checkoutId/create-stripe-session", protect, async (req, res) => {
   }
 });
 
-// @route GET /api/checkout/:id
+// @route GET /checkout/:id
 // @desc Fetch single checkout document data footprint matching context
 // @access Private
 router.get("/:id", protect, async (req, res) => {
@@ -92,7 +92,7 @@ router.get("/:id", protect, async (req, res) => {
   }
 });
 
-// @route POST /api/checkout
+// @route POST /checkout
 // @desc Create a new checkout session record
 // @access Private
 router.post("/", protect, async (req, res) => {
@@ -119,7 +119,7 @@ router.post("/", protect, async (req, res) => {
   }
 });
 
-// @route   PUT /api/checkout/:id/pay
+// @route   PUT /checkout/:id/pay
 // @desc    Update checkout status details and instantly finalize into Order History + clear DB Cart
 // @access  Private
 router.put("/:id/pay", protect, async (req, res) => {

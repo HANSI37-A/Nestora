@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Resend } = require('resend');
 
-// @route   POST /api/contact
+// @route   POST /contact
 // @desc    Send inquiry email via Resend
 // @access  Public
 router.post('/', async (req, res) => {

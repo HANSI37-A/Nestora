@@ -24,7 +24,7 @@ const uploadImage = multer({
   },
 });
 
-// @route   GET /api/admin/showrooms
+// @route   GET /admin/showrooms
 // @desc    Get all showrooms for administration listing table
 router.get("/", protect, admin, async (req, res) => {
   try {
@@ -36,7 +36,7 @@ router.get("/", protect, admin, async (req, res) => {
   }
 });
 
-// @route   POST /api/admin/showrooms
+// @route   POST /admin/showrooms
 // @desc    Create a new showroom showcase space
 router.post("/", protect, admin, async (req, res) => {
   const { name, location, dimensions, image, description } = req.body;
@@ -55,7 +55,7 @@ router.post("/", protect, admin, async (req, res) => {
   }
 });
 
-// @route   GET /api/admin/showrooms/:id
+// @route   GET /admin/showrooms/:id
 // @desc    Get a specific showroom profile by ID
 router.get("/:id", protect, admin, async (req, res) => {
   try {
@@ -70,7 +70,7 @@ router.get("/:id", protect, admin, async (req, res) => {
   }
 });
 
-// @route   PUT /api/admin/showrooms/:id
+// @route   PUT /admin/showrooms/:id
 // @desc    Modify an existing showroom document registry
 router.put("/:id", protect, admin, async (req, res) => {
   try {
@@ -95,7 +95,7 @@ router.put("/:id", protect, admin, async (req, res) => {
   }
 });
 
-// @route   DELETE /api/admin/showrooms/:id
+// @route   DELETE /admin/showrooms/:id
 // @desc    Remove a showroom record permanently from the database directory
 router.delete("/:id", protect, admin, async (req, res) => {
   try {
@@ -111,7 +111,7 @@ router.delete("/:id", protect, admin, async (req, res) => {
   }
 });
 
-// @route   POST /api/admin/showrooms/upload
+// @route   POST /admin/showrooms/upload
 // @desc    STREAM ENGINE: Streams architectural render to Cloudinary and force-creates 'nestora/showrooms'
 router.post("/upload", protect, admin, uploadImage.single('image'), async (req, res) => {
   try {

@@ -146,16 +146,16 @@ Nestora/
 
 | Resource | Endpoints |
 |---|---|
-| Auth | `POST /api/users/login` · `POST /api/users/register` |
-| Products | `GET /api/products` · `POST /api/admin/products` · `PUT /api/admin/products/:id` |
-| Cart | `GET /api/cart` · `POST /api/cart` · `DELETE /api/cart` |
-| Orders | `POST /api/orders` · `GET /api/orders/my-orders` · `GET /api/orders/:id` |
-| Showrooms | `GET /api/showrooms` · `GET /api/showrooms/:id` |
-| Designers | `GET /api/designers` · `GET /api/designers/:id` |
-| Categories | `GET /api/categories` |
-| Upload | `POST /api/upload` |
-| Subscribe | `POST /api/subscribe` |
-| Contact | `POST /api/contact` |
+| Auth | `POST /users/login` · `POST /users/register` |
+| Products | `GET /products` · `POST /admin/products` · `PUT /admin/products/:id` |
+| Cart | `GET /cart` · `POST /cart` · `DELETE /cart` |
+| Orders | `POST /orders` · `GET /orders/my-orders` · `GET /orders/:id` |
+| Showrooms | `GET /showrooms` · `GET /showrooms/:id` |
+| Designers | `GET /designers` · `GET /designers/:id` |
+| Categories | `GET /categories` |
+| Upload | `POST /upload` |
+| Subscribe | `POST /subscribe` |
+| Contact | `POST /contact` |
 
 ---
 

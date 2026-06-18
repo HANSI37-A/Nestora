@@ -4,7 +4,7 @@ const { protect, admin } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// @riute GET /api/admin/orders
+// @riute GET /admin/orders
 // @desc Get all order(admin only)
 // @access Private /admin
 router.get("/", protect, admin, async (req, res)=>{
@@ -18,7 +18,7 @@ router.get("/", protect, admin, async (req, res)=>{
 });
 
 
-// @route PUT /api/admin/orders/:id
+// @route PUT /admin/orders/:id
 // @desc Update order status
 // @access Private/admin
 router.put("/:id", protect, admin, async (req, res) =>{
@@ -40,7 +40,7 @@ router.put("/:id", protect, admin, async (req, res) =>{
   }
 });
 
-// @route DELETE /api/admin/orders/:id
+// @route DELETE /admin/orders/:id
 // @desc Delete an order
 // @access Private/Adimn
 router.delete("/:id", protect, admin, async (req, res)=>{

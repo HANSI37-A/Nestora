@@ -4,7 +4,7 @@ const { protect, admin } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// @route GET /api/admin/users
+// @route GET /admin/users
 // @desc Get alll users (Admin only)
 // @access Private/Admin
 router.get("/users", protect,admin, async (req, res) =>{
@@ -17,7 +17,7 @@ router.get("/users", protect,admin, async (req, res) =>{
   }
 });
 
-// @route POST /api/admin/users
+// @route POST /admin/users
 // @desc Add a new user (admin only)
 // @access Private(admin)
 router.post("/users", protect, admin, async (req, res)=>{
@@ -41,10 +41,10 @@ router.post("/users", protect, admin, async (req, res)=>{
   }
 });
 
-// @route PUT /api/admin/users/:id
+// @route PUT /admin/users/:id
 // @desc Update user info (admin only) - Name, emali and role
 // @access Private/Admin
-// @route PUT /api/admin/users/:id
+// @route PUT /admin/users/:id
 router.put("/users/:id", protect, admin, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -65,7 +65,7 @@ router.put("/users/:id", protect, admin, async (req, res) => {
   }
 });
 
-// @route DELETE /api/admin/users/:id
+// @route DELETE /admin/users/:id
 // @desc Delete a user
 // @access Private/Admin
 

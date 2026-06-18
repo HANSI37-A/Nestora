@@ -23,7 +23,7 @@ const uploadImage = multer({
   },
 });
 
-// @route   GET /api/admin/designers
+// @route   GET /admin/designers
 // @desc    Get all designers for administration listing table
 router.get("/", protect, admin, async (req, res) => {
   try {
@@ -35,7 +35,7 @@ router.get("/", protect, admin, async (req, res) => {
   }
 });
 
-// @route   POST /api/admin/designers
+// @route   POST /admin/designers
 // @desc    Create a new designer entry profile
 router.post("/", protect, admin, async (req, res) => {
   const { name, role, email, image, description } = req.body;
@@ -59,7 +59,7 @@ router.post("/", protect, admin, async (req, res) => {
   }
 });
 
-// @route   GET /api/admin/designers/:id
+// @route   GET /admin/designers/:id
 // @desc    Get a specific designer profile by ID
 router.get("/:id", protect, admin, async (req, res) => {
   try {
@@ -74,7 +74,7 @@ router.get("/:id", protect, admin, async (req, res) => {
   }
 });
 
-// @route   PUT /api/admin/designers/:id
+// @route   PUT /admin/designers/:id
 // @desc    Modify an existing designer item document registry
 router.put("/:id", protect, admin, async (req, res) => {
   try {
@@ -99,7 +99,7 @@ router.put("/:id", protect, admin, async (req, res) => {
   }
 });
 
-// @route   DELETE /api/admin/designers/:id
+// @route   DELETE /admin/designers/:id
 // @desc    Remove a designer record permanently from the database directory
 router.delete("/:id", protect, admin, async (req, res) => {
   try {
@@ -115,7 +115,7 @@ router.delete("/:id", protect, admin, async (req, res) => {
   }
 });
 
-// @route   POST /api/admin/designers/upload
+// @route   POST /admin/designers/upload
 // @desc     directory folder path
 // @access  Private/Admin
 router.post("/upload", protect, admin, uploadImage.single('image'), async (req, res) => {

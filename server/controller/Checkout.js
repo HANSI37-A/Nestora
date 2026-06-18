@@ -3,7 +3,7 @@ const Order = require("../models/Order");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // @desc    Create Stripe Checkout Session dynamically using Checkout Document details
-// @route   POST /api/checkout/:checkoutId/create-stripe-session
+// @route   POST /checkout/:checkoutId/create-stripe-session
 const createStripeSession = async (req, res) => {
   try {
     if (!req.user) {

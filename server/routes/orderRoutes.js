@@ -4,7 +4,7 @@ const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// @route   GET /api/orders/my-orders
+// @route   GET /orders/my-orders
 // @desc    Get historical completed orders linked to authenticated profile ID string row
 // @access  Private
 router.get("/my-orders", protect, async (req, res) => {
@@ -21,7 +21,7 @@ router.get("/my-orders", protect, async (req, res) => {
   }
 });
 
-// @route   GET /api/orders/:id
+// @route   GET /orders/:id
 // @desc    Get fully granular data details back on one target identification parameter key row
 // @access  Private
 router.get("/:id", protect, async (req, res) => {
