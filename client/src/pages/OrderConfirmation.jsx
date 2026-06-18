@@ -30,9 +30,8 @@ const OrderConfirmation = () => {
             Authorization: `Bearer ${token}`,
           },
         };
-
-        // FIX: Replaced explicit development port injection with global config base routing
-        const { data } = await axiosInstance.get(`/api/checkout/${checkoutId}`, config);
+        
+        const { data } = await axiosInstance.get(`/checkout/${checkoutId}`, config);
         setCheckoutData(data);
       } catch (err) {
         console.error("Order details mapping resolution crash:", err);

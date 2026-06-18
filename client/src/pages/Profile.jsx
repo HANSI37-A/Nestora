@@ -35,7 +35,7 @@ const Profile = () => {
           };
 
           await axiosInstance.put(
-            `/api/checkout/${checkoutId}/pay`,
+            `/checkout/${checkoutId}/pay`,
             { sessionId },
             config
           );

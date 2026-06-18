@@ -24,7 +24,7 @@ const Designers = () => {
     e.preventDefault();
     setFormStatus('sending');
     try {
-      await axiosInstance.post('/api/contact', formData);
+      await axiosInstance.post('/contact', formData);
       setFormStatus('success');
       setFormData({ name: '', email: '', message: '' });
     } catch (err) {

@@ -63,7 +63,7 @@ useEffect(() => {
         message: `Private Viewing Request for ${showroom?.name} (${showroom?.location}). Scheduled Date: ${bookingData.date} during ${bookingData.timeSlot}. Nature of interest: ${bookingData.interest}.`
       };
 
-      await axiosInstance.post("/api/contact", payload);
+      await axiosInstance.post("/contact", payload);
       
       setFormStatus("success");
       setBookingData({
