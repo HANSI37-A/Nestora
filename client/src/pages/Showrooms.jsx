@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance"; 
 import { Link } from "react-router-dom";
 
 const Showroom = () => {
@@ -11,8 +11,8 @@ const Showroom = () => {
     const fetchPublicShowrooms = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/showrooms`);
-        setShowrooms(data);
+        const { data } = await axiosInstance.get('/showrooms');
+        setShowrooms(data.data);
       } catch (err) {
         console.error("Public showroom extraction failure:", err);
         setError(err.response?.data?.message || "Failed to stream architectural showcase catalogs.");

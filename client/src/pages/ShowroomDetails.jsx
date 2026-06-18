@@ -22,7 +22,7 @@ useEffect(() => {
   const fetchShowroomDetails = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(`/api/showrooms/${id}`);
+      const response = await axiosInstance.get(`/showrooms/${id}`);
       
       if (response.data && response.data.data) {
         setShowroom(response.data.data); 
