@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createCheckout } from '../../redux/slice/checkoutSlice';
 import { useDispatch, useSelector } from "react-redux";
-import axiosinstance from '../../utils/axiosInstance';
+import axiosInstance from "../../utils/axiosInstance"; 
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -92,26 +92,23 @@ const Checkout = () => {
       });
   };
 
-  const handleStripePaymentRedirect = async () => {
-    setStripeRedirecting(true);
-    try {
-      const response = await axiosinstance.post(
-        `${import.meta.env.VITE_BACKEND_URL}/checkout/${checkoutId}/create-stripe-session`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+const handleStripePaymentRedirect = async () => {
+  setStripeRedirecting(true);
+  try {
+    
+    const response = await axiosInstance.post(`/checkout/${checkoutId}/create-stripe-session`);
 
-      if (response.data?.url) {
-        window.location.href = response.data.url; 
-      } else {
-        throw new Error("Invalid redirect link payload formatting configuration returned from sandbox.");
-      }
-    } catch (error) {
-      console.error(error);
-      alert(error.response?.data?.message || "Payment processing routing execution error.");
-      setStripeRedirecting(false);
+    if (response.data?.url) {
+      window.location.href = response.data.url; 
+    } else {
+      throw new Error("Invalid redirect link payload formatting configuration returned from sandbox.");
     }
-  };
+  } catch (error) {
+    console.error(error);
+    alert(error.response?.data?.message || "Payment processing routing execution error.");
+    setStripeRedirecting(false);
+  }
+};
 
   const inputFieldsStyle = "w-full bg-transparent border-b border-[#1A1A1A]/20 p-2 text-sm font-light tracking-wide focus:outline-none focus:border-[#1A1A1A] transition-colors placeholder-[#A8A29E]/50";
 

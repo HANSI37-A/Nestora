@@ -119,58 +119,6 @@ router.post("/", protect, async (req, res) => {
   }
 });
 
-// @route PUT /api/checkout/:id/pay
-// @desc Update checkout status details on payment clearance
-// @access Private
-router.put("/:id/pay", protect, async (req, res) => {
-  const { sessionId } = req.body;
-
-  try {
-    const checkout = await Checkout.findById(req.params.id);
-    if (!checkout) {
-      return res.status(404).json({ message: "Checkout not found" });
-    }
-
-   checkout.isPaid = true;
-    checkout.paymentStatus = "Paid";
-    checkout.paidAt = Date.now();
-    checkout.paymentDetails = { id: sessionId, status: "succeeded" };
-    await checkout.save();
-
-    if (!checkout.isFinalized) {
-      await Order.create({
-        user: checkout.user,
-        orderItems: checkout.checkoutItems,
-        shippingAddress: checkout.shippingAddress,
-        paymentMethod: checkout.paymentMethod,
-        totalPrice: checkout.totalPrice,
-        isPaid: true,
-        paidAt: checkout.paidAt,
-        isDelivered: false,
-        paymentStatus: "Paid",
-        paymentDetails: checkout.paymentDetails,
-      });
-
-      checkout.isFinalized = true;
-      checkout.finalizedAt = Date.now();
-      await checkout.save();
-
-      await Cart.findOneAndDelete({ user: checkout.user });
-      console.log(` Success: Order finalized and database cart wiped for user: ${checkout.user}`);
-    }
-
-    return res.status(200).json({ 
-      success: true, 
-      message: "Payment registered and order archived seamlessly.",
-      checkout 
-    });
-    
-  } catch (error) {
-    console.error("Error updating checkout payment state:", error);
-    return res.status(500).json({ message: "Internal Server Error updating pipeline data layers." });
-  }
-});
-
 // @route   PUT /api/checkout/:id/pay
 // @desc    Update checkout status details and instantly finalize into Order History + clear DB Cart
 // @access  Private
