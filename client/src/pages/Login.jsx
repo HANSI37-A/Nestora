@@ -35,7 +35,7 @@ const Login = () => {
     <div className="flex min-h-screen bg-[#F9F7F2] text-[#1A1A1A] font-sans antialiased select-none">
       <div className="flex flex-1 w-full">
         
-        <div className="hidden md:flex md:w-1/2 relative overflow-hidden">
+        <div className="hidden md:flex md:w-1/2 relative overflow-hidden pt-36 sm:pt-24">
           <img
             src={login}
             alt="Nestora Living Workspace"

@@ -37,18 +37,15 @@ const Register = () => {
   return (
   
     <div className="flex min-h-screen bg-[#F9F7F2] text-[#1A1A1A] font-sans antialiased select-none"> 
-      <div className="flex flex-1 w-full">
+      <div className="flex flex-1 w-full sm:pt-24">
 
-        <div className="hidden md:flex md:w-1/2 relative overflow-hidden"> 
+        <div className="hidden md:flex md:w-1/2 relative overflow-hidden "> 
           <img
             src={register}
             alt="Nestora Architectural Space"
             className="w-full h-full object-cover"
           />
-          
-          <div className="absolute top-12 left-12 text-white">
-            <h2 className="text-2xl font-serif tracking-wide">Nestora</h2>
-          </div>
+                 
 
           <div className="absolute bottom-16 left-12 right-12 text-white max-w-md"> 
             <span className="text-[10px] font-bold tracking-[0.25em] text-gray-300 uppercase block mb-2">
